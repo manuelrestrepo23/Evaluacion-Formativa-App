@@ -1,5 +1,5 @@
 import express from 'express'
-import Evaluation from '../models/Evaluation'
+import Evaluation from '../models/Evaluation.js'
 
 const router = express.Router()
 
@@ -52,9 +52,9 @@ router.get('/teacher-results', async (req, res) => {
 })
 
 // GET /api/evaluations/teacher-self-check?teacherId= - Verificar si un docente ya se autoevaluó
-router.get('/teahcer-self-check', async (req, res) => {
+router.get('/teacher-self-check', async (req, res) => {
     try {
-        const { teacherID } = req.query
+        const { teacherId } = req.query
 
         if(!teacherId){
             return res.status(400).json({ message: 'teacherId es requerido' })

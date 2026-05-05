@@ -7,7 +7,7 @@ const router = express.Router()
 router.get('/', async (req, res) => {
     try {
         const teachers = await Teacher.find()
-        res.status(200).json(teahcers)
+        res.status(200).json(teachers)
     } catch (error) {
         res.status(500).json({ message: 'Error al obtener los docentes', error: error.message })
     }

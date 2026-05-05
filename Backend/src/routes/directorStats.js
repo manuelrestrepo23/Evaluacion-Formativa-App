@@ -1,6 +1,6 @@
 import express from 'express'
 import Teacher from '../models/Teacher.js'
-import Evaluation from '../models/Evaluation'
+import Evaluation from '../models/Evaluation.js'
 import Question from '../models/Question.js'
 
 const router = express.Router()
@@ -76,7 +76,7 @@ router.get('/', async (req, res) => {
     teacherQuestions.forEach(q => {
       if (q.category) {
         if (!categoriesMap[q.category]) categoriesMap[q.category] = []
-        categoriesMap[q.category].push(q.id)
+        categoriesMap[q.category].push(q.number)
       }
     })
  

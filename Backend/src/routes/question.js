@@ -13,8 +13,9 @@ router.get('/', async (req, res) => {
         if (!type || !['teacher', 'student'].includes(type)) {
             return res.status(400).json({ message: 'Tipo no valido. Use type=teacher o type=student' })
         }
-        const questions = (await Question.find({ type })).sort({ id: 1 })
-        res.status(200).json(questions)
+        const questions = await Question.find({ type })
+        const sorted = questions.sort((a, b) => a.number - b.number) // Para organizar las preguntas en base al campo number de las preguntas
+        res.status(200).json(sorted)
     } catch (error){
         res.status(500).json({ message: 'Error al obtener las preguntas', error: error.message })
     }

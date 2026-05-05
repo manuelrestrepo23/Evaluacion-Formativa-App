@@ -1,0 +1,141 @@
+
+[
+  {
+    "number": 1,
+    "question": "Consulto con mis colegas alternativas de solución para las dificultades que se presentan en mi práctica de enseñanza.",
+    "category": "Generica",
+    "type": "teacher"
+  },
+  {
+    "number": 2,
+    "question": "Desarrollo estrategias para favorecer la inclusión de estudiantes con necesidades de aprendizaje particulares.",
+    "category": "Pedagogica",
+    "type": "teacher"
+  },
+  {
+    "number": 3,
+    "question": "Propicio el trabajo interdisciplinar en el desarrollo de mis cursos, planteando las relaciones de mi disciplina con otros campos de conocimiento.",
+    "category": "Generica",
+    "type": "teacher"
+  },
+  {
+    "number": 4,
+    "question": "Socializo oportunamente el programa del curso, estableciendo los objetivos, los contenidos, las metodologías de enseñanza, los modos de evaluación del aprendizaje y la agenda de desarrollo del curso.",
+    "category": "Pedagogica",
+    "type": "teacher"
+  },
+  {
+    "number": 5,
+    "question": "Me mantengo actualizado en estrategias de enseñanza y sobre modos de aprendizaje (actualizo las estrategias de enseñanza y modos de aprendizaje).",
+    "category": "Pedagogica",
+    "type": "teacher"
+  },
+  {
+    "number": 6,
+    "question": "Adecúo el cronograma y los contenidos del curso de acuerdo con las condiciones de contexto expresadas por los estudiantes y en atención a posibles contingencias que afectan el desarrollo de los cursos.",
+    "category": "Pedagogica",
+    "type": "teacher"
+  },
+  {
+    "number": 7,
+    "question": "¿Incorporo cambios en el desarrollo del curso en comparación con versiones anteriores del mismo?",
+    "category": "Pedagogica",
+    "type": "teacher"
+  },
+  {
+    "number": 8,
+    "question": "Actualizo periódicamente el programa del curso teniendo en cuenta las necesidades de aprendizaje de los estudiantes.",
+    "category": "Pedagogica",
+    "type": "teacher"
+  },
+  {
+    "number": 9,
+    "question": "En la estructuración del curso se consideran los fines y principios de formación de los estudiantes de la UNAL.",
+    "category": "Pedagogica",
+    "type": "teacher"
+  },
+  {
+    "number": 10,
+    "question": "Durante el desarrollo del curso motivo el interés de los estudiantes en atención a sus expectativas y trayectorias profesionales.",
+    "category": "Pedagogica",
+    "type": "teacher"
+  },
+  {
+    "number": 11,
+    "question": "Realizo actividades que contribuyen a mi formación pedagógica.",
+    "category": "Pedagogica",
+    "type": "teacher"
+  },
+  {
+    "number": 12,
+    "question": "Empleo las opiniones y valoraciones de los estudiantes para la estructuración de los cursos.",
+    "category": "Generica",
+    "type": "teacher"
+  },
+  {
+    "number": 13,
+    "question": "Comunico clara y oportunamente los mecanismos, pautas y resultados de la evaluación de aprendizajes.",
+    "category": "Generica",
+    "type": "teacher"
+  },
+  {
+    "number": 14,
+    "question": "La estructuración del programa posibilita la articulación entre los objetivos del curso y los objetivos de formación del programa curricular.",
+    "category": "Pedagogica",
+    "type": "teacher"
+  },
+  {
+    "number": 15,
+    "question": "Empleo diferentes recursos y mediaciones que contribuyen al aprendizaje para el desarrollo de mis cursos.",
+    "category": "Pedagogica",
+    "type": "teacher"
+  },
+  {
+    "number": 16,
+    "question": "Participo en la planeación de cursos a cargo de colegas en el programa curricular y soy abierto a la opinión de colegas en la planeación de mis cursos.",
+    "category": "Generica",
+    "type": "teacher"
+  },
+  {
+    "number": 17,
+    "question": "El desarrollo del curso involucra aspectos del contexto productivo, social y ambiental local y nacional.",
+    "category": "Generica",
+    "type": "teacher"
+  },
+  {
+    "number": 18,
+    "question": "Tengo en cuenta las creencias, valoraciones y críticas de colegas y otros actores del ámbito institucional.",
+    "category": "Generica",
+    "type": "teacher"
+  },
+  {
+    "number": 19,
+    "question": "Participo en proyectos de investigación o grupos de investigación pedagógica.",
+    "category": "Pedagogica",
+    "type": "teacher"
+  },
+  {
+    "number": 20,
+    "question": "Atiendo a las necesidades de aprendizaje de los estudiantes y adapto las metodologías de enseñanza para favorecer los aprendizajes de todos los estudiantes.",
+    "category": "Pedagogica",
+    "type": "teacher"
+  },
+  {
+    "number": 21,
+    "question": "Actualizo los contenidos del curso teniendo en cuenta los avances técnicos y científicos de la disciplina.",
+    "category": "Disciplinar",
+    "type": "teacher"
+  },
+  {
+    "number": 22,
+    "question": "Empleo estrategias para promover el trabajo cooperativo entre estudiantes para el desarrollo de las actividades.",
+    "category": "Pedagogica",
+    "type": "teacher"
+  },
+  {
+    "number": 23,
+    "question": "Los contenidos del curso están acompañados de ejemplos y aplicaciones que corresponden al ejercicio profesional de la disciplina.",
+    "category": "Pedagogica",
+    "type": "teacher"
+  }
+]

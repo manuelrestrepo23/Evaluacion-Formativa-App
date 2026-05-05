@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 
 const questionSchema = new mongoose.Schema({
-    id: {
+    number: { //Se pone Numero para señalar el numero de la pregunta y evitar conflicto con _id
         type: Number,
         required: true
     },

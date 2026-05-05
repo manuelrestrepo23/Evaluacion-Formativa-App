@@ -1,0 +1,98 @@
+[
+  {
+    "number": 1,
+    "question": "El docente mostró disposición para hacer modificaciones pertinentes al curso, en atención a las condiciones contextuales de los estudiantes y posibles contingencias que afectaran su desarrollo normal.",
+    "category": "Pedagogica",
+    "type": "student"
+  },
+  {
+    "number": 2,
+    "question": "El docente adaptó las metodologías de enseñanza del curso para favorecer el aprendizaje de todos los estudiantes.",
+    "category": "Pedagogica",
+    "type": "student"
+  },
+  {
+    "number": 3,
+    "question": "El docente motiva el interés profesional en la disciplina y la investigación en el área temática del curso.",
+    "category": "Pedagogica",
+    "type": "student"
+  },
+  {
+    "number": 4,
+    "question": "El docente es abierto a las opiniones y valoraciones sobre la estructuración del curso, los recursos empleados y la aplicación de evaluaciones.",
+    "category": "Generica",
+    "type": "student"
+  },
+  {
+    "number": 5,
+    "question": "El docente comunica clara y oportunamente los mecanismos, pautas y resultados de la evaluación de los aprendizajes.",
+    "category": "Generica",
+    "type": "student"
+  },
+  {
+    "number": 6,
+    "question": "El docente emplea recursos diversos que favorecen el aprendizaje.",
+    "category": "Pedagogica",
+    "type": "student"
+  },
+  {
+    "number": 7,
+    "question": "El programa presentado posibilita la articulación entre los objetivos del curso y los objetivos de formación del programa curricular.",
+    "category": "Pedagogica",
+    "type": "student"
+  },
+  {
+    "number": 8,
+    "question": "El docente adapta periódicamente el programa del curso teniendo en cuenta las necesidades de aprendizaje de los estudiantes.",
+    "category": "Pedagogica",
+    "type": "student"
+  },
+  {
+    "number": 9,
+    "question": "El docente relaciona los contenidos del curso con ejemplos y aplicaciones correspondientes al ejercicio profesional de la disciplina.",
+    "category": "Pedagogica",
+    "type": "student"
+  },
+  {
+    "number": 10,
+    "question": "El docente involucra en el desarrollo del curso elementos del contexto ambiental local y nacional, productivo y social.",
+    "category": "Generica",
+    "type": "student"
+  },
+  {
+    "number": 11,
+    "question": "Para el desarrollo de las actividades del curso, el docente incorporó las expectativas académicas y profesionales de los estudiantes.",
+    "category": "Pedagogica",
+    "type": "student"
+  },
+  {
+    "number": 12,
+    "question": "El docente promueve el trabajo interdisciplinar a través de ejercicios que relacionan el dominio de su disciplina con otros campos de conocimiento.",
+    "category": "Pedagogica",
+    "type": "student"
+  },
+  {
+    "number": 13,
+    "question": "El docente socializa oportunamente el programa del curso, estableciendo los objetivos, los contenidos, las metodologías de enseñanza, los modos de evaluación del aprendizaje y la agenda de desarrollo del curso.",
+    "category": "Generica",
+    "type": "student"
+  },
+  {
+    "number": 14,
+    "question": "El docente presenta contenidos del curso actualizados, teniendo en cuenta los avances técnicos y científicos de la disciplina.",
+    "category": "Disciplinar",
+    "type": "student"
+  },
+  {
+    "number": 15,
+    "question": "El docente desarrolla estrategias para favorecer la inclusión de estudiantes con necesidades de aprendizaje específicas.",
+    "category": "Pedagogica",
+    "type": "student"
+  },
+  {
+    "number": 16,
+    "question": "El docente promueve el trabajo cooperativo entre estudiantes para el desarrollo de las actividades del curso.",
+    "category": "Pedagogica",
+    "type": "student"
+  }
+]

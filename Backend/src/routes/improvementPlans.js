@@ -1,5 +1,5 @@
 import express from 'express'
-import ImprovementPlan from '../models/ImprovementPlan'
+import ImprovementPlan from '../models/ImprovementPlan.js'
 
 const router = express.Router()
 

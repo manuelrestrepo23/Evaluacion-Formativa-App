@@ -1,0 +1,617 @@
+/* =========================
+    VARIABLES - UNAL COLOR PALETTE
+    ========================= */
+:root {
+    /* UNAL Institutional Colors */
+    --unal-green: #94B43B;          /* Primary institutional */
+    --unal-red: #A61C31;            /* Alternate institutional */
+    --unal-green-dark: #466B3F;     /* Complementary green dark */
+    --unal-red-dark: #76232F;       /* Complementary red dark */
+    --unal-gray-dark: #565A5C;      /* Complementary gray dark */
+    --unal-gray-light: #B1B2B0;     /* Complementary gray light */
+    
+    /* Role Colors */
+    --teacher-color: #466B3F;       /* Green dark for teachers */
+    --student-color: #94B43B;       /* Institutional green for students */
+    --director-color: #A61C31;      /* Red for directors */
+    
+    /* UI Colors */
+    --primary-color: #94B43B;
+    --secondary-color: #565A5C;
+    --accent-color: #A61C31;
+    --light-color: #f8f9fa;
+    --success-color: #466B3F;
+    --warning-color: #76232F;
+    --danger-color: #A61C31;
+}
+
+/* =========================
+    BASE STYLES
+    ========================= */
+* { box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    color: #333;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+}
+
+/* =========================
+    NAVBAR STYLES
+    ========================= */
+.navbar {
+    background: linear-gradient(90deg, var(--unal-gray-dark), #3d4143);
+    padding: 0.75rem 1rem;
+    border-bottom: 3px solid var(--unal-green);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.navbar .navbar-brand {
+    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    font-size: 1.1rem;
+}
+
+.navbar .navbar-text {
+    color: rgba(255,255,255,0.9);
+    font-size: 0.88rem;
+}
+
+/* =========================
+    CARDS / HEADERS / BADGES
+    ========================= */
+.card {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    margin-bottom: 24px;
+    background: #ffffff;
+    overflow: hidden;
+    border: 1px solid rgba(148, 180, 59, 0.1);
+}
+
+.card:hover { 
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(148, 180, 59, 0.15);
+}
+
+.card-header {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--unal-green), #a8c447);
+    border-bottom: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Header color by role */
+.card-header.role-teacher { 
+    background: linear-gradient(135deg, var(--teacher-color), #5a8751);
+    color: #ffffff;
+}
+.card-header.role-student { 
+    background: linear-gradient(135deg, var(--student-color), #a8c447);
+    color: #ffffff;
+}
+.card-header.role-director { 
+    background: linear-gradient(135deg, var(--director-color), #c42643);
+    color: #ffffff;
+}
+
+/* When using bg-primary/text-white in header */
+.card-header.bg-primary, .card-header.bg-primary * { 
+    background: linear-gradient(135deg, var(--unal-green), #a8c447);
+    color: #ffffff !important; 
+}
+
+/* Badge style by role */
+.badge-role {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 600;
+}
+
+.badge-role.teacher { 
+    background: var(--teacher-color);
+    color: #ffffff;
+    border: 1px solid rgba(70, 107, 63, 0.3);
+}
+.badge-role.student { 
+    background: var(--student-color);
+    color: #ffffff;
+    border: 1px solid rgba(148, 180, 59, 0.3);
+}
+.badge-role.director { 
+    background: var(--director-color);
+    color: #ffffff;
+    border: 1px solid rgba(166, 28, 49, 0.3);
+}
+
+.header-actions { display:flex; gap:0.5rem; align-items:center; }
+
+/* =========================
+    BUTTONS
+    ========================= */
+.btn {
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    font-weight: 600;
+    transition: all 0.18s ease;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid rgba(0,0,0,0.06);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--unal-green), #a8c447);
+    border: none;
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(148, 180, 59, 0.3);
+}
+.btn-primary:hover { 
+    background: linear-gradient(135deg, #7f9a32, var(--unal-green));
+    box-shadow: 0 4px 12px rgba(148, 180, 59, 0.4);
+    transform: translateY(-1px);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--teacher-color), #5a8751);
+    border: none;
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(70, 107, 63, 0.3);
+}
+.btn-success:hover {
+    background: linear-gradient(135deg, #3a5833, var(--teacher-color));
+    box-shadow: 0 4px 12px rgba(70, 107, 63, 0.4);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--unal-red), #c42643);
+    border: none;
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(166, 28, 49, 0.3);
+}
+.btn-danger:hover {
+    background: linear-gradient(135deg, #8a1626, var(--unal-red));
+    box-shadow: 0 4px 12px rgba(166, 28, 49, 0.4);
+}
+
+.btn-secondary {
+    background: var(--unal-gray-light);
+    border: 1px solid var(--unal-gray-dark);
+    color: var(--unal-gray-dark);
+}
+.btn-secondary:hover {
+    background: var(--unal-gray-dark);
+    color: #ffffff;
+}
+
+.btn-outline-secondary {
+    background: transparent;
+    border: 2px solid var(--unal-gray-light);
+    color: var(--unal-gray-dark);
+}
+.btn-outline-secondary:hover {
+    background: var(--unal-gray-light);
+    border-color: var(--unal-gray-dark);
+    color: var(--unal-gray-dark);
+}
+
+/* Botones outline-secondary en headers oscuros - hacerlos blancos */
+.card-header.role-teacher .btn-outline-secondary,
+.card-header.role-student .btn-outline-secondary,
+.card-header.role-director .btn-outline-secondary {
+    border-color: rgba(255, 255, 255, 0.5);
+    color: #ffffff;
+}
+.card-header.role-teacher .btn-outline-secondary:hover,
+.card-header.role-student .btn-outline-secondary:hover,
+.card-header.role-director .btn-outline-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #ffffff;
+    color: #ffffff;
+}
+
+/* Small secondary buttons in headers */
+.btn-sm { padding: 0.35rem 0.5rem; font-size: 0.85rem; border-radius: 6px; }
+
+/* Circular button used for 1..5 options */
+.btn.rounded-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    padding: 0;
+    border: 2px solid var(--unal-gray-light);
+    background: #ffffff;
+    color: var(--unal-gray-dark);
+    transition: all 0.2s ease;
+}
+
+.btn.rounded-circle:hover {
+    border-color: var(--unal-green);
+    background: rgba(148, 180, 59, 0.1);
+    transform: scale(1.1);
+}
+
+/* Style for btn-check inputs (radio with button label) */
+.btn-check:checked + .btn,
+.btn-check:focus + .btn {
+    background: linear-gradient(135deg, var(--unal-green), #a8c447);
+    color: #ffffff;
+    border-color: var(--unal-green);
+    box-shadow: 0 0 0 3px rgba(148, 180, 59, 0.2);
+}
+
+.btn-outline-primary {
+    border-color: var(--unal-green);
+    color: var(--unal-green);
+}
+.btn-outline-primary:hover {
+    background: var(--unal-green);
+    color: #ffffff;
+}
+
+/* =========================
+    FORMS AND CONTROLS
+    ========================= */
+.form-control, .form-select {
+    border-radius: 8px;
+    box-shadow: none;
+    border: 2px solid var(--unal-gray-light);
+    padding: 0.6rem 0.75rem;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--unal-green);
+    box-shadow: 0 0 0 3px rgba(148, 180, 59, 0.15);
+    outline: none;
+}
+
+.form-label {
+    color: var(--unal-gray-dark);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.login-container {
+    max-width: 420px;
+    margin: 60px auto;
+    padding: 0;
+}
+
+/* =========================
+    LAYOUT / TABS / SECTIONS
+    ========================= */
+#role-tabs { gap: 0.5rem; display:flex; flex-wrap:wrap; margin-bottom: 1rem; }
+.tab-button {
+    background: transparent;
+    border: 2px solid var(--unal-gray-light);
+    padding: 10px 16px;
+    border-radius: 8px;
+    color: var(--unal-gray-dark);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.tab-button:hover {
+    border-color: var(--unal-green);
+    color: var(--unal-green);
+}
+.tab-button.active {
+    background: linear-gradient(135deg, var(--unal-green), #a8c447);
+    color: white;
+    border-color: var(--unal-green);
+    box-shadow: 0 3px 10px rgba(148, 180, 59, 0.3);
+}
+
+.role-section { display: none; }
+.role-section .card { overflow: hidden; }
+.active-section { display: block; }
+
+.evaluation-item {
+    margin-bottom: 20px;
+    padding: 18px;
+    background: linear-gradient(135deg, #ffffff, #f9fafb);
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(148, 180, 59, 0.08);
+    border-left: 4px solid var(--unal-green);
+    transition: all 0.2s ease;
+}
+
+.evaluation-item:hover {
+    box-shadow: 0 4px 12px rgba(148, 180, 59, 0.15);
+    transform: translateX(4px);
+}
+
+.dashboard-card { 
+    height: 100%;
+    border-left: 4px solid transparent;
+}
+
+.dashboard-card:hover {
+    border-left-color: var(--unal-green);
+}
+
+/* Scale and layout for evaluation items */
+.evaluation-scale { 
+    display: flex;
+    justify-content: space-between;
+    margin: 16px 0;
+    gap: 10px;
+    padding: 12px;
+    background: rgba(148, 180, 59, 0.05);
+    border-radius: 8px;
+}
+.scale-item { 
+    text-align: center;
+    flex: 1;
+    padding: 8px;
+    color: var(--unal-gray-dark);
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+.scale-item:hover {
+    background: rgba(148, 180, 59, 0.1);
+    color: var(--unal-green-dark);
+}
+
+/* Chart container */
+.chart-container { 
+    background: linear-gradient(135deg, #ffffff, #f9fafb);
+    padding: 16px;
+    border-radius: 10px;
+    position: relative;
+    height: 300px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(148, 180, 59, 0.1);
+    box-shadow: 0 2px 8px rgba(148, 180, 59, 0.08);
+}
+
+/* Tables */
+.table-responsive .table { 
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(148, 180, 59, 0.05);
+}
+
+.table thead th {
+    border-bottom: 2px solid var(--unal-green);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+#indicators-table td, #indicators-table th { 
+    vertical-align: middle;
+    padding: 0.75rem;
+}
+
+/* Icons Enhancement */
+.bi {
+    vertical-align: middle;
+}
+
+.header-actions .btn i {
+    font-size: 1rem;
+}
+
+/* Spinner/Loading States */
+.spinner-border {
+    border-color: var(--unal-green);
+    border-right-color: transparent;
+}
+
+/* =========================
+    LOGIN SPECIFIC (better integrated)
+    ========================= */
+.login-card { max-width: 420px; margin: 60px auto; }
+.login-card .card-body { padding: 1.25rem; }
+.login-card .card-footer { background: transparent; border-top: none; color: #6b7280; font-size: 0.85rem; }
+
+.login-card .card-header {
+    background: linear-gradient(135deg, var(--unal-green), #a8c447);
+    color: #fff;
+    border-bottom: 3px solid var(--unal-green-dark);
+}
+
+.login-card h2, .login-card h4 { 
+    color: var(--unal-gray-dark);
+    margin: 0;
+    font-weight: 700;
+}
+
+.login-container h2 { 
+    color: var(--unal-gray-dark);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+/* =========================
+    RESPONSIVE DESIGN
+    ========================= */
+@media (max-width: 576px) {
+    .login-container { margin: 40px 16px; }
+    .navbar .navbar-brand { font-size: 0.95rem; }
+    .chart-container { height: 220px; }
+    .evaluation-scale { flex-direction: column; gap: 4px; }
+    .scale-item { padding: 6px; font-size: 0.8rem; }
+}
+
+/* =========================
+    ANIMATIONS & TRANSITIONS
+    ========================= */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.btn-primary:active {
+    animation: pulse 0.3s ease;
+}
+
+/* Smooth transitions for interactive elements */
+a, button, .card, .btn, .form-control, .form-select, .tab-button {
+    transition: all 0.2s ease;
+}
+
+/* Focus states with UNAL colors */
+*:focus-visible {
+    outline: 3px solid rgba(148, 180, 59, 0.4);
+    outline-offset: 2px;
+}
+
+/* Selection color */
+::selection {
+    background: var(--unal-green);
+    color: #ffffff;
+}
+
+::-moz-selection {
+    background: var(--unal-green);
+    color: #ffffff;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--unal-gray-light);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--unal-green);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--unal-green-dark);
+}
+
+/* =========================
+    UTILS (small adjustments)
+    ========================= */
+.text-muted { color: #6b7280 !important; }
+.small { font-size: 0.85rem; }
+
+/* Bootstrap Badge Overrides - UNAL Colors */
+.badge.bg-primary {
+    background: linear-gradient(135deg, var(--unal-green), #a8c447) !important;
+    color: #ffffff !important;
+}
+
+.badge.bg-success {
+    background: var(--teacher-color) !important;
+    color: #ffffff !important;
+}
+
+.badge.bg-warning {
+    background: var(--unal-red-dark) !important;
+    color: #ffffff !important;
+}
+
+.badge.bg-danger {
+    background: var(--unal-red) !important;
+    color: #ffffff !important;
+}
+
+.badge.bg-info {
+    background: var(--unal-green-dark) !important;
+    color: #ffffff !important;
+}
+
+/* Card Stat Colors for Director Dashboard */
+.card.bg-primary {
+    background: linear-gradient(135deg, var(--unal-green), #a8c447) !important;
+}
+
+.card.bg-success {
+    background: linear-gradient(135deg, var(--teacher-color), #5a8751) !important;
+}
+
+.card.bg-info {
+    background: linear-gradient(135deg, var(--unal-green-dark), #5a8751) !important;
+}
+
+.card.bg-warning {
+    background: linear-gradient(135deg, var(--unal-red-dark), #943840) !important;
+}
+
+/* Table Header Colors */
+.table-primary {
+    background-color: rgba(148, 180, 59, 0.15) !important;
+    border-color: var(--unal-green) !important;
+}
+
+.table-warning {
+    background-color: rgba(118, 35, 47, 0.15) !important;
+    border-color: var(--unal-red-dark) !important;
+}
+
+.table-success {
+    background-color: rgba(70, 107, 63, 0.15) !important;
+    border-color: var(--teacher-color) !important;
+}
+
+/* Alert Colors */
+.alert-success {
+    background-color: rgba(70, 107, 63, 0.1);
+    border-color: var(--teacher-color);
+    color: var(--teacher-color);
+}
+
+.alert-warning {
+    background-color: rgba(118, 35, 47, 0.1);
+    border-color: var(--unal-red-dark);
+    color: var(--unal-red-dark);
+}
+
+.alert-info {
+    background-color: rgba(148, 180, 59, 0.1);
+    border-color: var(--unal-green);
+    color: var(--unal-green-dark);
+}
+
+.alert-danger {
+    background-color: rgba(166, 28, 49, 0.1);
+    border-color: var(--unal-red);
+    color: var(--unal-red);
+}

@@ -7,6 +7,7 @@ import questionsRouter from './routes/question.js'
 import evaluationsRouter from './routes/evaluations.js'
 import improvementPlansRouter from './routes/improvementPlans.js'
 import directorStatsRouter from './routes/directorStats.js'
+import authRouter from './routes/auth.js'
 
 dotenv.config()
 
@@ -23,6 +24,7 @@ app.use('/api/questions', questionsRouter)
 app.use('/api/evaluations', evaluationsRouter)
 app.use('/api/improvement-plans', improvementPlansRouter)
 app.use('/api/director-stats', directorStatsRouter)
+app.use('/api/auth', authRouter)
 
 // Test route
 app.get('/api/health', (req, res) => {

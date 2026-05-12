@@ -32,16 +32,16 @@ router.get('/', async (req, res) => {
       let studentAverage = 0
  
       if (selfEval) {
-        const scores = Object.values(selfEval.evaluationData?.scores || {})
+        const scores = [...selfEval.evaluationData.scores.values()]
           .filter(v => typeof v === 'number' && v > 0)
         if (scores.length > 0) {
           selfAverage = scores.reduce((a, b) => a + b, 0) / scores.length
         }
       }
- 
+
       if (studentEvals.length > 0) {
         const allScores = studentEvals.flatMap(e =>
-          Object.values(e.evaluationData?.scores || {}).filter(v => typeof v === 'number' && v > 0)
+          [...e.evaluationData.scores.values()].filter(v => typeof v === 'number' && v > 0)
         )
         if (allScores.length > 0) {
           studentAverage = allScores.reduce((a, b) => a + b, 0) / allScores.length

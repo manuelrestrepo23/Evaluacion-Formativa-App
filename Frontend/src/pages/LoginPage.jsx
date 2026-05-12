@@ -42,17 +42,22 @@ export default function LoginPage() {
     setLoading(true)
     try {
       const result = await signUp.create({ emailAddress: email, password })
-      
+
       await axios.post('/api/auth/update-role', {
         userId: result.createdUserId,
         role
       })
 
+      if (role === 'teacher') { // Se guarda el profesor en mongodb cuando se registra
+        await axios.post('/api/teachers', {
+          id: email,
+          name: email.split('@')[0]
+        })
+      }
+
       await setActiveSignUp({ session: result.createdSessionId })
     } catch (err) {
       console.log('Error completo:', err)
-      console.log('Error response:', err.response)
-      console.log('Error message:', err.message)
       setError('Error al registrarse. Verifica los datos ingresados')
     } finally {
       setLoading(false)

@@ -29,9 +29,10 @@ router.post('/', async (req, res) => {
             return res.status(400).json({ message: 'Datos incompletos' })
         }
 
-        const plan = await ImprovementPlan.create({ teacherId, goal, actions, indicator, deadline, userEmail })
+        const plan = await ImprovementPlan.create({ teacherId, goal, actions, indicators, deadline, userEmail })
         res.status(201).json({ message: 'Plan de mejora guardado correctamente', id: plan._id })
     } catch (error) {
+        console.log('Error detallado: ', error)
         res.status(500).json({ message: 'Error al guardar el plan de mejora', error: error.message })
     }
 })

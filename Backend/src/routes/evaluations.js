@@ -24,8 +24,8 @@ router.get('/student', async (req, res) => {
         }
 
         const evaluations = await Evaluation.find({ userEmail, userRole: 'student' })
-        const evaluatedTeachersIds = evaluations.map(e => e.teahcerId)
-        res.status(200).json({ evaluatedTeachersIds })
+        const evaluatedTeacherIds = evaluations.map(e => e.teacherId)
+        res.status(200).json({ evaluatedTeacherIds })
     } catch (error) {
         res.status(500).json({ message: 'Error al obtener las evaluaciones', error: error.message })
     }

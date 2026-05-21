@@ -30,8 +30,8 @@ export default function TeacherPage() {
   }
 
   const handlePlanSaved = (newPlan) => {
-    setPlans(prev => [newPlan, ...prev])
-    setShowPlanModal(false)
+  setPlans(prev => [newPlan.plan || newPlan, ...prev])
+  setShowPlanModal(false)
   }
 
   if (loading) {

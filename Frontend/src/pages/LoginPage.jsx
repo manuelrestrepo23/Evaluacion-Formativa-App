@@ -45,17 +45,16 @@ export default function LoginPage() {
 
       await axios.post('/api/auth/update-role', {
         userId: result.createdUserId,
-        role
+        role,
+        email
       })
 
-      if (role === 'teacher') { // Se guarda el profesor en mongodb cuando se registra
-        await axios.post('/api/teachers', {
-          id: email,
-          name: email.split('@')[0]
-        })
-      }
-
       await setActiveSignUp({ session: result.createdSessionId })
+
+      // Esperar a que Clerk propague el rol
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      window.location.reload()
+      
     } catch (err) {
       console.log('Error completo:', err)
       setError('Error al registrarse. Verifica los datos ingresados')

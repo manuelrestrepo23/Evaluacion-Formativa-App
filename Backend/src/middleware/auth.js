@@ -1,6 +1,4 @@
-import { createClerkClient, verifyToken } from '@clerk/backend'
-
-const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY })
+import { verifyToken } from '@clerk/backend'
 
 export const requireAuth = async (req, res, next) => {
   try {
@@ -16,7 +14,8 @@ export const requireAuth = async (req, res, next) => {
     })
 
     req.userId = payload.sub
-    req.userRole = payload.metadata?.role || payload.metadata?.role
+    req.userEmail = payload.email
+    req.userRole = payload.metadata?.role
 
     next()
   } catch (error) {

@@ -20,8 +20,6 @@ export default function ImprovementPlanModal({ teacherId, userEmail, onSaved, on
     setSubmitting(true)
     try {
       const res = await axios.post('/api/improvement-plans', {
-        teacherId,
-        userEmail,
         goal,
         actions,
         indicators,

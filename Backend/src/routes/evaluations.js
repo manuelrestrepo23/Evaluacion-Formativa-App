@@ -14,14 +14,10 @@ router.get('/all', requireAuth, requireRole('director'), async (req, res) => {
   }
 })
 
-// GET /api/evaluations/student?userEmail= - Docentes evaluados por un estudiante
+// GET /api/evaluations/student - Docentes evaluados por el estudiante autenticado
 router.get('/student', requireAuth, requireRole('student'), async (req, res) => {
   try {
-    const { userEmail } = req.query
-
-    if (!userEmail) {
-      return res.status(400).json({ message: 'userEmail es requerido' })
-    }
+    const userEmail = req.userEmail
 
     const evaluations = await Evaluation.find({ userEmail, userRole: 'student' })
     const evaluatedTeacherIds = evaluations.map(e => e.teacherId)
@@ -31,14 +27,10 @@ router.get('/student', requireAuth, requireRole('student'), async (req, res) => 
   }
 })
 
-// GET /api/evaluations/teacher-results?teacherId= - Resultados de un docente
+// GET /api/evaluations/teacher-results - Resultados del docente autenticado
 router.get('/teacher-results', requireAuth, requireRole('teacher', 'director'), async (req, res) => {
   try {
-    const { teacherId } = req.query
-
-    if (!teacherId) {
-      return res.status(400).json({ message: 'teacherId es requerido' })
-    }
+    const teacherId = req.userEmail
 
     const selfEvaluation = await Evaluation.findOne({ teacherId, userRole: 'teacher' })
     const studentEvaluations = await Evaluation.find({ teacherId, userRole: 'student' })
@@ -50,14 +42,10 @@ router.get('/teacher-results', requireAuth, requireRole('teacher', 'director'), 
   }
 })
 
-// GET /api/evaluations/teacher-self-check?teacherId= - Verificar si un docente ya se autoevaluó
+// GET /api/evaluations/teacher-self-check - Verificar si el docente autenticado ya se autoevaluó
 router.get('/teacher-self-check', requireAuth, requireRole('teacher'), async (req, res) => {
   try {
-    const { teacherId } = req.query
-
-    if (!teacherId) {
-      return res.status(400).json({ message: 'teacherId es requerido' })
-    }
+    const teacherId = req.userEmail
 
     const selfEvaluation = await Evaluation.findOne({ teacherId, userRole: 'teacher' })
     res.status(200).json({ hasEvaluated: !!selfEvaluation })
@@ -69,9 +57,10 @@ router.get('/teacher-self-check', requireAuth, requireRole('teacher'), async (re
 // POST /api/evaluations/submit - Enviar una evaluación
 router.post('/submit', requireAuth, requireRole('student', 'teacher'), async (req, res) => {
   try {
-    const { teacherId, evaluationData, userEmail, userRole } = req.body
+    const { teacherId, evaluationData, userRole } = req.body
+    const userEmail = req.userEmail
 
-    if (!teacherId || !evaluationData || !userEmail || !userRole) {
+    if (!teacherId || !evaluationData || !userRole) {
       return res.status(400).json({ message: 'Datos incompletos' })
     }
 

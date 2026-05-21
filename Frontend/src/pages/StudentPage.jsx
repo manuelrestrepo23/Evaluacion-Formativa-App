@@ -45,7 +45,6 @@ export default function StudentPage() {
       await axios.post('/api/evaluations/submit', {
         teacherId: selectedTeacher,
         evaluationData: { scores },
-        userEmail,
         userRole: 'student'
       })
 

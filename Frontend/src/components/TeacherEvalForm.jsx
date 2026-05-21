@@ -25,7 +25,6 @@ export default function TeacherEvalForm({ questions, teacherId, userEmail, onSub
       await axios.post('/api/evaluations/submit', {
         teacherId,
         evaluationData: { scores },
-        userEmail,
         userRole: 'teacher'
       })
       onSubmitted()

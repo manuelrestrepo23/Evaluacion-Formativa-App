@@ -20,7 +20,7 @@ export function useStudentData(userEmail) {
       const [teachersRes, questionsRes, evaluationsRes] = await Promise.all([
         api.get('/api/teachers'),
         api.get('/api/questions?type=student'),
-        api.get(`/api/evaluations/student?userEmail=${encodeURIComponent(userEmail)}`)
+        api.get('/api/evaluations/student')
       ])
 
       setTeachers(teachersRes.data)

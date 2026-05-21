@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from '../api/axios.js'
+import api from '../api/axios.js'
 
 export function useTeacherData(teacherId) {
   const [questions, setQuestions] = useState([])
@@ -19,8 +19,8 @@ export function useTeacherData(teacherId) {
     setError('')
     try {
       const [questionsRes, selfCheckRes] = await Promise.all([
-        axios.get('/api/questions?type=teacher'),
-        axios.get(`/api/evaluations/teacher-self-check?teacherId=${encodeURIComponent(teacherId)}`)
+        api.get('/api/questions?type=teacher'),
+        api.get('/api/evaluations/teacher-self-check')
       ])
 
       setQuestions(questionsRes.data)
@@ -36,8 +36,8 @@ export function useTeacherData(teacherId) {
   const loadResults = async () => {
     try {
       const [resultsRes, plansRes] = await Promise.all([
-        axios.get(`/api/evaluations/teacher-results?teacherId=${encodeURIComponent(teacherId)}`),
-        axios.get(`/api/improvement-plans?teacherId=${encodeURIComponent(teacherId)}`)
+        api.get('/api/evaluations/teacher-results'),
+        api.get('/api/improvement-plans')
       ])
       setResults(resultsRes.data)
       setPlans(plansRes.data.plans || [])

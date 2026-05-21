@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useUser, useClerk } from '@clerk/clerk-react'
 import axios from 'axios'
-import { useTeacherData } from '../hooks/UseTeacherData.js'
+import { useTeacherData } from '../hooks/useTeacherData.js'
 import TeacherEvalForm from '../components/TeacherEvalForm.jsx'
 import TeacherResults from '../components/TeacherResults.jsx'
 import ImprovementPlanModal from '../components/ImprovementPlanModal.jsx'

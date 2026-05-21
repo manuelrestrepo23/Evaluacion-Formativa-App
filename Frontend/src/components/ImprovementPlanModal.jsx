@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import axios from 'axios'
+import axios from '../api/axios.js'
 
 export default function ImprovementPlanModal({ teacherId, userEmail, onSaved, onClose }) {
   const [goal, setGoal] = useState('')

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import api from '../api/axios.js'
 
 export function useStudentData(userEmail) {
   const [teachers, setTeachers] = useState([])
@@ -18,9 +18,9 @@ export function useStudentData(userEmail) {
     setError('')
     try {
       const [teachersRes, questionsRes, evaluationsRes] = await Promise.all([
-        axios.get('/api/teachers'),
-        axios.get('/api/questions?type=student'),
-        axios.get(`/api/evaluations/student?userEmail=${encodeURIComponent(userEmail)}`)
+        api.get('/api/teachers'),
+        api.get('/api/questions?type=student'),
+        api.get(`/api/evaluations/student?userEmail=${encodeURIComponent(userEmail)}`)
       ])
 
       setTeachers(teachersRes.data)

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useUser, useClerk } from '@clerk/clerk-react'
-import axios from 'axios'
+import axios from '../api/axios.js'
 import { useStudentData } from '../hooks/useStudentData.js'
 
 export default function StudentPage() {

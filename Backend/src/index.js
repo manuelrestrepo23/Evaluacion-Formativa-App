@@ -8,6 +8,7 @@ import evaluationsRouter from './routes/evaluations.js'
 import improvementPlansRouter from './routes/improvementPlans.js'
 import directorStatsRouter from './routes/directorStats.js'
 import authRouter from './routes/auth.js'
+import cookieParser from 'cookie-parser'
 
 dotenv.config()
 
@@ -17,6 +18,7 @@ const PORT = process.env.PORT || 5000
 // Middlewares
 app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:3000' }))
 app.use(express.json())
+app.use(cookieParser())
 
 // Routes 
 app.use('/api/teachers', teachersRouter)

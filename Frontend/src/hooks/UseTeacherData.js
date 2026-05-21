@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import axios from '../api/axios.js'
 
 export function useTeacherData(teacherId) {
   const [questions, setQuestions] = useState([])

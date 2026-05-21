@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import axios from '../api/axios.js'
 
 export function useDirectorData() {
   const [stats, setStats] = useState(null)

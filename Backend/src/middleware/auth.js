@@ -2,8 +2,8 @@ import { verifyToken } from '@clerk/backend'
 
 export const requireAuth = async (req, res, next) => {
   try {
-    const sessionToken = req.cookies?.__session ||
-                        req.headers.authorization?.split(' ')[1]
+    const sessionToken = req.headers.authorization?.split(' ')[1] ||
+                    req.cookies?.__session
 
     if (!sessionToken) {
       return res.status(401).json({ message: 'No autorizado - Token requerido' })

@@ -15,6 +15,11 @@ dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 5000
 
+console.log(process.env.FRONTEND_URL)
+app.use((req, res, next) => {
+  console.log(req.headers.origin)
+  next()
+})
 // Middlewares
 app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:3000' }))
 app.use(express.json())

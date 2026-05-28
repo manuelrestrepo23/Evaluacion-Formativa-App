@@ -15,9 +15,9 @@ dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 5000
 
-console.log(process.env.FRONTEND_URL)
+console.log("Frontend url: ", process.env.FRONTEND_URL)
 app.use((req, res, next) => {
-  console.log(req.headers.origin)
+  console.log("request headers: ", req.headers.origin)
   next()
 })
 // Middlewares

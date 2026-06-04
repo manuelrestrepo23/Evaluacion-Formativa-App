@@ -1,6 +1,6 @@
 import { useSignIn, useSignUp } from '@clerk/clerk-react'
 import { useState } from 'react'
-import axios from 'axios'
+import { publicApi } from '../api/axios.js'
 
 export default function LoginPage() {
   const { signIn, setActive: setActiveSignIn } = useSignIn()
@@ -43,7 +43,7 @@ export default function LoginPage() {
     try {
       const result = await signUp.create({ emailAddress: email, password })
 
-      await axios.post('/api/auth/update-role', {
+      await publicApi.post('/api/auth/update-role', {
         userId: result.createdUserId,
         role,
         email

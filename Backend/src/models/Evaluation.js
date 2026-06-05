@@ -11,7 +11,7 @@ const evaluationSchema = mongoose.Schema({
     },
     userRole: {
         type: String,
-        enum: ['teacher', 'student'], // Solo acepta evaluacion de estas dos roles
+        enum: ['docente', 'estudiante'], // Solo acepta evaluacion de estas dos roles
         required: true
     },
     evaluationData: {

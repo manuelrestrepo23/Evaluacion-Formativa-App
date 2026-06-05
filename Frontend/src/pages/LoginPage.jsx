@@ -127,9 +127,9 @@ export default function LoginPage() {
                       required
                     >
                       <option value="">-- Seleccione un rol --</option>
-                      <option value="student">Estudiante</option>
-                      <option value="teacher">Docente</option>
-                      <option value="director">Directivo</option>
+                      <option value="estudiante">Estudiante</option>
+                      <option value="docente">Docente</option>
+                      <option value="directivo">Directivo</option>
                     </select>
                   </div>
                 </>

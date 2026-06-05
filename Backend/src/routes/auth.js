@@ -15,7 +15,7 @@ router.post('/update-role', async (req, res) => {
       return res.status(400).json({ message: 'userId y role son requeridos' })
     }
 
-    if (!['student', 'teacher', 'director'].includes(role)) {
+    if (!['estudiante', 'docente', 'directivo'].includes(role)) {
       return res.status(400).json({ message: 'Rol inválido' })
     }
 
@@ -24,7 +24,7 @@ router.post('/update-role', async (req, res) => {
     })
 
     // Si el rol es teacher, agregarlo a la coleccion de docentes
-    if (role === 'teacher' && email) {
+    if (role === 'docente' && email) {
       const existingTeacher = await Teacher.findOne({ id: email })
       if (!existingTeacher) {
         await Teacher.create({

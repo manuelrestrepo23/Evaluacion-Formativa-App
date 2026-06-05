@@ -5,7 +5,7 @@ import { requireAuth, requireRole } from '../middleware/auth.js'
 const router = express.Router()
 
 // GET /api/improvement-plans - Obtener planes de mejora del docente autenticado
-router.get('/', requireAuth, requireRole('teacher', 'director'), async (req, res) => {
+router.get('/', requireAuth, requireRole('docente', 'directivo'), async (req, res) => {
   try {
     const teacherId = req.userEmail
 
@@ -17,7 +17,7 @@ router.get('/', requireAuth, requireRole('teacher', 'director'), async (req, res
 })
 
 // POST /api/improvement-plans - Guardar un plan de mejora
-router.post('/', requireAuth, requireRole('teacher'), async (req, res) => {
+router.post('/', requireAuth, requireRole('docente'), async (req, res) => {
   try {
     const { goal, actions, indicators, deadline } = req.body
     const teacherId = req.userEmail

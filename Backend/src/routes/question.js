@@ -6,7 +6,7 @@ const router = express.Router()
 
 // GET /api/questions?type=teacher - Obtener preguntas de docentes
 // GET /api/questions?type=student - Obtener preguntas de estudiantes
-router.get('/', requireAuth, requireRole('student', 'teacher', 'director'), async (req, res) => {
+router.get('/', requireAuth, requireRole('estudiante', 'docente', 'directivo'), async (req, res) => {
   try {
     const { type } = req.query
 

@@ -5,7 +5,7 @@ import { requireAuth, requireRole } from '../middleware/auth.js'
 const router = express.Router()
 
 // GET /api/evaluations/all - Obtener todas las evaluaciones (directivo)
-router.get('/all', requireAuth, requireRole('director'), async (req, res) => {
+router.get('/all', requireAuth, requireRole('directivo'), async (req, res) => {
   try {
     const evaluations = await Evaluation.find()
     res.status(200).json({ evaluations })
@@ -15,11 +15,11 @@ router.get('/all', requireAuth, requireRole('director'), async (req, res) => {
 })
 
 // GET /api/evaluations/student - Docentes evaluados por el estudiante autenticado
-router.get('/student', requireAuth, requireRole('student'), async (req, res) => {
+router.get('/student', requireAuth, requireRole('estudiante'), async (req, res) => {
   try {
     const userEmail = req.userEmail
 
-    const evaluations = await Evaluation.find({ userEmail, userRole: 'student' })
+    const evaluations = await Evaluation.find({ userEmail, userRole: 'estudiante' })
     const evaluatedTeacherIds = evaluations.map(e => e.teacherId)
     res.status(200).json({ evaluatedTeacherIds })
   } catch (error) {
@@ -28,12 +28,12 @@ router.get('/student', requireAuth, requireRole('student'), async (req, res) => 
 })
 
 // GET /api/evaluations/teacher-results - Resultados del docente autenticado
-router.get('/teacher-results', requireAuth, requireRole('teacher', 'director'), async (req, res) => {
+router.get('/teacher-results', requireAuth, requireRole('docente', 'directivo'), async (req, res) => {
   try {
     const teacherId = req.userEmail
 
-    const selfEvaluation = await Evaluation.findOne({ teacherId, userRole: 'teacher' })
-    const studentEvaluations = await Evaluation.find({ teacherId, userRole: 'student' })
+    const selfEvaluation = await Evaluation.findOne({ teacherId, userRole: 'docente' })
+    const studentEvaluations = await Evaluation.find({ teacherId, userRole: 'estudiante' })
     const hasData = !!selfEvaluation || studentEvaluations.length > 0
 
     res.status(200).json({ hasData, selfEvaluation, studentEvaluations })
@@ -43,11 +43,11 @@ router.get('/teacher-results', requireAuth, requireRole('teacher', 'director'), 
 })
 
 // GET /api/evaluations/teacher-self-check - Verificar si el docente autenticado ya se autoevaluó
-router.get('/teacher-self-check', requireAuth, requireRole('teacher'), async (req, res) => {
+router.get('/teacher-self-check', requireAuth, requireRole('docente'), async (req, res) => {
   try {
     const teacherId = req.userEmail
 
-    const selfEvaluation = await Evaluation.findOne({ teacherId, userRole: 'teacher' })
+    const selfEvaluation = await Evaluation.findOne({ teacherId, userRole: 'docente' })
     res.status(200).json({ hasEvaluated: !!selfEvaluation })
   } catch (error) {
     res.status(500).json({ message: 'Error al verificar la autoevaluación', error: error.message })
@@ -55,7 +55,7 @@ router.get('/teacher-self-check', requireAuth, requireRole('teacher'), async (re
 })
 
 // POST /api/evaluations/submit - Enviar una evaluación
-router.post('/submit', requireAuth, requireRole('student', 'teacher'), async (req, res) => {
+router.post('/submit', requireAuth, requireRole('estudiante', 'docente'), async (req, res) => {
   try {
     const { teacherId, evaluationData, userRole } = req.body
     const userEmail = req.userEmail

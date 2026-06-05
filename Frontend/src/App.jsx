@@ -33,13 +33,13 @@ function AuthenticatedApp() {
 
   return (
     <Routes>
-      <Route path="/student" element={role === 'student' ? <StudentPage /> : <Navigate to="/login" />} />
-      <Route path="/teacher" element={role === 'teacher' ? <TeacherPage /> : <Navigate to="/login" />} />
-      <Route path="/director" element={role === 'director' ? <DirectorPage /> : <Navigate to="/login" />} />
+      <Route path="/student" element={role === 'estudiante' ? <StudentPage /> : <Navigate to="/login" />} />
+      <Route path="/teacher" element={role === 'docente' ? <TeacherPage /> : <Navigate to="/login" />} />
+      <Route path="/director" element={role === 'directivo' ? <DirectorPage /> : <Navigate to="/login" />} />
       <Route path="*" element={
-        role === 'student' ? <Navigate to="/student" /> :
-        role === 'teacher' ? <Navigate to="/teacher" /> :
-        role === 'director' ? <Navigate to="/director" /> :
+        role === 'estudiante' ? <Navigate to="/student" /> :
+        role === 'docente' ? <Navigate to="/teacher" /> :
+        role === 'directivo' ? <Navigate to="/director" /> :
         <Navigate to="/login" />
       } />
     </Routes>

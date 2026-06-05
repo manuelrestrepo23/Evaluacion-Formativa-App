@@ -5,7 +5,7 @@ import { requireAuth, requireRole } from '../middleware/auth.js'
 const router = express.Router()
 
 // GET /api/teachers - Obtener todos los docentes
-router.get('/', requireAuth, requireRole('student', 'teacher', 'director'), async (req, res) => {
+router.get('/', requireAuth, requireRole('estudiante', 'docente', 'directivo'), async (req, res) => {
   try {
     const teachers = await Teacher.find()
     res.status(200).json(teachers)
@@ -15,7 +15,7 @@ router.get('/', requireAuth, requireRole('student', 'teacher', 'director'), asyn
 })
 
 // POST /api/teachers - Agregar un nuevo docente
-router.post('/', requireAuth, requireRole('director', 'teacher'), async (req, res) => {
+router.post('/', requireAuth, requireRole('directivo', 'docente'), async (req, res) => {
   try {
     const { id, name, subject } = req.body
 

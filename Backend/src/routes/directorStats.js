@@ -7,7 +7,7 @@ import { requireAuth, requireRole } from '../middleware/auth.js'
 const router = express.Router()
 
 // GET /api/director-stats - Obtener estadisticas generales para el directivo
-router.get('/', requireAuth, requireRole('director'), async (req, res) => {
+router.get('/', requireAuth, requireRole('directivo'), async (req, res) => {
   try {
     const teachers = await Teacher.find()
     const evaluations = await Evaluation.find()
@@ -18,8 +18,8 @@ router.get('/', requireAuth, requireRole('director'), async (req, res) => {
     const stats = {
       totalTeachers: teachers.length,
       totalEvaluations: evaluations.length,
-      selfEvaluations: evaluations.filter(e => e.userRole === 'teacher').length,
-      studentEvaluations: evaluations.filter(e => e.userRole === 'student').length,
+      selfEvaluations: evaluations.filter(e => e.userRole === 'docente').length,
+      studentEvaluations: evaluations.filter(e => e.userRole === 'estudiante').length,
       teachers: [],
       overallAverage: 0,
       categoryAverages: {}
@@ -28,8 +28,8 @@ router.get('/', requireAuth, requireRole('director'), async (req, res) => {
     // Calcular promedios y respuestas abiertas por docente
     teachers.forEach(teacher => {
       const teacherEvals = evaluations.filter(e => e.teacherId === teacher.id)
-      const selfEval = teacherEvals.find(e => e.userRole === 'teacher')
-      const studentEvals = teacherEvals.filter(e => e.userRole === 'student')
+      const selfEval = teacherEvals.find(e => e.userRole === 'docente')
+      const studentEvals = teacherEvals.filter(e => e.userRole === 'estudiante')
 
       let selfAverage = 0
       let studentAverage = 0

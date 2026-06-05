@@ -1,10 +1,12 @@
 import { BarChart, Bar, RadarChart, Radar, PolarGrid, PolarAngleAxis, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
-function processResults(results) {
+function processResults(results, questions) {
   if (!results || !results.hasData) return null
 
   const { selfEvaluation, studentEvaluations } = results
+  const openQuestions = questions?.filter(q => q.questionType === 'abierta') || []
 
+  // Scores Likert - autoevaluación
   const selfScores = selfEvaluation
     ? Object.entries(selfEvaluation.evaluationData?.scores || {}).map(([id, score]) => ({
         questionId: parseInt(id),
@@ -12,6 +14,15 @@ function processResults(results) {
       }))
     : []
 
+  // Respuestas abiertas - autoevaluación
+  const selfOpenAnswers = selfEvaluation
+    ? openQuestions.map(q => ({
+        question: q.question,
+        answer: selfEvaluation.evaluationData?.openAnswers?.[q.number] || ''
+      })).filter(a => a.answer)
+    : []
+
+  // Scores Likert - estudiantes
   const studentScoresMap = {}
   studentEvaluations.forEach(evaluation => {
     const scoresData = evaluation.evaluationData?.scores || {}
@@ -27,9 +38,19 @@ function processResults(results) {
     score: scores.reduce((a, b) => a + b, 0) / scores.length
   }))
 
+  // Respuestas abiertas - estudiantes agrupadas por pregunta
+  const studentOpenAnswers = openQuestions.map(q => ({
+    question: q.question,
+    answers: studentEvaluations
+      .map(e => e.evaluationData?.openAnswers?.[q.number])
+      .filter(a => a && a.trim())
+  })).filter(a => a.answers.length > 0)
+
   return {
     selfScores,
     studentScores,
+    selfOpenAnswers,
+    studentOpenAnswers,
     hasData: selfScores.length > 0 || studentScores.length > 0,
     hasSelfEvaluation: selfScores.length > 0,
     hasStudentEvaluations: studentScores.length > 0,
@@ -46,11 +67,30 @@ function exportCSV(teacherName, processedData) {
   if (processedData.hasSelfEvaluation) {
     const avg = processedData.selfScores.reduce((s, x) => s + x.score, 0) / processedData.selfScores.length
     csv += `AUTOEVALUACIÓN\nPromedio,${avg.toFixed(2)}\n\n`
+
+    if (processedData.selfOpenAnswers?.length > 0) {
+      csv += `RESPUESTAS ABIERTAS - AUTOEVALUACIÓN\n`
+      processedData.selfOpenAnswers.forEach(a => {
+        csv += `"${a.question}","${a.answer.replace(/"/g, '""')}"\n`
+      })
+      csv += '\n'
+    }
   }
 
   if (processedData.hasStudentEvaluations) {
     const avg = processedData.studentScores.reduce((s, x) => s + x.score, 0) / processedData.studentScores.length
-    csv += `EVALUACIÓN ESTUDIANTIL\nEvaluaciones recibidas,${processedData.studentCount}\nPromedio,${avg.toFixed(2)}\n`
+    csv += `EVALUACIÓN ESTUDIANTIL\nEvaluaciones recibidas,${processedData.studentCount}\nPromedio,${avg.toFixed(2)}\n\n`
+
+    if (processedData.studentOpenAnswers?.length > 0) {
+      csv += `RESPUESTAS ABIERTAS - ESTUDIANTES\n`
+      processedData.studentOpenAnswers.forEach(a => {
+        csv += `Pregunta,"${a.question}"\n`
+        a.answers.forEach((ans, i) => {
+          csv += `Respuesta ${i + 1},"${ans.replace(/"/g, '""')}"\n`
+        })
+        csv += '\n'
+      })
+    }
   }
 
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
@@ -60,8 +100,8 @@ function exportCSV(teacherName, processedData) {
   link.click()
 }
 
-export default function TeacherResults({ results, plans, teacherId, onClose, onCreatePlan }) {
-  const processedData = processResults(results)
+export default function TeacherResults({ results, plans, questions, teacherId, onClose, onCreatePlan }) {
+  const processedData = processResults(results, questions)
 
   const selfAverage = processedData?.hasSelfEvaluation
     ? processedData.selfScores.reduce((s, x) => s + x.score, 0) / processedData.selfScores.length

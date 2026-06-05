@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useUser, useClerk } from '@clerk/clerk-react'
-import axios from 'axios'
 import { useTeacherData } from '../hooks/useTeacherData.js'
 import TeacherEvalForm from '../components/TeacherEvalForm.jsx'
 import TeacherResults from '../components/TeacherResults.jsx'
@@ -13,7 +12,7 @@ export default function TeacherPage() {
 
   const { questions, results, plans, hasEvaluated, loading, error, loadResults, markAsEvaluated, setPlans } = useTeacherData(teacherId)
 
-  const [view, setView] = useState('dashboard') // 'dashboard' | 'eval' | 'results'
+  const [view, setView] = useState('dashboard')
   const [showPlanModal, setShowPlanModal] = useState(false)
 
   const handleStartEval = () => setView('eval')
@@ -30,8 +29,8 @@ export default function TeacherPage() {
   }
 
   const handlePlanSaved = (newPlan) => {
-  setPlans(prev => [newPlan.plan || newPlan, ...prev])
-  setShowPlanModal(false)
+    setPlans(prev => [newPlan.plan || newPlan, ...prev])
+    setShowPlanModal(false)
   }
 
   if (loading) {
@@ -135,6 +134,7 @@ export default function TeacherPage() {
         <TeacherResults
           results={results}
           plans={plans}
+          questions={questions}
           teacherId={teacherId}
           onClose={() => setView('dashboard')}
           onCreatePlan={() => setShowPlanModal(true)}

@@ -1,98 +1,170 @@
 [
   {
     "number": 1,
-    "question": "El docente mostró disposición para hacer modificaciones pertinentes al curso, en atención a las condiciones contextuales de los estudiantes y posibles contingencias que afectaran su desarrollo normal.",
-    "category": "Pedagogica",
-    "type": "student"
+    "question": "El profesor es receptivo frente a las inquietudes, creencias y valoraciones de los estudiantes.",
+    "category": "Caracter docente",
+    "type": "student",
+    "questionType": "likert"
   },
   {
     "number": 2,
-    "question": "El docente adaptó las metodologías de enseñanza del curso para favorecer el aprendizaje de todos los estudiantes.",
-    "category": "Pedagogica",
-    "type": "student"
+    "question": "El profesor mantiene un trato respetuoso y equitativo con los estudiantes.",
+    "category": "Caracter docente",
+    "type": "student",
+    "questionType": "likert"
   },
   {
     "number": 3,
-    "question": "El docente motiva el interés profesional en la disciplina y la investigación en el área temática del curso.",
-    "category": "Pedagogica",
-    "type": "student"
+    "question": "El profesor favorece la inclusión de estudiantes con necesidades de aprendizaje particulares.",
+    "category": "Caracter docente",
+    "type": "student",
+    "questionType": "likert"
   },
   {
     "number": 4,
-    "question": "El docente es abierto a las opiniones y valoraciones sobre la estructuración del curso, los recursos empleados y la aplicación de evaluaciones.",
-    "category": "Generica",
-    "type": "student"
+    "question": "El profesor motiva mi interés por el aprendizaje y el conocimiento.",
+    "category": "Caracter docente",
+    "type": "student",
+    "questionType": "likert"
   },
   {
     "number": 5,
-    "question": "El docente comunica clara y oportunamente los mecanismos, pautas y resultados de la evaluación de los aprendizajes.",
-    "category": "Generica",
-    "type": "student"
+    "question": "El profesor muestra disposición para reconocer y mejorar aspectos de su enseñanza.",
+    "category": "Caracter docente",
+    "type": "student",
+    "questionType": "likert"
   },
   {
     "number": 6,
-    "question": "El docente emplea recursos diversos que favorecen el aprendizaje.",
-    "category": "Pedagogica",
-    "type": "student"
+    "question": "El profesor socializa oportunamente el programa del curso.",
+    "category": "Competencias pedagogicas",
+    "type": "student",
+    "questionType": "likert"
   },
   {
     "number": 7,
-    "question": "El programa presentado posibilita la articulación entre los objetivos del curso y los objetivos de formación del programa curricular.",
-    "category": "Pedagogica",
-    "type": "student"
+    "question": "El profesor comunica claramente los contenidos que debo aprender.",
+    "category": "Competencias pedagogicas",
+    "type": "student",
+    "questionType": "likert"
   },
   {
     "number": 8,
-    "question": "El docente adapta periódicamente el programa del curso teniendo en cuenta las necesidades de aprendizaje de los estudiantes.",
-    "category": "Pedagogica",
-    "type": "student"
+    "question": "El profesor emplea diferentes estrategias y recursos didácticos, incluidos recursos tecnológicos, en el desarrollo del curso.",
+    "category": "Competencias pedagogicas",
+    "type": "student",
+    "questionType": "likert"
   },
   {
     "number": 9,
-    "question": "El docente relaciona los contenidos del curso con ejemplos y aplicaciones correspondientes al ejercicio profesional de la disciplina.",
-    "category": "Pedagogica",
-    "type": "student"
+    "question": "El profesor hace uso adecuado de diferentes ambientes de aprendizaje, como aulas, laboratorios, bibliotecas, auditorios y zonas verdes.",
+    "category": "Competencias pedagogicas",
+    "type": "student",
+    "questionType": "likert"
   },
   {
     "number": 10,
-    "question": "El docente involucra en el desarrollo del curso elementos del contexto ambiental local y nacional, productivo y social.",
-    "category": "Generica",
-    "type": "student"
+    "question": "El profesor promueve el trabajo cooperativo entre los estudiantes.",
+    "category": "Competencias pedagogicas",
+    "type": "student",
+    "questionType": "likert"
   },
   {
     "number": 11,
-    "question": "Para el desarrollo de las actividades del curso, el docente incorporó las expectativas académicas y profesionales de los estudiantes.",
-    "category": "Pedagogica",
-    "type": "student"
+    "question": "El profesor promueve el desarrollo del pensamiento crítico y la autonomía en el aprendizaje.",
+    "category": "Competencias pedagogicas",
+    "type": "student",
+    "questionType": "likert"
   },
   {
     "number": 12,
-    "question": "El docente promueve el trabajo interdisciplinar a través de ejercicios que relacionan el dominio de su disciplina con otros campos de conocimiento.",
-    "category": "Pedagogica",
-    "type": "student"
+    "question": "El profesor comunica oportunamente los criterios de evaluación.",
+    "category": "Competencias pedagogicas",
+    "type": "student",
+    "questionType": "likert"
   },
   {
     "number": 13,
-    "question": "El docente socializa oportunamente el programa del curso, estableciendo los objetivos, los contenidos, las metodologías de enseñanza, los modos de evaluación del aprendizaje y la agenda de desarrollo del curso.",
-    "category": "Generica",
-    "type": "student"
+    "question": "El profesor comunica oportunamente los resultados de las evaluaciones y las actividades para mejorar los aprendizajes.",
+    "category": "Competencias pedagogicas",
+    "type": "student",
+    "questionType": "likert"
   },
   {
     "number": 14,
-    "question": "El docente presenta contenidos del curso actualizados, teniendo en cuenta los avances técnicos y científicos de la disciplina.",
-    "category": "Disciplinar",
-    "type": "student"
+    "question": "El profesor presenta contenidos actualizados de acuerdo con los avances de la disciplina.",
+    "category": "Dominio disciplinar",
+    "type": "student",
+    "questionType": "likert"
   },
   {
     "number": 15,
-    "question": "El docente desarrolla estrategias para favorecer la inclusión de estudiantes con necesidades de aprendizaje específicas.",
-    "category": "Pedagogica",
-    "type": "student"
+    "question": "El profesor utiliza problemas, ejemplos y casos actuales de la disciplina para facilitar la comprensión de los contenidos.",
+    "category": "Dominio disciplinar",
+    "type": "student",
+    "questionType": "likert"
   },
   {
     "number": 16,
-    "question": "El docente promueve el trabajo cooperativo entre estudiantes para el desarrollo de las actividades del curso.",
-    "category": "Pedagogica",
-    "type": "student"
+    "question": "El profesor promueve el trabajo interdisciplinario en el desarrollo del curso.",
+    "category": "Dominio disciplinar",
+    "type": "student",
+    "questionType": "likert"
+  },
+  {
+    "number": 17,
+    "question": "El curso se desarrolla de manera coherente con los fines de formación de la Universidad.",
+    "category": "Contexto",
+    "type": "student",
+    "questionType": "likert"
+  },
+  {
+    "number": 18,
+    "question": "El profesor involucra aspectos del contexto productivo, social y ambiental local y nacional en el desarrollo del curso.",
+    "category": "Contexto",
+    "type": "student",
+    "questionType": "likert"
+  },
+  {
+    "number": 19,
+    "question": "El profesor promueve trabajos prácticos o aplicaciones de los contenidos del curso relacionados con el ejercicio profesional de la disciplina.",
+    "category": "Contexto",
+    "type": "student",
+    "questionType": "likert"
+  },
+  {
+    "number": 20,
+    "question": "El profesor adecúa contenidos o actividades del curso considerando las condiciones de contexto de los estudiantes.",
+    "category": "Contexto",
+    "type": "student",
+    "questionType": "likert"
+  },
+  {
+    "number": 21,
+    "question": "El profesor introduce cambios o mejoras en sus estrategias de enseñanza para favorecer el aprendizaje.",
+    "category": "Produccion de conocimiento pedagogico",
+    "type": "student",
+    "questionType": "likert"
+  },
+  {
+    "number": 22,
+    "question": "¿Cuáles considera que son las principales fortalezas del profesor o profesora en este curso?",
+    "category": "Produccion de conocimiento pedagogico",
+    "type": "student",
+    "questionType": "abierta"
+  },
+  {
+    "number": 23,
+    "question": "¿Qué aspectos considera que podrían mejorarse en el desarrollo del curso?",
+    "category": "Produccion de conocimiento pedagogico",
+    "type": "student",
+    "questionType": "abierta"
+  },
+  {
+    "number": 24,
+    "question": "¿Qué sugerencias haría para fortalecer la enseñanza y el aprendizaje en este curso?",
+    "category": "Produccion de conocimiento pedagogico",
+    "type": "student",
+    "questionType": "abierta"
   }
 ]

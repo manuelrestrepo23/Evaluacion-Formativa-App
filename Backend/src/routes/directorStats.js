@@ -12,6 +12,8 @@ router.get('/', requireAuth, requireRole('director'), async (req, res) => {
     const teachers = await Teacher.find()
     const evaluations = await Evaluation.find()
     const teacherQuestions = await Question.find({ type: 'teacher' })
+    const studentOpenQuestions = await Question.find({ type: 'student', questionType: 'abierta' })
+    const openQuestions = teacherQuestions.filter(q => q.questionType === 'abierta')
 
     const stats = {
       totalTeachers: teachers.length,
@@ -23,7 +25,7 @@ router.get('/', requireAuth, requireRole('director'), async (req, res) => {
       categoryAverages: {}
     }
 
-    // Calcular promedios por docente
+    // Calcular promedios y respuestas abiertas por docente
     teachers.forEach(teacher => {
       const teacherEvals = evaluations.filter(e => e.teacherId === teacher.id)
       const selfEval = teacherEvals.find(e => e.userRole === 'teacher')
@@ -53,6 +55,22 @@ router.get('/', requireAuth, requireRole('director'), async (req, res) => {
         ? (selfAverage + studentAverage) / 2
         : selfAverage > 0 ? selfAverage : studentAverage
 
+      // Respuestas abiertas - autoevaluación
+      const selfOpenAnswers = selfEval
+        ? openQuestions.map(q => ({
+            question: q.question,
+            answer: selfEval.evaluationData?.openAnswers?.get(String(q.number)) || ''
+          })).filter(a => a.answer)
+        : []
+
+      // Respuestas abiertas - estudiantes agrupadas por pregunta
+      const studentOpenAnswers = studentOpenQuestions.map(q => ({
+        question: q.question,
+        answers: studentEvals
+          .map(e => e.evaluationData?.openAnswers?.get(String(q.number)))
+          .filter(a => a && a.trim())
+      })).filter(a => a.answers.length > 0)
+
       stats.teachers.push({
         id: teacher.id,
         name: teacher.name,
@@ -60,7 +78,9 @@ router.get('/', requireAuth, requireRole('director'), async (req, res) => {
         studentAverage: parseFloat(studentAverage.toFixed(2)),
         overallAverage: parseFloat(overallAverage.toFixed(2)),
         studentEvaluationCount: studentEvals.length,
-        hasSelfEvaluation: !!selfEval
+        hasSelfEvaluation: !!selfEval,
+        selfOpenAnswers,
+        studentOpenAnswers
       })
     })
 
@@ -72,9 +92,10 @@ router.get('/', requireAuth, requireRole('director'), async (req, res) => {
       )
     }
 
-    // Calcular promedios por categoria
+    // Calcular promedios por categoria (solo preguntas likert)
+    const likertQuestions = teacherQuestions.filter(q => q.questionType === 'likert')
     const categoriesMap = {}
-    teacherQuestions.forEach(q => {
+    likertQuestions.forEach(q => {
       if (q.category) {
         if (!categoriesMap[q.category]) categoriesMap[q.category] = []
         categoriesMap[q.category].push(q.number)

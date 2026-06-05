@@ -1,16 +1,26 @@
 import { useState } from 'react'
-import axios from '../api/axios.js'
+import api from '../api/axios.js'
 
 export default function TeacherEvalForm({ questions, teacherId, userEmail, onSubmitted, onCancel }) {
   const [scores, setScores] = useState({})
+  const [openAnswers, setOpenAnswers] = useState({})
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
+
+  const likertQuestions = questions.filter(q => q.questionType === 'likert')
+  const openQuestions = questions.filter(q => q.questionType === 'abierta')
 
   const handleScoreChange = (questionNumber, value) => {
     setScores(prev => ({ ...prev, [questionNumber]: parseInt(value) }))
   }
 
-  const allAnswered = questions.length > 0 && questions.every(q => scores[q.number])
+  const handleOpenAnswerChange = (questionNumber, value) => {
+    setOpenAnswers(prev => ({ ...prev, [questionNumber]: value }))
+  }
+
+  const allLikertAnswered = likertQuestions.length > 0 && likertQuestions.every(q => scores[q.number])
+  const allOpenAnswered = openQuestions.every(q => openAnswers[q.number]?.trim())
+  const allAnswered = allLikertAnswered && allOpenAnswered
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -22,9 +32,9 @@ export default function TeacherEvalForm({ questions, teacherId, userEmail, onSub
 
     setSubmitting(true)
     try {
-      await axios.post('/api/evaluations/submit', {
+      await api.post('/api/evaluations/submit', {
         teacherId,
-        evaluationData: { scores },
+        evaluationData: { scores, openAnswers },
         userRole: 'teacher'
       })
       onSubmitted()
@@ -45,7 +55,6 @@ export default function TeacherEvalForm({ questions, teacherId, userEmail, onSub
 
       <div className="card-body">
         <p>Evalúe su desempeño según la siguiente escala:</p>
-
         <div className="evaluation-scale mb-4">
           <div className="scale-item">1: Totalmente en desacuerdo</div>
           <div className="scale-item">2: En desacuerdo</div>
@@ -55,7 +64,8 @@ export default function TeacherEvalForm({ questions, teacherId, userEmail, onSub
         </div>
 
         <form onSubmit={handleSubmit}>
-          {questions.map((question) => (
+          {/* Preguntas Likert */}
+          {likertQuestions.map((question) => (
             <div key={question.number} className="evaluation-item mb-3">
               <h6 className="mb-2">{question.question}</h6>
               <div className="d-flex align-items-center">
@@ -81,6 +91,25 @@ export default function TeacherEvalForm({ questions, teacherId, userEmail, onSub
               </div>
             </div>
           ))}
+
+          {/* Preguntas abiertas */}
+          {openQuestions.length > 0 && (
+            <div className="mt-4">
+              <h5 className="mb-3">Preguntas abiertas</h5>
+              {openQuestions.map((question) => (
+                <div key={question.number} className="evaluation-item mb-3">
+                  <h6 className="mb-2">{question.question}</h6>
+                  <textarea
+                    className="form-control"
+                    rows="3"
+                    placeholder="Escribe tu respuesta aquí..."
+                    value={openAnswers[question.number] || ''}
+                    onChange={e => handleOpenAnswerChange(question.number, e.target.value)}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
 
           {error && <div className="alert alert-danger mt-3">{error}</div>}
 

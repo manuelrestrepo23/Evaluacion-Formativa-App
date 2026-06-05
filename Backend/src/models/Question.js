@@ -11,12 +11,18 @@ const questionSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        enum: ['Generica', 'Pedagogica', 'Disciplinar', 'Evaluacion'],
+        enum: ['Caracter docente', 'Competencias pedagogicas', 'Dominio disciplinar', 'Contexto', 'Produccion de conocimiento pedagogico'],
         required: true
     },
     type: {
         type: String,
         enum: ['teacher', 'student'], // Se separa preguntas por cuestionario de profesores y estudiantes
+        required: true
+    },
+    questionType: {
+        type: String,
+        enum: ['likert', 'abierta'],
+        default: 'likert',
         required: true
     }
 }, {timestamps: true})

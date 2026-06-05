@@ -1,141 +1,177 @@
-
 [
   {
     "number": 1,
-    "question": "Consulto con mis colegas alternativas de solución para las dificultades que se presentan en mi práctica de enseñanza.",
-    "category": "Generica",
-    "type": "teacher"
+    "question": "Soy receptivo y flexible frente a las inquietudes, creencias y valoraciones de los estudiantes.",
+    "category": "Caracter docente",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 2,
-    "question": "Desarrollo estrategias para favorecer la inclusión de estudiantes con necesidades de aprendizaje particulares.",
-    "category": "Pedagogica",
-    "type": "teacher"
+    "question": "Mantengo un trato respetuoso y equitativo con los estudiantes.",
+    "category": "Caracter docente",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 3,
-    "question": "Propicio el trabajo interdisciplinar en el desarrollo de mis cursos, planteando las relaciones de mi disciplina con otros campos de conocimiento.",
-    "category": "Generica",
-    "type": "teacher"
+    "question": "Favorezco la inclusión de estudiantes con necesidades de aprendizaje particulares.",
+    "category": "Caracter docente",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 4,
-    "question": "Socializo oportunamente el programa del curso, estableciendo los objetivos, los contenidos, las metodologías de enseñanza, los modos de evaluación del aprendizaje y la agenda de desarrollo del curso.",
-    "category": "Pedagogica",
-    "type": "teacher"
+    "question": "Motivo el interés de los estudiantes por el aprendizaje y el conocimiento.",
+    "category": "Caracter docente",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 5,
-    "question": "Me mantengo actualizado en estrategias de enseñanza y sobre modos de aprendizaje (actualizo las estrategias de enseñanza y modos de aprendizaje).",
-    "category": "Pedagogica",
-    "type": "teacher"
+    "question": "Reflexiono de manera crítica sobre mi desempeño docente.",
+    "category": "Caracter docente",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 6,
-    "question": "Adecúo el cronograma y los contenidos del curso de acuerdo con las condiciones de contexto expresadas por los estudiantes y en atención a posibles contingencias que afectan el desarrollo de los cursos.",
-    "category": "Pedagogica",
-    "type": "teacher"
+    "question": "Planifico mi actividad de enseñanza y socializo oportunamente el programa del curso con los estudiantes.",
+    "category": "Competencias pedagogicas",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 7,
-    "question": "¿Incorporo cambios en el desarrollo del curso en comparación con versiones anteriores del mismo?",
-    "category": "Pedagogica",
-    "type": "teacher"
+    "question": "Comunico claramente los contenidos que deben aprender los estudiantes.",
+    "category": "Competencias pedagogicas",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 8,
-    "question": "Actualizo periódicamente el programa del curso teniendo en cuenta las necesidades de aprendizaje de los estudiantes.",
-    "category": "Pedagogica",
-    "type": "teacher"
+    "question": "Empleo diferentes estrategias y recursos didácticos, incluidos recursos tecnológicos, en el desarrollo de mis cursos.",
+    "category": "Competencias pedagogicas",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 9,
-    "question": "En la estructuración del curso se consideran los fines y principios de formación de los estudiantes de la UNAL.",
-    "category": "Pedagogica",
-    "type": "teacher"
+    "question": "Hago un uso adecuado de diferentes ambientes de aprendizaje, como aulas, laboratorios, bibliotecas, auditorios y zonas verdes.",
+    "category": "Competencias pedagogicas",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 10,
-    "question": "Durante el desarrollo del curso motivo el interés de los estudiantes en atención a sus expectativas y trayectorias profesionales.",
-    "category": "Pedagogica",
-    "type": "teacher"
+    "question": "Empleo estrategias para promover el trabajo cooperativo entre los estudiantes.",
+    "category": "Competencias pedagogicas",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 11,
-    "question": "Realizo actividades que contribuyen a mi formación pedagógica.",
-    "category": "Pedagogica",
-    "type": "teacher"
+    "question": "Promuevo el desarrollo del pensamiento crítico y la autonomía en el aprendizaje.",
+    "category": "Competencias pedagogicas",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 12,
-    "question": "Empleo las opiniones y valoraciones de los estudiantes para la estructuración de los cursos.",
-    "category": "Generica",
-    "type": "teacher"
+    "question": "Comunico oportunamente los criterios de la evaluación de aprendizajes.",
+    "category": "Competencias pedagogicas",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 13,
-    "question": "Comunico clara y oportunamente los mecanismos, pautas y resultados de la evaluación de aprendizajes.",
-    "category": "Generica",
-    "type": "teacher"
+    "question": "Comunico oportunamente los resultados de las evaluaciones y las actividades para mejorar los aprendizajes.",
+    "category": "Competencias pedagogicas",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 14,
-    "question": "La estructuración del programa posibilita la articulación entre los objetivos del curso y los objetivos de formación del programa curricular.",
-    "category": "Pedagogica",
-    "type": "teacher"
+    "question": "Actualizo los contenidos de los cursos teniendo en cuenta los avances técnicos y científicos de la disciplina.",
+    "category": "Dominio disciplinar",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 15,
-    "question": "Empleo diferentes recursos y mediaciones que contribuyen al aprendizaje para el desarrollo de mis cursos.",
-    "category": "Pedagogica",
-    "type": "teacher"
+    "question": "Utilizo problemas, ejemplos y casos actuales de la disciplina para aumentar la comprensión conceptual de los estudiantes.",
+    "category": "Dominio disciplinar",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 16,
-    "question": "Participo en la planeación de cursos a cargo de colegas en el programa curricular y soy abierto a la opinión de colegas en la planeación de mis cursos.",
-    "category": "Generica",
-    "type": "teacher"
+    "question": "Propicio el trabajo interdisciplinario en el desarrollo de mis cursos.",
+    "category": "Dominio disciplinar",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 17,
-    "question": "El desarrollo del curso involucra aspectos del contexto productivo, social y ambiental local y nacional.",
-    "category": "Generica",
-    "type": "teacher"
+    "question": "En la estructuración del curso considero los fines y principios de formación de los estudiantes de la Universidad.",
+    "category": "Contexto",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 18,
-    "question": "Tengo en cuenta las creencias, valoraciones y críticas de colegas y otros actores del ámbito institucional.",
-    "category": "Generica",
-    "type": "teacher"
+    "question": "Involucro aspectos del contexto productivo, social y ambiental local y nacional en el desarrollo del curso.",
+    "category": "Contexto",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 19,
-    "question": "Participo en proyectos de investigación o grupos de investigación pedagógica.",
-    "category": "Pedagogica",
-    "type": "teacher"
+    "question": "Acompaño los contenidos del curso con aplicaciones a trabajos prácticos relacionados con el ejercicio profesional de la disciplina.",
+    "category": "Contexto",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 20,
-    "question": "Atiendo a las necesidades de aprendizaje de los estudiantes y adapto las metodologías de enseñanza para favorecer los aprendizajes de todos los estudiantes.",
-    "category": "Pedagogica",
-    "type": "teacher"
+    "question": "Adecúo los contenidos del curso de acuerdo con las condiciones de contexto que viven los estudiantes.",
+    "category": "Contexto",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 21,
-    "question": "Actualizo los contenidos del curso teniendo en cuenta los avances técnicos y científicos de la disciplina.",
-    "category": "Disciplinar",
-    "type": "teacher"
+    "question": "Reflexiono y genero cambios en mis prácticas pedagógicas a partir de los resultados de aprendizaje de los estudiantes.",
+    "category": "Produccion de conocimiento pedagogico",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 22,
-    "question": "Empleo estrategias para promover el trabajo cooperativo entre estudiantes para el desarrollo de las actividades.",
-    "category": "Pedagogica",
-    "type": "teacher"
+    "question": "Participo en proyectos de investigación o innovación pedagógica.",
+    "category": "Produccion de conocimiento pedagogico",
+    "type": "teacher",
+    "questionType": "likert"
   },
   {
     "number": 23,
-    "question": "Los contenidos del curso están acompañados de ejemplos y aplicaciones que corresponden al ejercicio profesional de la disciplina.",
-    "category": "Pedagogica",
-    "type": "teacher"
+    "question": "¿Cuáles considera que son las principales fortalezas de mi práctica docente?",
+    "category": "Produccion de conocimiento pedagogico",
+    "type": "teacher",
+    "questionType": "abierta"
+  },
+  {
+    "number": 24,
+    "question": "¿Qué aspectos de mi práctica docente considera que requieren fortalecimiento?",
+    "category": "Produccion de conocimiento pedagogico",
+    "type": "teacher",
+    "questionType": "abierta"
+  },
+  {
+    "number": 25,
+    "question": "¿Qué apoyos o procesos institucionales podrían contribuir a mejorar mi práctica?",
+    "category": "Produccion de conocimiento pedagogico",
+    "type": "teacher",
+    "questionType": "abierta"
   }
 ]

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useUser, useClerk } from '@clerk/clerk-react'
-import axios from '../api/axios.js'
+import api from '../api/axios.js'
 import { useStudentData } from '../hooks/useStudentData.js'
 
 export default function StudentPage() {
@@ -12,13 +12,18 @@ export default function StudentPage() {
 
   const [selectedTeacher, setSelectedTeacher] = useState('')
   const [scores, setScores] = useState({})
+  const [openAnswers, setOpenAnswers] = useState({})
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
   const [submitSuccess, setSubmitSuccess] = useState('')
 
+  const likertQuestions = questions.filter(q => q.questionType === 'likert')
+  const openQuestions = questions.filter(q => q.questionType === 'abierta')
+
   const handleTeacherChange = (e) => {
     setSelectedTeacher(e.target.value)
     setScores({})
+    setOpenAnswers({})
     setSubmitError('')
     setSubmitSuccess('')
   }
@@ -27,7 +32,13 @@ export default function StudentPage() {
     setScores(prev => ({ ...prev, [questionNumber]: parseInt(value) }))
   }
 
-  const allAnswered = questions.length > 0 && questions.every(q => scores[q.number])
+  const handleOpenAnswerChange = (questionNumber, value) => {
+    setOpenAnswers(prev => ({ ...prev, [questionNumber]: value }))
+  }
+
+  const allLikertAnswered = likertQuestions.length > 0 && likertQuestions.every(q => scores[q.number])
+  const allOpenAnswered = openQuestions.every(q => openAnswers[q.number]?.trim())
+  const allAnswered = allLikertAnswered && allOpenAnswered
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -42,15 +53,16 @@ export default function StudentPage() {
 
     setSubmitting(true)
     try {
-      await axios.post('/api/evaluations/submit', {
+      await api.post('/api/evaluations/submit', {
         teacherId: selectedTeacher,
-        evaluationData: { scores },
+        evaluationData: { scores, openAnswers },
         userRole: 'student'
       })
 
       markTeacherAsEvaluated(selectedTeacher)
       setSelectedTeacher('')
       setScores({})
+      setOpenAnswers({})
       setSubmitSuccess('¡Evaluación enviada con éxito! Su respuesta es anónima.')
     } catch (err) {
       setSubmitError('Error al enviar la evaluación. Por favor intenta nuevamente.')
@@ -125,7 +137,8 @@ export default function StudentPage() {
                 <div className="scale-item">5: Totalmente de acuerdo</div>
               </div>
 
-              {questions.map((question) => (
+              {/* Preguntas Likert */}
+              {likertQuestions.map((question) => (
                 <div key={question.number} className="evaluation-item mb-3">
                   <h6 className="mb-2">{question.question}</h6>
                   <div className="d-flex align-items-center">
@@ -152,6 +165,25 @@ export default function StudentPage() {
                 </div>
               ))}
 
+              {/* Preguntas abiertas */}
+              {openQuestions.length > 0 && (
+                <div className="mt-4">
+                  <h5 className="mb-3">Preguntas abiertas</h5>
+                  {openQuestions.map((question) => (
+                    <div key={question.number} className="evaluation-item mb-3">
+                      <h6 className="mb-2">{question.question}</h6>
+                      <textarea
+                        className="form-control"
+                        rows="3"
+                        placeholder="Escribe tu respuesta aquí..."
+                        value={openAnswers[question.number] || ''}
+                        onChange={e => handleOpenAnswerChange(question.number, e.target.value)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+
               {submitError && <div className="alert alert-danger mt-3">{submitError}</div>}
 
               <div className="mt-3">
@@ -165,7 +197,7 @@ export default function StudentPage() {
                 <button
                   type="button"
                   className="btn btn-secondary ms-2"
-                  onClick={() => { setSelectedTeacher(''); setScores({}) }}
+                  onClick={() => { setSelectedTeacher(''); setScores({}); setOpenAnswers({}) }}
                 >
                   Cancelar
                 </button>

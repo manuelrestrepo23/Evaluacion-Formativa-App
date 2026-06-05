@@ -15,11 +15,35 @@ function exportCSV(stats) {
     csv += `${teacher.studentEvaluationCount},`
     csv += `${teacher.overallAverage > 0 ? teacher.overallAverage : 'N/A'}\n`
   })
+
   csv += `\nTotal Docentes,${stats.totalTeachers}\n`
   csv += `Total Evaluaciones,${stats.totalEvaluations}\n`
   csv += `Autoevaluaciones,${stats.selfEvaluations}\n`
   csv += `Evaluaciones Estudiantes,${stats.studentEvaluations}\n`
   csv += `Promedio General,${stats.overallAverage}\n`
+
+  // Respuestas abiertas por docente
+  csv += '\n\nRESPUESTAS ABIERTAS POR DOCENTE\n'
+  stats.teachers.forEach(teacher => {
+    csv += `\n${teacher.name}\n`
+
+    if (teacher.selfOpenAnswers?.length > 0) {
+      csv += `AUTOEVALUACIÓN\n`
+      teacher.selfOpenAnswers.forEach(a => {
+        csv += `"${a.question}","${a.answer.replace(/"/g, '""')}"\n`
+      })
+    }
+
+    if (teacher.studentOpenAnswers?.length > 0) {
+      csv += `ESTUDIANTES\n`
+      teacher.studentOpenAnswers.forEach(a => {
+        csv += `"${a.question}"\n`
+        a.answers.forEach((ans, i) => {
+          csv += `Respuesta ${i + 1},"${ans.replace(/"/g, '""')}"\n`
+        })
+      })
+    }
+  })
 
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
   const link = document.createElement('a')
@@ -27,7 +51,6 @@ function exportCSV(stats) {
   link.download = `reporte_evaluaciones_${new Date().toISOString().split('T')[0]}.csv`
   link.click()
 }
-
 export default function DirectorPage() {
   const { signOut } = useClerk()
   const { stats, loading, error, reload } = useDirectorData()

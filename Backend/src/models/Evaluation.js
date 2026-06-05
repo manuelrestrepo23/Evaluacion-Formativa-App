@@ -18,6 +18,10 @@ const evaluationSchema = mongoose.Schema({
         scores: {
             type: Map, // Map de cada pregunta con su respuesta: "1": 4, "2": 3, ...
             of: Number
+        },
+        openAnswers: {
+            type: Map, // Map de cada pregunta abierta con su respuesta de texto
+            of: String
         }
     }
 }, {timestamps: true})

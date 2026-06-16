@@ -56,7 +56,7 @@ export default function StudentPage() {
       await api.post('/api/evaluations/submit', {
         teacherId: selectedTeacher,
         evaluationData: { scores, openAnswers },
-        userRole: 'student'
+        userRole: 'estudiante'
       })
 
       markTeacherAsEvaluated(selectedTeacher)

@@ -101,6 +101,84 @@ function exportCSV(teacherName, processedData) {
   link.click()
 }
 
+function truncateText(text, maxLength = 150) {
+  if (!text) return ''
+  return text.length > maxLength ? text.slice(0, maxLength).trimEnd() + '...' : text
+}
+
+function getQuestionText(questions, questionId) {
+  const found = questions?.find(q => q.number === questionId)
+  return found?.question || `Pregunta ${questionId}`
+}
+
+function OpenAnswersSection({ processedData }) {
+  const hasSelf = processedData?.selfOpenAnswers?.length > 0
+  const hasStudent = processedData?.studentOpenAnswers?.some(q => q.answers.length > 0)
+
+  if (!hasSelf && !hasStudent) return null
+
+  return (
+    <div className="mb-4">
+      <h5 className="mb-3"><i className="bi bi-chat-left-text me-2"></i>Respuestas Abiertas</h5>
+
+      {hasSelf && (
+        <div className="mb-4">
+          <h6 className="text-uppercase text-muted fw-semibold mb-3" style={{ fontSize: '0.75rem', letterSpacing: '0.08em' }}>
+            Autoevaluación
+          </h6>
+          {processedData.selfOpenAnswers.map((item, i) => (
+            <div key={i} className="mb-3">
+              <p className="fw-semibold mb-1 text-dark" style={{ fontSize: '0.9rem' }}>{item.question}</p>
+              <div className="p-3 rounded" style={{ backgroundColor: '#f8f9fa', borderLeft: '3px solid #466B3F' }}>
+                <p className="mb-0" style={{ fontSize: '0.9rem' }}>{item.answer}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {hasSelf && hasStudent && <hr className="my-3" />}
+
+      {hasStudent && (
+        <div>
+          <h6 className="text-uppercase text-muted fw-semibold mb-3" style={{ fontSize: '0.75rem', letterSpacing: '0.08em' }}>
+            Respuestas de estudiantes
+          </h6>
+          {processedData.studentOpenAnswers
+            .filter(q => q.answers.length > 0)
+            .map((item, i) => {
+              const total = item.answers.length
+              const shown = item.answers.slice(0, 10)
+              return (
+                <div key={i} className="mb-4">
+                  <p className="fw-semibold mb-1 text-dark" style={{ fontSize: '0.9rem' }}>{item.question}</p>
+                  {total > 10 && (
+                    <p className="text-muted mb-2" style={{ fontSize: '0.78rem' }}>
+                      Mostrando 10 de {total} respuestas
+                    </p>
+                  )}
+                  <ul className="list-unstyled mb-0">
+                    {shown.map((ans, j) => (
+                      <li key={j} className="mb-2 d-flex align-items-start gap-2">
+                        <span className="badge rounded-pill mt-1 flex-shrink-0" style={{ backgroundColor: '#94B43B', fontSize: '0.7rem' }}>
+                          {j + 1}
+                        </span>
+                        <span style={{ fontSize: '0.9rem' }}>{ans}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            })}
+          <p className="text-muted mb-0" style={{ fontSize: '0.8rem' }}>
+            Para ver todas las respuestas, exporta el reporte CSV completo.
+          </p>
+        </div>
+      )}
+    </div>
+  )
+}
+
 function PlanCard({ plan, index, total, onComplete, onDelete }) {
   const [actionLoading, setActionLoading] = useState(false)
   const [confirmingDelete, setConfirmingDelete] = useState(false)
@@ -307,15 +385,18 @@ export default function TeacherResults({ results, plans, questions, teacherId, o
                 <div className="table-responsive">
                   <table className="table table-bordered table-sm">
                     <thead className="table-primary">
-                      <tr><th>Pregunta (ID)</th><th className="text-center">Puntuación</th></tr>
+                      <tr><th>Pregunta</th><th className="text-center">Puntuación</th></tr>
                     </thead>
                     <tbody>
-                      {processedData.selfScores.map(s => (
-                        <tr key={s.questionId}>
-                          <td>Pregunta {s.questionId}</td>
-                          <td className="text-center"><span className="badge bg-primary">{s.score}</span></td>
-                        </tr>
-                      ))}
+                      {processedData.selfScores.map(s => {
+                        const questionText = getQuestionText(questions, s.questionId)
+                        return (
+                          <tr key={s.questionId}>
+                            <td title={questionText}>{truncateText(questionText)}</td>
+                            <td className="text-center"><span className="badge bg-primary">{s.score}</span></td>
+                          </tr>
+                        )
+                      })}
                     </tbody>
                   </table>
                 </div>
@@ -328,20 +409,25 @@ export default function TeacherResults({ results, plans, questions, teacherId, o
                 <div className="table-responsive">
                   <table className="table table-bordered table-sm">
                     <thead className="table-warning">
-                      <tr><th>Pregunta (ID)</th><th className="text-center">Promedio</th></tr>
+                      <tr><th>Pregunta</th><th className="text-center">Promedio</th></tr>
                     </thead>
                     <tbody>
-                      {processedData.studentScores.map(s => (
-                        <tr key={s.questionId}>
-                          <td>Pregunta {s.questionId}</td>
-                          <td className="text-center"><span className="badge bg-warning text-dark">{s.score.toFixed(1)}</span></td>
-                        </tr>
-                      ))}
+                      {processedData.studentScores.map(s => {
+                        const questionText = getQuestionText(questions, s.questionId)
+                        return (
+                          <tr key={s.questionId}>
+                            <td title={questionText}>{truncateText(questionText)}</td>
+                            <td className="text-center"><span className="badge bg-warning text-dark">{s.score.toFixed(1)}</span></td>
+                          </tr>
+                        )
+                      })}
                     </tbody>
                   </table>
                 </div>
               </div>
             )}
+
+            <OpenAnswersSection processedData={processedData} />
           </>
         )}
 

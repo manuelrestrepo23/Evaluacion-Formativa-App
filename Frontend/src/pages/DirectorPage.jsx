@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useClerk } from '@clerk/clerk-react'
 import { BarChart, Bar, PieChart, Pie, Cell, RadarChart, Radar, PolarGrid, PolarAngleAxis, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { useDirectorData } from '../hooks/useDirectorData.js'
@@ -22,7 +23,6 @@ function exportCSV(stats) {
   csv += `Evaluaciones Estudiantes,${stats.studentEvaluations}\n`
   csv += `Promedio General,${stats.overallAverage}\n`
 
-  // Respuestas abiertas por docente
   csv += '\n\nRESPUESTAS ABIERTAS POR DOCENTE\n'
   stats.teachers.forEach(teacher => {
     csv += `\n${teacher.name}\n`
@@ -51,9 +51,140 @@ function exportCSV(stats) {
   link.download = `reporte_evaluaciones_${new Date().toISOString().split('T')[0]}.csv`
   link.click()
 }
+
+// Modal de respuestas abiertas
+function OpenAnswersModal({ teacher, onClose }) {
+  if (!teacher) return null
+
+  const hasAnswers =
+    teacher.selfOpenAnswers?.length > 0 ||
+    teacher.studentOpenAnswers?.some(q => q.answers.length > 0)
+
+  return (
+    <>
+      {/* Overlay */}
+      <div
+        className="modal-backdrop fade show"
+        onClick={onClose}
+        style={{ zIndex: 1040 }}
+      />
+
+      {/* Modal */}
+      <div
+        className="modal fade show d-block"
+        style={{ zIndex: 1050 }}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="openAnswersModalTitle"
+      >
+        <div className="modal-dialog modal-lg modal-dialog-scrollable">
+          <div className="modal-content">
+
+            <div className="modal-header">
+              <h5 className="modal-title" id="openAnswersModalTitle">
+                Respuestas abiertas — {teacher.name}
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={onClose}
+                aria-label="Cerrar"
+              />
+            </div>
+
+            <div className="modal-body">
+              {!hasAnswers && (
+                <p className="text-muted text-center py-3">
+                  Este docente aún no tiene respuestas abiertas registradas.
+                </p>
+              )}
+
+              {/* Autoevaluación */}
+              {teacher.selfOpenAnswers?.length > 0 && (
+                <div className="mb-4">
+                  <h6 className="text-uppercase text-muted fw-semibold mb-3" style={{ fontSize: '0.75rem', letterSpacing: '0.08em' }}>
+                    Autoevaluación del docente
+                  </h6>
+                  {teacher.selfOpenAnswers.map((item, i) => (
+                    <div key={i} className="mb-3">
+                      <p className="fw-semibold mb-1 text-dark" style={{ fontSize: '0.9rem' }}>
+                        {item.question}
+                      </p>
+                      <div className="p-3 rounded" style={{ backgroundColor: '#f8f9fa', borderLeft: '3px solid #94B43B' }}>
+                        <p className="mb-0" style={{ fontSize: '0.9rem' }}>{item.answer}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Separador si hay ambas secciones */}
+              {teacher.selfOpenAnswers?.length > 0 &&
+                teacher.studentOpenAnswers?.some(q => q.answers.length > 0) && (
+                <hr className="my-3" />
+              )}
+
+              {/* Respuestas de estudiantes */}
+              {teacher.studentOpenAnswers?.some(q => q.answers.length > 0) && (
+                <div>
+                  <h6 className="text-uppercase text-muted fw-semibold mb-3" style={{ fontSize: '0.75rem', letterSpacing: '0.08em' }}>
+                    Respuestas de estudiantes
+                  </h6>
+                  {teacher.studentOpenAnswers
+                    .filter(q => q.answers.length > 0)
+                    .map((item, i) => {
+                      const total = item.answers.length
+                      const shown = item.answers.slice(0, 10)
+                      return (
+                        <div key={i} className="mb-4">
+                          <p className="fw-semibold mb-1 text-dark" style={{ fontSize: '0.9rem' }}>
+                            {item.question}
+                          </p>
+                          {total > 10 && (
+                            <p className="text-muted mb-2" style={{ fontSize: '0.78rem' }}>
+                              Mostrando 10 de {total} respuestas
+                            </p>
+                          )}
+                          <ul className="list-unstyled mb-0">
+                            {shown.map((ans, j) => (
+                              <li key={j} className="mb-2 d-flex align-items-start gap-2">
+                                <span
+                                  className="badge rounded-pill mt-1 flex-shrink-0"
+                                  style={{ backgroundColor: '#466B3F', fontSize: '0.7rem' }}
+                                >
+                                  {j + 1}
+                                </span>
+                                <span style={{ fontSize: '0.9rem' }}>{ans}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )
+                    })}
+                  <p className="text-muted mb-0" style={{ fontSize: '0.8rem' }}>
+                    Para ver todas las respuestas, exporta el reporte CSV completo.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" onClick={onClose}>
+                Cerrar
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
 export default function DirectorPage() {
   const { signOut } = useClerk()
   const { stats, loading, error, reload } = useDirectorData()
+  const [selectedTeacher, setSelectedTeacher] = useState(null)
 
   const sortedTeachers = stats?.teachers
     ? [...stats.teachers].sort((a, b) => b.overallAverage - a.overallAverage)
@@ -74,6 +205,10 @@ export default function DirectorPage() {
   const radarData = stats?.categoryAverages
     ? Object.entries(stats.categoryAverages).map(([category, average]) => ({ category, Promedio: average }))
     : []
+
+  const hasOpenAnswers = (teacher) =>
+    teacher.selfOpenAnswers?.length > 0 ||
+    teacher.studentOpenAnswers?.some(q => q.answers.length > 0)
 
   if (loading) {
     return (
@@ -218,6 +353,7 @@ export default function DirectorPage() {
                     <th>Promedio Estudiantes</th>
                     <th>Evaluaciones Recibidas</th>
                     <th>Promedio General</th>
+                    <th>Respuestas</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -236,6 +372,18 @@ export default function DirectorPage() {
                       </td>
                       <td className="text-center">{teacher.studentEvaluationCount}</td>
                       <td><strong>{teacher.overallAverage > 0 ? teacher.overallAverage : '-'}</strong></td>
+                      <td>
+                        {hasOpenAnswers(teacher) ? (
+                          <button
+                            className="btn btn-sm btn-outline-secondary"
+                            onClick={() => setSelectedTeacher(teacher)}
+                          >
+                            <i className="bi bi-chat-left-text me-1"></i>Ver respuestas
+                          </button>
+                        ) : (
+                          <span className="text-muted" style={{ fontSize: '0.85rem' }}>Sin respuestas</span>
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -251,6 +399,12 @@ export default function DirectorPage() {
           </div>
         </div>
       </div>
+
+      {/* Modal de respuestas abiertas */}
+      <OpenAnswersModal
+        teacher={selectedTeacher}
+        onClose={() => setSelectedTeacher(null)}
+      />
     </div>
   )
 }

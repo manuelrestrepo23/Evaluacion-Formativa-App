@@ -10,7 +10,7 @@ export default function TeacherPage() {
   const { signOut } = useClerk()
   const teacherId = user?.primaryEmailAddress?.emailAddress
 
-  const { questions, results, plans, hasEvaluated, loading, error, loadResults, markAsEvaluated, setPlans } = useTeacherData(teacherId)
+  const { questions, results, plans, hasEvaluated, loading, error, loadResults, markAsEvaluated, setPlans, completePlan, deletePlan } = useTeacherData(teacherId)
 
   const [view, setView] = useState('dashboard')
   const [showPlanModal, setShowPlanModal] = useState(false)
@@ -138,6 +138,8 @@ export default function TeacherPage() {
           teacherId={teacherId}
           onClose={() => setView('dashboard')}
           onCreatePlan={() => setShowPlanModal(true)}
+          onCompletePlan={completePlan}
+          onDeletePlan={deletePlan}
         />
       )}
 

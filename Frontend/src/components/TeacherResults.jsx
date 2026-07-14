@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { BarChart, Bar, RadarChart, Radar, PolarGrid, PolarAngleAxis, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
 function processResults(results, questions) {
@@ -100,7 +101,101 @@ function exportCSV(teacherName, processedData) {
   link.click()
 }
 
-export default function TeacherResults({ results, plans, questions, teacherId, onClose, onCreatePlan }) {
+function PlanCard({ plan, index, total, onComplete, onDelete }) {
+  const [actionLoading, setActionLoading] = useState(false)
+  const [confirmingDelete, setConfirmingDelete] = useState(false)
+
+  const deadline = new Date(plan.deadline)
+  const isCompleted = plan.status === 'completado'
+  const isOverdue = !isCompleted && deadline < new Date()
+
+  let badgeLabel = 'Activo'
+  let headerClass = 'bg-light'
+  let badgeClass = 'bg-secondary'
+
+  if (isCompleted) {
+    badgeLabel = 'Completado'
+    headerClass = 'bg-success text-white'
+    badgeClass = 'bg-light text-success'
+  } else if (isOverdue) {
+    badgeLabel = 'Vencido'
+    headerClass = 'bg-danger text-white'
+    badgeClass = 'bg-light text-danger'
+  }
+
+  const handleComplete = async () => {
+    setActionLoading(true)
+    try {
+      await onComplete(plan._id)
+    } catch {
+      // el error ya se loguea en el hook; aquí solo evitamos que quede colgado el botón
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
+  const handleDelete = async () => {
+    if (!confirmingDelete) {
+      setConfirmingDelete(true)
+      return
+    }
+    setActionLoading(true)
+    try {
+      await onDelete(plan._id)
+    } catch {
+      setActionLoading(false)
+      setConfirmingDelete(false)
+    }
+  }
+
+  return (
+    <div className="card mb-3">
+      <div className={`card-header d-flex justify-content-between align-items-center ${headerClass}`}>
+        <h6 className="mb-0"><i className="bi bi-calendar-event me-2"></i>Plan de Mejora #{total - index}</h6>
+        <span className={`badge ${badgeClass}`}>{badgeLabel}</span>
+      </div>
+      <div className="card-body">
+        <p><strong>Meta:</strong> {plan.goal}</p>
+        <p><strong>Acciones:</strong> {plan.actions}</p>
+        <p><strong>Indicadores:</strong> {plan.indicators}</p>
+        <p className="mb-3"><strong>Fecha límite:</strong> {deadline.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+
+        <div className="d-flex gap-2">
+          {!isCompleted && (
+            <button
+              className="btn btn-sm btn-outline-success"
+              onClick={handleComplete}
+              disabled={actionLoading}
+            >
+              <i className="bi bi-check-lg me-1"></i>
+              {actionLoading ? 'Guardando...' : 'Marcar como completado'}
+            </button>
+          )}
+
+          <button
+            className={`btn btn-sm ${confirmingDelete ? 'btn-danger' : 'btn-outline-danger'}`}
+            onClick={handleDelete}
+            disabled={actionLoading}
+          >
+            <i className="bi bi-trash me-1"></i>
+            {actionLoading ? 'Eliminando...' : confirmingDelete ? '¿Confirmar eliminación?' : 'Eliminar'}
+          </button>
+
+          {confirmingDelete && !actionLoading && (
+            <button
+              className="btn btn-sm btn-link text-muted"
+              onClick={() => setConfirmingDelete(false)}
+            >
+              Cancelar
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function TeacherResults({ results, plans, questions, teacherId, onClose, onCreatePlan, onCompletePlan, onDeletePlan }) {
   const processedData = processResults(results, questions)
 
   const selfAverage = processedData?.hasSelfEvaluation
@@ -265,26 +360,16 @@ export default function TeacherResults({ results, plans, questions, teacherId, o
               No hay planes de mejora registrados.
             </div>
           ) : (
-            plans.map((plan, index) => {
-              const deadline = new Date(plan.deadline)
-              const isOverdue = deadline < new Date()
-              return (
-                <div key={plan._id || index} className="card mb-3">
-                  <div className={`card-header d-flex justify-content-between align-items-center ${isOverdue ? 'bg-danger text-white' : 'bg-light'}`}>
-                    <h6 className="mb-0"><i className="bi bi-calendar-event me-2"></i>Plan de Mejora #{plans.length - index}</h6>
-                    <span className={`badge ${isOverdue ? 'bg-light text-danger' : 'bg-secondary'}`}>
-                      {isOverdue ? 'Vencido' : 'Activo'}
-                    </span>
-                  </div>
-                  <div className="card-body">
-                    <p><strong>Meta:</strong> {plan.goal}</p>
-                    <p><strong>Acciones:</strong> {plan.actions}</p>
-                    <p><strong>Indicadores:</strong> {plan.indicators}</p>
-                    <p className="mb-0"><strong>Fecha límite:</strong> {deadline.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                  </div>
-                </div>
-              )
-            })
+            plans.map((plan, index) => (
+              <PlanCard
+                key={plan._id || index}
+                plan={plan}
+                index={index}
+                total={plans.length}
+                onComplete={onCompletePlan}
+                onDelete={onDeletePlan}
+              />
+            ))
           )}
         </div>
       </div>

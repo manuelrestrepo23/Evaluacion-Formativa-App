@@ -24,6 +24,11 @@ const improvementPlanSchema = new mongoose.Schema({
     deadline: {
         type: Date,
         required: true
+    },
+    status: {
+        type: String,
+        enum: ['activo', 'completado'],
+        default: 'activo'
     }
 }, {timestamps: true})
 

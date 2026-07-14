@@ -34,4 +34,41 @@ router.post('/', requireAuth, requireRole('docente'), async (req, res) => {
   }
 })
 
+// PATCH /api/improvement-plans/:id - Marcar un plan como completado
+router.patch('/:id', requireAuth, requireRole('docente'), async (req, res) => {
+  try {
+    const { id } = req.params
+    const teacherId = req.userEmail
+
+    const plan = await ImprovementPlan.findOne({ _id: id, teacherId })
+    if (!plan) {
+      return res.status(404).json({ message: 'Plan de mejora no encontrado' })
+    }
+
+    plan.status = 'completado'
+    await plan.save()
+
+    res.status(200).json({ message: 'Plan marcado como completado', plan })
+  } catch (error) {
+    res.status(500).json({ message: 'Error al actualizar el plan de mejora', error: error.message })
+  }
+})
+
+// DELETE /api/improvement-plans/:id - Eliminar un plan de mejora
+router.delete('/:id', requireAuth, requireRole('docente'), async (req, res) => {
+  try {
+    const { id } = req.params
+    const teacherId = req.userEmail
+
+    const plan = await ImprovementPlan.findOneAndDelete({ _id: id, teacherId })
+    if (!plan) {
+      return res.status(404).json({ message: 'Plan de mejora no encontrado' })
+    }
+
+    res.status(200).json({ message: 'Plan de mejora eliminado correctamente' })
+  } catch (error) {
+    res.status(500).json({ message: 'Error al eliminar el plan de mejora', error: error.message })
+  }
+})
+
 export default router

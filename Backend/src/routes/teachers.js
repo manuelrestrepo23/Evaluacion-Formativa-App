@@ -4,6 +4,19 @@ import { requireAuth, requireRole } from '../middleware/auth.js'
 
 const router = express.Router()
 
+// GET /api/teachers/me - Obtener los datos del docente autenticado
+router.get('/me', requireAuth, requireRole('docente'), async (req, res) => {
+  try {
+    const teacher = await Teacher.findOne({ id: req.userEmail?.toLowerCase() })
+    if (!teacher) {
+      return res.status(404).json({ message: 'Docente no encontrado' })
+    }
+    res.status(200).json(teacher)
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener el docente', error: error.message })
+  }
+})
+
 // GET /api/teachers - Obtener todos los docentes
 router.get('/', requireAuth, requireRole('estudiante', 'docente', 'directivo'), async (req, res) => {
   try {

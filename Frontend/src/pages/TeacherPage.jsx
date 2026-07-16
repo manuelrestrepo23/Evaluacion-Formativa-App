@@ -10,7 +10,7 @@ export default function TeacherPage() {
   const { signOut } = useClerk()
   const teacherId = user?.primaryEmailAddress?.emailAddress
 
-  const { questions, results, plans, hasEvaluated, loading, error, loadResults, markAsEvaluated, setPlans, completePlan, deletePlan } = useTeacherData(teacherId)
+  const { questions, results, plans, teacherInfo, hasEvaluated, loading, error, loadResults, markAsEvaluated, setPlans, completePlan, deletePlan } = useTeacherData(teacherId)
 
   const [view, setView] = useState('dashboard')
   const [showPlanModal, setShowPlanModal] = useState(false)
@@ -53,6 +53,11 @@ export default function TeacherPage() {
         <div className="card-header role-teacher d-flex justify-content-between align-items-center">
           <h4 className="mb-0">Panel Docente</h4>
           <div className="d-flex align-items-center gap-2">
+            {teacherInfo?.name && (
+              <span className="text-white" style={{ fontSize: '0.9rem' }}>
+                Hola, {teacherInfo.name}
+              </span>
+            )}
             <span className="badge badge-role teacher">Docente</span>
             <button className="btn btn-sm btn-light" onClick={() => signOut()}>
               <i className="bi bi-box-arrow-right"></i> Cerrar sesión

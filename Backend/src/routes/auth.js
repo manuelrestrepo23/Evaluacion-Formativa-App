@@ -9,7 +9,7 @@ const router = express.Router()
 // POST /api/auth/update-role - Actualizar rol del usuario en Clerk
 router.post('/update-role', async (req, res) => {
   try {
-    const { userId, role, email } = req.body
+    const { userId, role, email, fullName, subject } = req.body
 
     if (!userId || !role) {
       return res.status(400).json({ message: 'userId y role son requeridos' })
@@ -19,20 +19,25 @@ router.post('/update-role', async (req, res) => {
       return res.status(400).json({ message: 'Rol inválido' })
     }
 
+    if (role === 'docente' && (!fullName || !subject)) {
+      return res.status(400).json({ message: 'Nombre completo y materia son requeridos para docentes' })
+    }
+
     const user = await clerkClient.users.updateUser(userId, {
       publicMetadata: { role }
     })
 
-    // Si el rol es teacher, agregarlo a la coleccion de docentes
+    // Si el rol es docente, agregarlo a la coleccion de docentes
     if (role === 'docente' && email) {
-      const existingTeacher = await Teacher.findOne({ id: email })
+      const normalizedEmail = email.trim().toLowerCase()
+      const existingTeacher = await Teacher.findOne({ id: normalizedEmail })
       if (!existingTeacher) {
         await Teacher.create({
-          id: email,
-          name: email.split('@')[0],
-          subject: ''
+          id: normalizedEmail,
+          name: fullName,
+          subject
         })
-        console.log('Docente agregado a MongoDB:', email)
+        console.log('Docente agregado a MongoDB:', normalizedEmail)
       }
     }
 

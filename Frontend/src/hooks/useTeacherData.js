@@ -5,6 +5,7 @@ export function useTeacherData(teacherId) {
   const [questions, setQuestions] = useState([])
   const [results, setResults] = useState(null)
   const [plans, setPlans] = useState([])
+  const [teacherInfo, setTeacherInfo] = useState(null)
   const [hasEvaluated, setHasEvaluated] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -18,13 +19,15 @@ export function useTeacherData(teacherId) {
     setLoading(true)
     setError('')
     try {
-      const [questionsRes, selfCheckRes] = await Promise.all([
+      const [questionsRes, selfCheckRes, teacherInfoRes] = await Promise.all([
         api.get('/api/questions?type=teacher'),
-        api.get('/api/evaluations/teacher-self-check')
+        api.get('/api/evaluations/teacher-self-check'),
+        api.get('/api/teachers/me')
       ])
 
       setQuestions(questionsRes.data)
       setHasEvaluated(selfCheckRes.data.hasEvaluated)
+      setTeacherInfo(teacherInfoRes.data)
     } catch (err) {
       setError('Error al cargar los datos. Por favor recarga la página.')
       console.log('Error cargando datos del docente:', err)
@@ -68,5 +71,5 @@ export function useTeacherData(teacherId) {
     }
   }
 
-  return { questions, results, plans, hasEvaluated, loading, error, loadResults, markAsEvaluated, setPlans, completePlan, deletePlan }
+  return { questions, results, plans, teacherInfo, hasEvaluated, loading, error, loadResults, markAsEvaluated, setPlans, completePlan, deletePlan }
 }

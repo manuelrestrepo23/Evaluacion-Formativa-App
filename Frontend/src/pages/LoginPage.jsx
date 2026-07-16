@@ -11,8 +11,12 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [role, setRole] = useState('')
+  const [fullName, setFullName] = useState('')
+  const [subject, setSubject] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState('')
+
+  const isTeacherRole = role === 'docente'
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -38,6 +42,9 @@ export default function LoginPage() {
     if (!role) {
       return setError('Debes seleccionar un rol')
     }
+    if (isTeacherRole && (!fullName.trim() || !subject.trim())) {
+      return setError('Debes ingresar tu nombre completo y la materia que dictas')
+    }
 
     setLoading(true)
     try {
@@ -46,7 +53,8 @@ export default function LoginPage() {
       await publicApi.post('/api/auth/update-role', {
         userId: result.createdUserId,
         role,
-        email
+        email,
+        ...(isTeacherRole && { fullName: fullName.trim(), subject: subject.trim() })
       })
 
       await setActiveSignUp({ session: result.createdSessionId })
@@ -132,6 +140,32 @@ export default function LoginPage() {
                       <option value="directivo">Directivo</option>
                     </select>
                   </div>
+
+                  {isTeacherRole && (
+                    <>
+                      <div className="mb-3">
+                        <label className="form-label">Nombre completo</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={fullName}
+                          onChange={e => setFullName(e.target.value)}
+                          required
+                        />
+                      </div>
+
+                      <div className="mb-3">
+                        <label className="form-label">Materia que dicta</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={subject}
+                          onChange={e => setSubject(e.target.value)}
+                          required
+                        />
+                      </div>
+                    </>
+                  )}
                 </>
               )}
 

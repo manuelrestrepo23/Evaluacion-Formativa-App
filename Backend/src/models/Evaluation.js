@@ -17,13 +17,20 @@ const evaluationSchema = mongoose.Schema({
     evaluationData: {
         scores: {
             type: Map, // Map de cada pregunta con su respuesta: "1": 4, "2": 3, ...
-            of: Number
+            of: { type: Number, min: 1, max: 5 }
         },
         openAnswers: {
             type: Map, // Map de cada pregunta abierta con su respuesta de texto
             of: String
         }
+    },
+    status: {
+        type: String,
+        enum: ['draft', 'submitted'], // draft: autoguardado en progreso; submitted: evaluacion completa y enviada
+        default: 'submitted' // los documentos legacy (sin este campo) y los envios de un solo paso (autoevaluacion docente) se consideran ya enviados
     }
 }, {timestamps: true})
+
+evaluationSchema.index({ userEmail: 1, teacherId: 1, userRole: 1 }, { unique: true })
 
 export default mongoose.model('Evaluation', evaluationSchema)

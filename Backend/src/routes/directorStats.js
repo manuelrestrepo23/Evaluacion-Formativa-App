@@ -10,7 +10,7 @@ const router = express.Router()
 router.get('/', requireAuth, requireRole('directivo'), async (req, res) => {
   try {
     const teachers = await Teacher.find()
-    const evaluations = await Evaluation.find()
+    const evaluations = await Evaluation.find({ status: { $ne: 'draft' } })
     const teacherQuestions = await Question.find({ type: 'teacher' })
     const studentOpenQuestions = await Question.find({ type: 'student', questionType: 'abierta' })
     const openQuestions = teacherQuestions.filter(q => q.questionType === 'abierta')

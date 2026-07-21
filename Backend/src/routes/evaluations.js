@@ -1,5 +1,6 @@
 import express from 'express'
 import Evaluation from '../models/Evaluation.js'
+import Question from '../models/Question.js'
 import { requireAuth, requireRole } from '../middleware/auth.js'
 
 const router = express.Router()
@@ -7,21 +8,28 @@ const router = express.Router()
 // GET /api/evaluations/all - Obtener todas las evaluaciones (directivo)
 router.get('/all', requireAuth, requireRole('directivo'), async (req, res) => {
   try {
-    const evaluations = await Evaluation.find()
+    const evaluations = await Evaluation.find({ status: { $ne: 'draft' } })
     res.status(200).json({ evaluations })
   } catch (error) {
     res.status(500).json({ message: 'Error al obtener las evaluaciones', error: error.message })
   }
 })
 
-// GET /api/evaluations/student - Docentes evaluados por el estudiante autenticado
+// GET /api/evaluations/student - Progreso del estudiante autenticado por profesor (incluye borradores en curso)
 router.get('/student', requireAuth, requireRole('estudiante'), async (req, res) => {
   try {
     const userEmail = req.userEmail
 
     const evaluations = await Evaluation.find({ userEmail, userRole: 'estudiante' })
-    const evaluatedTeacherIds = evaluations.map(e => e.teacherId)
-    res.status(200).json({ evaluatedTeacherIds })
+    const progress = {}
+    evaluations.forEach(e => {
+      progress[e.teacherId] = {
+        status: e.status,
+        scores: Object.fromEntries(e.evaluationData?.scores || []),
+        openAnswers: Object.fromEntries(e.evaluationData?.openAnswers || [])
+      }
+    })
+    res.status(200).json({ progress })
   } catch (error) {
     res.status(500).json({ message: 'Error al obtener las evaluaciones', error: error.message })
   }
@@ -32,8 +40,8 @@ router.get('/teacher-results', requireAuth, requireRole('docente', 'directivo'),
   try {
     const teacherId = req.userEmail
 
-    const selfEvaluation = await Evaluation.findOne({ teacherId, userRole: 'docente' })
-    const studentEvaluations = await Evaluation.find({ teacherId, userRole: 'estudiante' })
+    const selfEvaluation = await Evaluation.findOne({ teacherId, userRole: 'docente', status: { $ne: 'draft' } })
+    const studentEvaluations = await Evaluation.find({ teacherId, userRole: 'estudiante', status: { $ne: 'draft' } })
     const hasData = !!selfEvaluation || studentEvaluations.length > 0
 
     res.status(200).json({ hasData, selfEvaluation, studentEvaluations })
@@ -47,14 +55,14 @@ router.get('/teacher-self-check', requireAuth, requireRole('docente'), async (re
   try {
     const teacherId = req.userEmail
 
-    const selfEvaluation = await Evaluation.findOne({ teacherId, userRole: 'docente' })
+    const selfEvaluation = await Evaluation.findOne({ teacherId, userRole: 'docente', status: { $ne: 'draft' } })
     res.status(200).json({ hasEvaluated: !!selfEvaluation })
   } catch (error) {
     res.status(500).json({ message: 'Error al verificar la autoevaluación', error: error.message })
   }
 })
 
-// POST /api/evaluations/submit - Enviar una evaluación
+// POST /api/evaluations/submit - Enviar una evaluación completa en un solo paso (autoevaluación docente)
 router.post('/submit', requireAuth, requireRole('estudiante', 'docente'), async (req, res) => {
   try {
     const { teacherId, evaluationData, userRole } = req.body
@@ -64,10 +72,95 @@ router.post('/submit', requireAuth, requireRole('estudiante', 'docente'), async 
       return res.status(400).json({ message: 'Datos incompletos' })
     }
 
-    const evaluation = await Evaluation.create({ teacherId, evaluationData, userEmail, userRole })
+    const evaluation = await Evaluation.create({ teacherId, evaluationData, userEmail, userRole, status: 'submitted' })
     res.status(201).json({ message: 'Evaluación enviada correctamente', id: evaluation._id })
   } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({ message: 'Ya existe una evaluación para este docente' })
+    }
     res.status(500).json({ message: 'Error al enviar la evaluación', error: error.message })
+  }
+})
+
+// PATCH /api/evaluations/answer - Autoguardar la respuesta de una pregunta para un profesor (flujo estudiantil)
+router.patch('/answer', requireAuth, requireRole('estudiante'), async (req, res) => {
+  try {
+    const { teacherId, questionNumber, questionType, value } = req.body
+    const userEmail = req.userEmail
+    const userRole = 'estudiante'
+
+    if (!teacherId || !Number.isInteger(questionNumber) || questionNumber <= 0) {
+      return res.status(400).json({ message: 'Datos incompletos o inválidos' })
+    }
+    if (!['likert', 'abierta'].includes(questionType)) {
+      return res.status(400).json({ message: 'Tipo de pregunta inválido' })
+    }
+    if (questionType === 'likert' && (!Number.isInteger(value) || value < 1 || value > 5)) {
+      return res.status(400).json({ message: 'El valor de una pregunta likert debe ser un entero entre 1 y 5' })
+    }
+
+    const existing = await Evaluation.findOne({ userEmail, teacherId, userRole })
+    if (existing && existing.status === 'submitted') {
+      return res.status(409).json({ message: 'Esta evaluación ya fue enviada y no se puede editar' })
+    }
+
+    const field = questionType === 'likert' ? 'scores' : 'openAnswers'
+    const evaluation = await Evaluation.findOneAndUpdate(
+      { userEmail, teacherId, userRole },
+      {
+        $set: { [`evaluationData.${field}.${questionNumber}`]: value, status: 'draft' },
+        $setOnInsert: { teacherId, userEmail, userRole }
+      },
+      { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true }
+    )
+
+    res.status(200).json({ message: 'Respuesta guardada', status: evaluation.status })
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({ message: 'Ya existe una evaluación para este docente' })
+    }
+    res.status(500).json({ message: 'Error al guardar la respuesta', error: error.message })
+  }
+})
+
+// POST /api/evaluations/finalize - Marcar como enviada la evaluación en borrador de un profesor (flujo estudiantil)
+router.post('/finalize', requireAuth, requireRole('estudiante'), async (req, res) => {
+  try {
+    const { teacherId } = req.body
+    const userEmail = req.userEmail
+    const userRole = 'estudiante'
+
+    if (!teacherId) {
+      return res.status(400).json({ message: 'Datos incompletos' })
+    }
+
+    const evaluation = await Evaluation.findOne({ userEmail, teacherId, userRole })
+    if (!evaluation) {
+      return res.status(404).json({ message: 'No hay respuestas guardadas para este docente' })
+    }
+    if (evaluation.status === 'submitted') {
+      return res.status(409).json({ message: 'Esta evaluación ya fue enviada' })
+    }
+
+    const questions = await Question.find({ type: 'student' })
+    const missing = questions
+      .filter(q => {
+        if (q.questionType === 'likert') {
+          return !evaluation.evaluationData?.scores?.has(String(q.number))
+        }
+        return !evaluation.evaluationData?.openAnswers?.get(String(q.number))?.trim()
+      })
+      .map(q => q.number)
+
+    if (missing.length > 0) {
+      return res.status(400).json({ message: 'Faltan preguntas por responder', missing })
+    }
+
+    evaluation.status = 'submitted'
+    await evaluation.save()
+    res.status(200).json({ message: 'Evaluación enviada correctamente', id: evaluation._id })
+  } catch (error) {
+    res.status(500).json({ message: 'Error al finalizar la evaluación', error: error.message })
   }
 })
 

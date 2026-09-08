@@ -1,6 +1,7 @@
 import { useSignIn, useSignUp } from '@clerk/clerk-react'
 import { useState } from 'react'
 import { publicApi } from '../api/axios.js'
+import { getErrorMessage } from '../utils/errors.js'
 
 export default function LoginPage() {
   const { signIn, setActive: setActiveSignIn } = useSignIn()
@@ -26,7 +27,7 @@ export default function LoginPage() {
       const result = await signIn.create({ identifier: email, password })
       await setActiveSignIn({ session: result.createdSessionId })
     } catch (err) {
-      setError('Correo o contraseña incorrectos')
+      setError(getErrorMessage(err, 'Correo o contraseña incorrectos'))
     } finally {
       setLoading(false)
     }
@@ -65,7 +66,7 @@ export default function LoginPage() {
       
     } catch (err) {
       console.log('Error completo:', err)
-      setError('Error al registrarse. Verifica los datos ingresados')
+      setError(getErrorMessage(err, 'Error al registrarse. Verifica los datos ingresados'))
     } finally {
       setLoading(false)
     }

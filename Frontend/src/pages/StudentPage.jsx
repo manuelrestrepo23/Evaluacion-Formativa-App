@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { useUser, useClerk } from '@clerk/clerk-react'
 import { useStudentData } from '../hooks/useStudentData.js'
+import { getErrorMessage } from '../utils/errors.js'
 
 const DEBOUNCE_MS = 600
 
@@ -115,8 +116,8 @@ export default function StudentPage() {
       }
     }))
     setSaveError('')
-    saveAnswer(teacherId, question.number, 'likert', value).catch(() => {
-      setSaveError('No se pudo guardar una respuesta. Verifica tu conexión e inténtalo de nuevo.')
+    saveAnswer(teacherId, question.number, 'likert', value).catch(err => {
+      setSaveError(getErrorMessage(err, 'No se pudo guardar una respuesta.'))
     })
   }
 
@@ -133,8 +134,8 @@ export default function StudentPage() {
     if (!debounceTimers.current[teacherId]) debounceTimers.current[teacherId] = {}
     clearTimeout(debounceTimers.current[teacherId][question.number])
     debounceTimers.current[teacherId][question.number] = setTimeout(() => {
-      saveAnswer(teacherId, question.number, 'abierta', value).catch(() => {
-        setSaveError('No se pudo guardar una respuesta. Verifica tu conexión e inténtalo de nuevo.')
+      saveAnswer(teacherId, question.number, 'abierta', value).catch(err => {
+        setSaveError(getErrorMessage(err, 'No se pudo guardar una respuesta.'))
       })
       delete debounceTimers.current[teacherId][question.number]
     }, DEBOUNCE_MS)

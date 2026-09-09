@@ -35,16 +35,16 @@ router.get('/', requireAuth, requireRole('directivo'), async (req, res) => {
       let studentAverage = 0
 
       if (selfEval) {
-        const scores = [...selfEval.evaluationData.scores.values()]
+        const scores = [...(selfEval.evaluationData?.scores?.values() || [])]
           .filter(v => typeof v === 'number' && v > 0)
         if (scores.length > 0) {
           selfAverage = scores.reduce((a, b) => a + b, 0) / scores.length
         }
       }
 
-      if (studentEvals.length > 0) {
+            if (studentEvals.length > 0) {
         const allScores = studentEvals.flatMap(e =>
-          [...e.evaluationData.scores.values()].filter(v => typeof v === 'number' && v > 0)
+          [...(e.evaluationData?.scores?.values() || [])].filter(v => typeof v === 'number' && v > 0)
         )
         if (allScores.length > 0) {
           studentAverage = allScores.reduce((a, b) => a + b, 0) / allScores.length

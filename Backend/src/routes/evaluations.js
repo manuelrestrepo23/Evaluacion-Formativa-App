@@ -62,13 +62,17 @@ router.get('/teacher-self-check', requireAuth, requireRole('docente'), async (re
   }
 })
 
-// POST /api/evaluations/submit - Enviar una evaluación completa en un solo paso (autoevaluación docente)
-router.post('/submit', requireAuth, requireRole('estudiante', 'docente'), async (req, res) => {
+// POST /api/evaluations/submit - Autoevaluación docente (un solo paso)
+router.post('/submit', requireAuth, requireRole('docente'), async (req, res) => {
   try {
-    const { teacherId, evaluationData, userRole } = req.body
-    const userEmail = req.userEmail
+    const { evaluationData } = req.body
 
-    if (!teacherId || !evaluationData || !userRole) {
+    // Un docente solo puede autoevaluarse a sí mismo: identidad y rol salen del token.
+    const teacherId = req.userEmail
+    const userEmail = req.userEmail
+    const userRole = 'docente'
+
+    if (!evaluationData) {
       return res.status(400).json({ message: 'Datos incompletos' })
     }
 

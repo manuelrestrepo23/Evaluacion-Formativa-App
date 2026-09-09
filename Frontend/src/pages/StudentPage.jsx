@@ -174,6 +174,14 @@ export default function StudentPage() {
     setFinalizeResults(null)
     const results = await Promise.allSettled(pendingTeachers.map(t => finalizeTeacher(t.id)))
     const failed = pendingTeachers.filter((_, i) => results[i].status === 'rejected')
+
+    // Sacar de la selección manual los docentes que sí se enviaron, para que
+    // dejen de aparecer como pendientes y el formulario dé paso al mensaje de éxito.
+    const idsEnviados = pendingTeachers
+      .filter((_, i) => results[i].status === 'fulfilled')
+      .map(t => t.id)
+    setExtraSelected(prev => prev.filter(id => !idsEnviados.includes(id)))
+
     setFinalizeResults({ succeededCount: pendingTeachers.length - failed.length, failed })
     setFinalizing(false)
   }

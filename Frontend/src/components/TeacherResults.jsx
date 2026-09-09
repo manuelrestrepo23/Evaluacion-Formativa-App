@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { BarChart, Bar, RadarChart, Radar, PolarGrid, PolarAngleAxis, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
-function processResults(results, questions) {
+function processResults(results, questions, studentQuestions) {
   if (!results || !results.hasData) return null
 
   const { selfEvaluation, studentEvaluations } = results
-  const openQuestions = questions?.filter(q => q.questionType === 'abierta') || []
+  const selfOpenQuestions = questions?.filter(q => q.questionType === 'abierta') || []
+  const studentOpenQuestions = studentQuestions?.filter(q => q.questionType === 'abierta') || []
 
   // Scores Likert - autoevaluación
   const selfScores = selfEvaluation
@@ -17,7 +18,7 @@ function processResults(results, questions) {
 
   // Respuestas abiertas - autoevaluación
   const selfOpenAnswers = selfEvaluation
-    ? openQuestions.map(q => ({
+    ? selfOpenQuestions.map(q => ({
         question: q.question,
         answer: selfEvaluation.evaluationData?.openAnswers?.[q.number] || ''
       })).filter(a => a.answer)
@@ -40,7 +41,7 @@ function processResults(results, questions) {
   }))
 
   // Respuestas abiertas - estudiantes agrupadas por pregunta
-  const studentOpenAnswers = openQuestions.map(q => ({
+  const studentOpenAnswers = studentOpenQuestions.map(q => ({
     question: q.question,
     answers: studentEvaluations
       .map(e => e.evaluationData?.openAnswers?.[q.number])
@@ -273,8 +274,8 @@ function PlanCard({ plan, index, total, onComplete, onDelete }) {
   )
 }
 
-export default function TeacherResults({ results, plans, questions, teacherId, onClose, onCreatePlan, onCompletePlan, onDeletePlan }) {
-  const processedData = processResults(results, questions)
+export default function TeacherResults({ results, plans, questions, studentQuestions, teacherId, onClose, onCreatePlan, onCompletePlan, onDeletePlan }) {
+  const processedData = processResults(results, questions, studentQuestions)
 
   const selfAverage = processedData?.hasSelfEvaluation
     ? processedData.selfScores.reduce((s, x) => s + x.score, 0) / processedData.selfScores.length
@@ -412,8 +413,8 @@ export default function TeacherResults({ results, plans, questions, teacherId, o
                       <tr><th>Pregunta</th><th className="text-center">Promedio</th></tr>
                     </thead>
                     <tbody>
-                      {processedData.studentScores.map(s => {
-                        const questionText = getQuestionText(questions, s.questionId)
+                        {processedData.studentScores.map(s => {
+                          const questionText = getQuestionText(studentQuestions, s.questionId)
                         return (
                           <tr key={s.questionId}>
                             <td title={questionText}>{truncateText(questionText)}</td>

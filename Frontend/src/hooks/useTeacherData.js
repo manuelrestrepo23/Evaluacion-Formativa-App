@@ -3,6 +3,7 @@ import api from '../api/axios.js'
 
 export function useTeacherData(teacherId) {
   const [questions, setQuestions] = useState([])
+  const [studentQuestions, setStudentQuestions] = useState([])
   const [results, setResults] = useState(null)
   const [plans, setPlans] = useState([])
   const [teacherInfo, setTeacherInfo] = useState(null)
@@ -19,13 +20,15 @@ export function useTeacherData(teacherId) {
     setLoading(true)
     setError('')
     try {
-      const [questionsRes, selfCheckRes, teacherInfoRes] = await Promise.all([
+        const [questionsRes, studentQuestionsRes, selfCheckRes, teacherInfoRes] = await Promise.all([
         api.get('/api/questions?type=teacher'),
+        api.get('/api/questions?type=student'),
         api.get('/api/evaluations/teacher-self-check'),
         api.get('/api/teachers/me')
       ])
 
       setQuestions(questionsRes.data)
+      setStudentQuestions(studentQuestionsRes.data)
       setHasEvaluated(selfCheckRes.data.hasEvaluated)
       setTeacherInfo(teacherInfoRes.data)
     } catch (err) {
@@ -70,6 +73,5 @@ export function useTeacherData(teacherId) {
       throw err
     }
   }
-
-  return { questions, results, plans, teacherInfo, hasEvaluated, loading, error, loadResults, markAsEvaluated, setPlans, completePlan, deletePlan }
+  return { questions, studentQuestions, results, plans, teacherInfo, hasEvaluated, loading, error, loadResults, markAsEvaluated, setPlans, completePlan, deletePlan }
 }

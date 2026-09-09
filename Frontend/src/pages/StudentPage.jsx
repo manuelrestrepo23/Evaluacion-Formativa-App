@@ -186,6 +186,17 @@ export default function StudentPage() {
     setFinalizing(false)
   }
 
+  if (error) {
+    return (
+      <div className="container mt-5">
+        <div className="alert alert-danger">{error}</div>
+        <button className="btn btn-primary" onClick={() => window.location.reload()}>
+          Reintentar
+        </button>
+      </div>
+    )
+  }
+
   if (loading || !initialized) {
     return (
       <div className="container mt-5 text-center">

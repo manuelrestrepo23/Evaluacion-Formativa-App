@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useClerk } from '@clerk/clerk-react'
 import { BarChart, Bar, PieChart, Pie, Cell, RadarChart, Radar, PolarGrid, PolarAngleAxis, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { useDirectorData } from '../hooks/useDirectorData.js'
+import TeacherFeedbackModal from '../components/TeacherFeedbackModal.jsx'
 
 const COLORS = ['#466B3F', '#94B43B', '#A61C31', '#B1B2B0']
 
@@ -185,6 +186,7 @@ export default function DirectorPage() {
   const { signOut } = useClerk()
   const { stats, loading, error, reload } = useDirectorData()
   const [selectedTeacher, setSelectedTeacher] = useState(null)
+  const [feedbackTeacher, setFeedbackTeacher] = useState(null)
 
   const sortedTeachers = stats?.teachers
     ? [...stats.teachers].sort((a, b) => b.overallAverage - a.overallAverage)
@@ -373,16 +375,24 @@ export default function DirectorPage() {
                       <td className="text-center">{teacher.studentEvaluationCount}</td>
                       <td><strong>{teacher.overallAverage > 0 ? teacher.overallAverage : '-'}</strong></td>
                       <td>
-                        {hasOpenAnswers(teacher) ? (
+                        <div className="d-flex gap-2">
+                          {hasOpenAnswers(teacher) ? (
+                            <button
+                              className="btn btn-sm btn-outline-secondary"
+                              onClick={() => setSelectedTeacher(teacher)}
+                            >
+                              <i className="bi bi-chat-left-text me-1"></i>Ver respuestas
+                            </button>
+                          ) : (
+                            <span className="text-muted align-self-center" style={{ fontSize: '0.85rem' }}>Sin respuestas</span>
+                          )}
                           <button
-                            className="btn btn-sm btn-outline-secondary"
-                            onClick={() => setSelectedTeacher(teacher)}
+                            className="btn btn-sm btn-outline-primary"
+                            onClick={() => setFeedbackTeacher(teacher)}
                           >
-                            <i className="bi bi-chat-left-text me-1"></i>Ver respuestas
+                            <i className="bi bi-journal-text me-1"></i>Retroalimentar
                           </button>
-                        ) : (
-                          <span className="text-muted" style={{ fontSize: '0.85rem' }}>Sin respuestas</span>
-                        )}
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -404,6 +414,11 @@ export default function DirectorPage() {
       <OpenAnswersModal
         teacher={selectedTeacher}
         onClose={() => setSelectedTeacher(null)}
+      />
+      
+      <TeacherFeedbackModal
+        teacher={feedbackTeacher}
+        onClose={() => setFeedbackTeacher(null)}
       />
     </div>
   )

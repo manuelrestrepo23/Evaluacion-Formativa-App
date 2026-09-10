@@ -6,6 +6,7 @@ export function useTeacherData(teacherId) {
   const [studentQuestions, setStudentQuestions] = useState([])
   const [results, setResults] = useState(null)
   const [plans, setPlans] = useState([])
+  const [directorFeedback, setDirectorFeedback] = useState([])
   const [teacherInfo, setTeacherInfo] = useState(null)
   const [hasEvaluated, setHasEvaluated] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -39,14 +40,16 @@ export function useTeacherData(teacherId) {
     }
   }
 
-  const loadResults = async () => {
+const loadResults = async () => {
     try {
-      const [resultsRes, plansRes] = await Promise.all([
+      const [resultsRes, plansRes, feedbackRes] = await Promise.all([
         api.get('/api/evaluations/teacher-results'),
-        api.get('/api/improvement-plans')
+        api.get('/api/improvement-plans'),
+        api.get('/api/improvement-plans/from-director')
       ])
       setResults(resultsRes.data)
       setPlans(plansRes.data.plans || [])
+      setDirectorFeedback(feedbackRes.data.plans || [])
     } catch (err) {
       console.log('Error cargando resultados:', err)
     }
@@ -73,5 +76,5 @@ export function useTeacherData(teacherId) {
       throw err
     }
   }
-  return { questions, studentQuestions, results, plans, teacherInfo, hasEvaluated, loading, error, loadResults, markAsEvaluated, setPlans, completePlan, deletePlan }
+  return { questions, studentQuestions, results, plans, directorFeedback, teacherInfo, hasEvaluated, loading, error, loadResults, markAsEvaluated, setPlans, completePlan, deletePlan }
 }

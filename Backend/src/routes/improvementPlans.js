@@ -105,5 +105,14 @@ router.post('/teacher/:teacherId', requireAuth, requireRole('directivo'), async 
     res.status(500).json({ message: 'Error al guardar la retroalimentación', error: error.message })
   }
 })
-
+// GET /api/improvement-plans/from-director - Retroalimentacion que la direccion dejo al docente autenticado (solo lectura)
+router.get('/from-director', requireAuth, requireRole('docente'), async (req, res) => {
+  try {
+    const teacherId = req.userEmail
+    const plans = await ImprovementPlan.find({ teacherId, authorRole: 'directivo' }).sort({ createdAt: -1 })
+    res.status(200).json({ plans, count: plans.length })
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener la retroalimentación', error: error.message })
+  }
+})
 export default router

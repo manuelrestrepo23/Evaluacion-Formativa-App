@@ -4,13 +4,14 @@ import { useTeacherData } from '../hooks/useTeacherData.js'
 import TeacherEvalForm from '../components/TeacherEvalForm.jsx'
 import TeacherResults from '../components/TeacherResults.jsx'
 import ImprovementPlanModal from '../components/ImprovementPlanModal.jsx'
+import DirectorFeedbackCard from '../components/DirectorFeedbackCard.jsx'
 
 export default function TeacherPage() {
   const { user } = useUser()
   const { signOut } = useClerk()
   const teacherId = user?.primaryEmailAddress?.emailAddress
 
-  const { questions,studentQuestions, results, plans, teacherInfo, hasEvaluated, loading, error, loadResults, markAsEvaluated, setPlans, completePlan, deletePlan } = useTeacherData(teacherId)
+  const { questions,studentQuestions, results, plans, directorFeedback, teacherInfo, hasEvaluated, loading, error, loadResults, markAsEvaluated, setPlans, completePlan, deletePlan } = useTeacherData(teacherId)
 
   const [view, setView] = useState('dashboard')
   const [showPlanModal, setShowPlanModal] = useState(false)
@@ -136,17 +137,20 @@ export default function TeacherPage() {
 
       {/* Resultados */}
       {view === 'results' && (
-        <TeacherResults
-          results={results}
-          plans={plans}
-          questions={questions}
-          studentQuestions={studentQuestions}
-          teacherId={teacherId}
-          onClose={() => setView('dashboard')}
-          onCreatePlan={() => setShowPlanModal(true)}
-          onCompletePlan={completePlan}
-          onDeletePlan={deletePlan}
-        />
+        <>
+          <TeacherResults
+            results={results}
+            plans={plans}
+            questions={questions}
+            studentQuestions={studentQuestions}
+            teacherId={teacherId}
+            onClose={() => setView('dashboard')}
+            onCreatePlan={() => setShowPlanModal(true)}
+            onCompletePlan={completePlan}
+            onDeletePlan={deletePlan}
+          />
+          <DirectorFeedbackCard feedback={directorFeedback} />
+        </>
       )}
 
       {/* Modal plan de mejora */}

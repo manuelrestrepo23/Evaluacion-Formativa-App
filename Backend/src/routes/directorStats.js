@@ -51,9 +51,9 @@ router.get('/', requireAuth, requireRole('directivo'), async (req, res) => {
         }
       }
 
-      const overallAverage = selfAverage > 0 && studentAverage > 0
-        ? (selfAverage + studentAverage) / 2
-        : selfAverage > 0 ? selfAverage : studentAverage
+      // El promedio general refleja solo la percepción estudiantil 
+      // la autoevaluación se muestra aparte para comparar
+      const overallAverage = studentAverage
 
       // Respuestas abiertas - autoevaluación
       const selfOpenAnswers = selfEval

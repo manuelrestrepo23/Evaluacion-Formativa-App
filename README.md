@@ -4,7 +4,7 @@ App web para el proyecto de **Evaluación Formativa de la Docencia**: permite a 
 
 Tres roles, cada uno con su propio panel:
 
-- **Estudiante** — evalúa a los profesores que le correspondan (21 preguntas likert + 3 abiertas), pregunta por pregunta, con autoguardado.
+- **Estudiante** — evalúa a los profesores que le correspondan (21 preguntas likert + 3 abiertas), un profesor completo por página** y avanzando profesor por profesor, con autoguardado.
 - **Docente** — se autoevalúa, revisa sus resultados frente a la percepción estudiantil, y gestiona planes de mejora.
 - **Directivo** — ve estadísticas generales, gráficas comparativas y exporta un reporte CSV con todo (promedios y respuestas abiertas).
 
@@ -58,7 +58,7 @@ Evaluacion-Formativa-App/
     ├── src/
     │   ├── api/axios.js             # Instancia de axios + inyección del token de Clerk
     │   ├── hooks/                   # useStudentData, useTeacherData, useDirectorData
-    │   ├── components/               # TeacherEvalForm, TeacherResults, ImprovementPlanModal
+    │   ├── components/              # AppLayout, TeacherEvalForm, TeacherResults, ImprovementPlanModal,TeacherFeedbackModal, DirectorFeedbackCard
     │   ├── pages/                   # LoginPage, StudentPage, TeacherPage, DirectorPage
     │   ├── App.jsx                  # Ruteo por rol (react-router-dom)
     │   └── main.jsx                 # Bootstrap de la app + ClerkProvider
@@ -171,13 +171,16 @@ Todas bajo el prefijo `/api`. Salvo donde se indica "pública", todas requieren 
 | `POST /evaluations/submit` | estudiante, docente | Envío en un solo paso (usado hoy solo por la autoevaluación docente) |
 | `GET /evaluations/teacher-results` | docente, directivo | Autoevaluación + evaluaciones de estudiantes de un profesor |
 | `GET /evaluations/teacher-self-check` | docente | Si el docente ya se autoevaluó |
-| `GET /evaluations/all` | directivo | Todas las evaluaciones enviadas |
+
 | `GET /improvement-plans` | docente, directivo | Planes de mejora del docente autenticado |
 | `POST /improvement-plans` | docente | Crea un plan de mejora |
 | `PATCH /improvement-plans/:id` | docente | Marca un plan como completado |
 | `DELETE /improvement-plans/:id` | docente | Elimina un plan |
 | `GET /director-stats` | directivo | Estadísticas agregadas (promedios, categorías, respuestas abiertas) |
 | `GET /health` | pública | Chequeo de salud del servidor |
+| `GET /improvement-plans/teacher/:teacherId`  | directivo | Retroalimentación que la dirección dejó a un docente |
+| `POST /improvement-plans/teacher/:teacherId` | directivo | Crea retroalimentación de la dirección para un docente |
+| `GET /improvement-plans/from-director`       | docente   | Retroalimentación que la dirección le dejó al docente autenticado |
 
 ## Despliegue
 

@@ -1,6 +1,7 @@
+import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
-import dotenv from 'dotenv'
+
 import { connectDB } from './config/db.js'
 import teachersRouter from './routes/teachers.js'
 import questionsRouter from './routes/question.js'
@@ -10,7 +11,7 @@ import directorStatsRouter from './routes/directorStats.js'
 import authRouter from './routes/auth.js'
 import cookieParser from 'cookie-parser'
 
-dotenv.config()
+
 
 const app = express()
 const PORT = process.env.PORT || 5000

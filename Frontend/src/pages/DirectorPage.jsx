@@ -4,6 +4,7 @@ import { BarChart, Bar, PieChart, Pie, Cell, RadarChart, Radar, PolarGrid, Polar
 import { useDirectorData } from '../hooks/useDirectorData.js'
 import AppLayout from '../components/AppLayout.jsx'
 import TeacherFeedbackModal from '../components/TeacherFeedbackModal.jsx'
+import FrequentTerms from '../components/FrequentTerms.jsx'
 
 const COLORS = ['#466B3F', '#94B43B', '#A61C31', '#B1B2B0']
 
@@ -147,6 +148,7 @@ function OpenAnswersModal({ teacher, onClose }) {
                               Mostrando 10 de {total} respuestas
                             </p>
                           )}
+                          <FrequentTerms answers={item.answers} />
                           <ul className="list-unstyled mb-0">
                             {shown.map((ans, j) => (
                               <li key={j} className="mb-2 d-flex align-items-start gap-2">

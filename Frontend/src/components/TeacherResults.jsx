@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { BarChart, Bar, RadarChart, Radar, PolarGrid, PolarAngleAxis, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import FrequentTerms from './FrequentTerms.jsx'
 
 function processResults(results, questions, studentQuestions) {
   if (!results || !results.hasData) return null
@@ -158,6 +159,7 @@ function OpenAnswersSection({ processedData }) {
                       Mostrando 10 de {total} respuestas
                     </p>
                   )}
+                  <FrequentTerms answers={item.answers} />
                   <ul className="list-unstyled mb-0">
                     {shown.map((ans, j) => (
                       <li key={j} className="mb-2 d-flex align-items-start gap-2">

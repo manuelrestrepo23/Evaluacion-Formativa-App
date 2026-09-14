@@ -23,6 +23,7 @@ const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:3000')
   .split(',')
   .map(o => o.trim())
   .filter(Boolean)
+  console.log('CORS - orígenes permitidos:', allowedOrigins)
 
 // Middlewares
 app.use(cors({

@@ -21,39 +21,52 @@ export function useTeacherData(teacherId) {
     setLoading(true)
     setError('')
     try {
-        const [questionsRes, studentQuestionsRes, selfCheckRes, teacherInfoRes, directorFeedbackRes] = await Promise.all([
+      const [questionsRes, studentQuestionsRes, selfCheckRes, teacherInfoRes] = await Promise.all([
         api.get('/api/questions?type=teacher'),
         api.get('/api/questions?type=student'),
         api.get('/api/evaluations/teacher-self-check'),
-        api.get('/api/teachers/me'),
-        api.get('/api/improvement-plans/from-director')
+        api.get('/api/teachers/me')
       ])
 
       setQuestions(questionsRes.data)
       setStudentQuestions(studentQuestionsRes.data)
       setHasEvaluated(selfCheckRes.data.hasEvaluated)
       setTeacherInfo(teacherInfoRes.data)
-      setDirectorFeedback(directorFeedbackRes.data.plans || [])
     } catch (err) {
       setError('Error al cargar los datos. Por favor recarga la página.')
-      console.log('Error cargando datos del docente:', err)
+      console.log('Error cargando datos del docente:', err?.config?.url, err?.response?.status, err?.response?.data)
     } finally {
       setLoading(false)
+    }
+
+    // Opcional: si la direccion aun no ha dejado retroalimentacion, o el endpoint falla,
+    // la pagina del docente debe seguir funcionando igual
+    try {
+      const directorFeedbackRes = await api.get('/api/improvement-plans/from-director')
+      setDirectorFeedback(directorFeedbackRes.data.plans || [])
+    } catch (err) {
+      setDirectorFeedback([])
+      console.log('No se pudo cargar la retroalimentación del directivo:', err?.response?.status)
     }
   }
 
 const loadResults = async () => {
     try {
-      const [resultsRes, plansRes, feedbackRes] = await Promise.all([
+      const [resultsRes, plansRes] = await Promise.all([
         api.get('/api/evaluations/teacher-results'),
-        api.get('/api/improvement-plans'),
-        api.get('/api/improvement-plans/from-director')
+        api.get('/api/improvement-plans')
       ])
       setResults(resultsRes.data)
       setPlans(plansRes.data.plans || [])
+    } catch (err) {
+      console.log('Error cargando resultados:', err?.config?.url, err?.response?.status)
+    }
+
+    try {
+      const feedbackRes = await api.get('/api/improvement-plans/from-director')
       setDirectorFeedback(feedbackRes.data.plans || [])
     } catch (err) {
-      console.log('Error cargando resultados:', err)
+      console.log('No se pudo cargar la retroalimentación del directivo:', err?.response?.status)
     }
   }
 

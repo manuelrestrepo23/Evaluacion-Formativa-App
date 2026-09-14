@@ -8,6 +8,7 @@ import FrequentTerms from '../components/FrequentTerms.jsx'
 import TeacherDetailModal from '../components/TeacherDetailModal.jsx'
 
 const COLORS = ['#466B3F', '#94B43B', '#A61C31', '#B1B2B0']
+const SCORE_COLORS = ['#A61C31', '#c76b4e', '#B1B2B0', '#94B43B', '#466B3F']
 
 function exportCSV(stats) {
   if (!stats?.teachers) return
@@ -213,6 +214,16 @@ export default function DirectorPage() {
   const radarData = stats?.categoryAverages
     ? Object.entries(stats.categoryAverages).map(([category, average]) => ({ category, Promedio: average }))
     : []
+  
+  const categoryRanking = stats
+    ? Object.entries(stats.categoryAveragesStudent || {})
+        .map(([category, value]) => ({ category, value }))
+        .sort((a, b) => b.value - a.value)
+    : []
+
+  const instDistData = stats
+    ? [1, 2, 3, 4, 5].map(n => ({ score: String(n), Respuestas: stats.scoreDistribution?.[n] || 0 }))
+    : []
 
   const hasOpenAnswers = (teacher) =>
     teacher.selfOpenAnswers?.length > 0 ||
@@ -349,7 +360,79 @@ export default function DirectorPage() {
               </div>
             </div>
           )}
+          
+          {/* Analisis institucional por categoria y distribucion */}
+          {stats && (
+            <div className="row g-4 mb-4">
+              <div className="col-lg-7">
+                <div className="card h-100">
+                  <div className="card-header"><h5 className="mb-0">Fortalezas y debilidades por categoría</h5></div>
+                  <div className="card-body">
+                    {categoryRanking.length > 0 ? (
+                      <>
+                        {categoryRanking.map((c, i) => {
+                          const isTop = i === 0
+                          const isBottom = i === categoryRanking.length - 1
+                          const color = isTop ? '#466B3F' : isBottom ? '#A61C31' : '#94B43B'
+                          return (
+                            <div key={c.category} className="mb-3">
+                              <div className="d-flex justify-content-between mb-1" style={{ fontSize: '0.9rem' }}>
+                                <span>{c.category}</span>
+                                <strong>{c.value}</strong>
+                              </div>
+                              <div className="progress" style={{ height: '10px' }}>
+                                <div
+                                  className="progress-bar"
+                                  role="progressbar"
+                                  style={{ width: `${(c.value / 5) * 100}%`, backgroundColor: color }}
+                                  aria-valuenow={c.value}
+                                  aria-valuemin="0"
+                                  aria-valuemax="5"
+                                />
+                              </div>
+                            </div>
+                          )
+                        })}
+                        <p className="text-muted mb-0 mt-3" style={{ fontSize: '0.85rem' }}>
+                          <i className="bi bi-arrow-up-circle text-success me-1"></i>
+                          Fortaleza: <strong>{categoryRanking[0].category}</strong>
+                          {' · '}
+                          <i className="bi bi-arrow-down-circle text-danger me-1"></i>
+                          A reforzar: <strong>{categoryRanking[categoryRanking.length - 1].category}</strong>
+                        </p>
+                      </>
+                    ) : (
+                      <p className="text-muted">No hay datos disponibles</p>
+                    )}
+                  </div>
+                </div>
+              </div>
 
+              <div className="col-lg-5">
+                <div className="card h-100">
+                  <div className="card-header"><h5 className="mb-0">Distribución global de puntajes</h5></div>
+                  <div className="card-body">
+                    {instDistData.some(d => d.Respuestas > 0) ? (
+                      <ResponsiveContainer width="100%" height={260}>
+                        <BarChart data={instDistData}>
+                          <XAxis dataKey="score" />
+                          <YAxis allowDecimals={false} />
+                          <Tooltip />
+                          <Bar dataKey="Respuestas">
+                            {instDistData.map((_, i) => (
+                              <Cell key={i} fill={SCORE_COLORS[i]} />
+                            ))}
+                          </Bar>
+                        </BarChart>
+                      </ResponsiveContainer>
+                    ) : (
+                      <p className="text-muted">No hay datos disponibles</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
           {/* Tabla de docentes */}
           <div className="mt-4">
             <h5>Detalle de Docentes</h5>

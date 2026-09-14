@@ -310,9 +310,9 @@ export default function DirectorPage() {
                 <div className="card-header"><h5 className="mb-0">Distribución de Evaluaciones</h5></div>
                 <div className="card-body">
                   {pieData.some(d => d.value > 0) ? (
-                    <ResponsiveContainer width="100%" height={300}>
-                      <PieChart>
-                        <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} label>
+                    <ResponsiveContainer width="100%" height={320}>
+                      <PieChart margin={{ top: 24, right: 24, bottom: 24, left: 24 }}>
+                        <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
                           {pieData.map((_, index) => (
                             <Cell key={index} fill={COLORS[index % COLORS.length]} />
                           ))}
@@ -357,7 +357,6 @@ export default function DirectorPage() {
                     <th>Autoevaluación</th>
                     <th>Promedio Estudiantes</th>
                     <th>Evaluaciones Recibidas</th>
-                    <th>Promedio General</th>
                     <th>Respuestas</th>
                   </tr>
                 </thead>
@@ -376,7 +375,7 @@ export default function DirectorPage() {
                           : <span className="text-muted">Sin datos</span>}
                       </td>
                       <td className="text-center">{teacher.studentEvaluationCount}</td>
-                      <td><strong>{teacher.overallAverage > 0 ? teacher.overallAverage : '-'}</strong></td>
+                      
                       <td>
                         <div className="d-flex gap-2">
                           {hasOpenAnswers(teacher) ? (

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useMemo } from 'react'
 import { useUser, useClerk } from '@clerk/clerk-react'
 import { useStudentData } from '../hooks/useStudentData.js'
 import { getErrorMessage } from '../utils/errors.js'
+import AppLayout from '../components/AppLayout.jsx'
 
 const DEBOUNCE_MS = 600
 
@@ -209,18 +210,16 @@ export default function StudentPage() {
   }
 
   return (
-    <div className="container mt-4">
+    <AppLayout
+      title="Evaluación de Percepción Estudiantil"
+      roleLabel="Estudiante"
+      userName={user?.firstName || userEmail}
+      onSignOut={() => signOut()}
+      nav={[
+        { label: 'Evaluación', icon: 'bi-clipboard-check', active: true, onClick: () => {} },
+      ]}
+    >
       <div className="card">
-        <div className="card-header role-student d-flex justify-content-between align-items-center">
-          <h4 className="mb-0">Evaluación de Percepción Estudiantil</h4>
-          <div className="d-flex align-items-center gap-2">
-            <span className="badge badge-role student">Estudiante</span>
-            <button className="btn btn-sm btn-light" onClick={() => signOut()}>
-              <i className="bi bi-box-arrow-right"></i> Cerrar sesión
-            </button>
-          </div>
-        </div>
-
         <div className="card-body">
           {error && <div className="alert alert-danger">{error}</div>}
           {saveError && <div className="alert alert-danger">{saveError}</div>}
@@ -388,6 +387,6 @@ export default function StudentPage() {
           )}
         </div>
       </div>
-    </div>
+    </AppLayout>
   )
 }

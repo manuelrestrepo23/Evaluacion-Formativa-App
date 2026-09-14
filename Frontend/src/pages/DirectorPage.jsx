@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { useClerk } from '@clerk/clerk-react'
+import { useClerk, useUser } from '@clerk/clerk-react'
 import { BarChart, Bar, PieChart, Pie, Cell, RadarChart, Radar, PolarGrid, PolarAngleAxis, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { useDirectorData } from '../hooks/useDirectorData.js'
+import AppLayout from '../components/AppLayout.jsx'
 import TeacherFeedbackModal from '../components/TeacherFeedbackModal.jsx'
 
 const COLORS = ['#466B3F', '#94B43B', '#A61C31', '#B1B2B0']
@@ -184,6 +185,7 @@ function OpenAnswersModal({ teacher, onClose }) {
 
 export default function DirectorPage() {
   const { signOut } = useClerk()
+  const { user } = useUser()
   const { stats, loading, error, reload } = useDirectorData()
   const [selectedTeacher, setSelectedTeacher] = useState(null)
   const [feedbackTeacher, setFeedbackTeacher] = useState(null)
@@ -224,25 +226,26 @@ export default function DirectorPage() {
   }
 
   return (
-    <div className="container mt-4">
+    <AppLayout
+      title="Panel de Directivos"
+      roleLabel="Directivo"
+      userName={user?.firstName || user?.primaryEmailAddress?.emailAddress || 'Directivo'}
+      onSignOut={() => signOut()}
+      nav={[
+        { label: 'Inicio', icon: 'bi-house', active: true, onClick: () => {} },
+      ]}
+    >
       <div className="card">
-        <div className="card-header role-director d-flex justify-content-between align-items-center">
-          <h4 className="mb-0">Panel de Directivos - Reportes y Analytics</h4>
-          <div className="d-flex gap-2">
-            <button className="btn btn-sm btn-light" onClick={reload}>
+        <div className="card-body">
+          <div className="d-flex justify-content-end gap-2 mb-3">
+            <button className="btn btn-sm btn-outline-secondary" onClick={reload}>
               <i className="bi bi-arrow-clockwise me-1"></i>Actualizar
             </button>
-            <button className="btn btn-sm btn-light" onClick={() => exportCSV(stats)}>
+            <button className="btn btn-sm btn-outline-secondary" onClick={() => exportCSV(stats)}>
               <i className="bi bi-download me-1"></i>Exportar
             </button>
-            <button className="btn btn-sm btn-light" onClick={() => signOut()}>
-              <i className="bi bi-box-arrow-right me-1"></i>Cerrar sesión
-            </button>
           </div>
-        </div>
-
-        <div className="card-body">
-          {error && <div className="alert alert-danger">{error}</div>}
+            {error && <div className="alert alert-danger">{error}</div>}
 
           {/* Tarjetas de estadísticas */}
           <div className="row mb-4">
@@ -420,6 +423,6 @@ export default function DirectorPage() {
         teacher={feedbackTeacher}
         onClose={() => setFeedbackTeacher(null)}
       />
-    </div>
+    </AppLayout>
   )
 }

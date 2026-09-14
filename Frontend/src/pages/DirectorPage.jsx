@@ -5,6 +5,7 @@ import { useDirectorData } from '../hooks/useDirectorData.js'
 import AppLayout from '../components/AppLayout.jsx'
 import TeacherFeedbackModal from '../components/TeacherFeedbackModal.jsx'
 import FrequentTerms from '../components/FrequentTerms.jsx'
+import TeacherDetailModal from '../components/TeacherDetailModal.jsx'
 
 const COLORS = ['#466B3F', '#94B43B', '#A61C31', '#B1B2B0']
 
@@ -191,6 +192,7 @@ export default function DirectorPage() {
   const { stats, loading, error, reload } = useDirectorData()
   const [selectedTeacher, setSelectedTeacher] = useState(null)
   const [feedbackTeacher, setFeedbackTeacher] = useState(null)
+  const [detailTeacher, setDetailTeacher] = useState(null)
 
   const sortedTeachers = stats?.teachers
     ? [...stats.teachers].sort((a, b) => b.overallAverage - a.overallAverage)
@@ -359,7 +361,7 @@ export default function DirectorPage() {
                     <th>Autoevaluación</th>
                     <th>Promedio Estudiantes</th>
                     <th>Evaluaciones Recibidas</th>
-                    <th>Respuestas</th>
+                    <th>Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -390,6 +392,12 @@ export default function DirectorPage() {
                           ) : (
                             <span className="text-muted align-self-center" style={{ fontSize: '0.85rem' }}>Sin respuestas</span>
                           )}
+                          <button
+                            className="btn btn-sm btn-outline-secondary"
+                            onClick={() => setDetailTeacher(teacher)}
+                          >
+                            <i className="bi bi-graph-up me-1"></i>Detalle
+                          </button>
                           <button
                             className="btn btn-sm btn-outline-primary"
                             onClick={() => setFeedbackTeacher(teacher)}
@@ -423,6 +431,10 @@ export default function DirectorPage() {
       <TeacherFeedbackModal
         teacher={feedbackTeacher}
         onClose={() => setFeedbackTeacher(null)}
+      />
+      <TeacherDetailModal
+        teacher={detailTeacher}
+        onClose={() => setDetailTeacher(null)}
       />
     </AppLayout>
   )

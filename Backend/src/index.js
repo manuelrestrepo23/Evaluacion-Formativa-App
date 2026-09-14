@@ -10,10 +10,12 @@ import improvementPlansRouter from './routes/improvementPlans.js'
 import directorStatsRouter from './routes/directorStats.js'
 import authRouter from './routes/auth.js'
 import cookieParser from 'cookie-parser'
+import rateLimit from 'express-rate-limit'
 
 
 
 const app = express()
+app.set('trust proxy', 1)
 const PORT = process.env.PORT || 5000
 
 // Origenes permitidos por CORS: lista separada por comas en FRONTEND_URL (dev y/o prod)
@@ -35,6 +37,15 @@ app.use(cors({
 }))
 app.use(express.json())
 app.use(cookieParser())
+
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutos
+  max: 300,                 // máx. peticiones por IP en esa ventana
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: 'Demasiadas peticiones, intenta de nuevo más tarde.' }
+})
+app.use('/api', apiLimiter)
 
 // Routes 
 app.use('/api/teachers', teachersRouter)

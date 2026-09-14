@@ -119,7 +119,7 @@ Requiere Node.js `^20.19.0` o `>=22.12.0` (lo exige Vite 8).
 # Backend
 cd Backend
 npm install
-# crear .env con MONGODB_URI, CLERK_SECRET_KEY, FRONTEND_URL=http://localhost:5173
+# crear .env con MONGODB_URI, CLERK_SECRET_KEY, FRONTEND_URL=http://localhost:3000
 npm run seed   # carga las preguntas iniciales (solo la primera vez / si cambian las plantillas)
 npm run dev    # http://localhost:5000
 
@@ -127,7 +127,7 @@ npm run dev    # http://localhost:5000
 cd Frontend
 npm install
 # crear .env con VITE_CLERK_PUBLISHABLE_KEY
-npm run dev    # http://localhost:5173
+npm run dev    # http://localhost:3000
 ```
 
 Ambos deben apuntar a la **misma** instancia de Clerk (mismo par de claves pub/secret) para que el rol asignado en el registro sea consistente.

@@ -5,6 +5,7 @@ import TeacherEvalForm from '../components/TeacherEvalForm.jsx'
 import TeacherResults from '../components/TeacherResults.jsx'
 import ImprovementPlanModal from '../components/ImprovementPlanModal.jsx'
 import DirectorFeedbackCard from '../components/DirectorFeedbackCard.jsx'
+import AppLayout from '../components/AppLayout.jsx'
 
 export default function TeacherPage() {
   const { user } = useUser()
@@ -46,26 +47,18 @@ export default function TeacherPage() {
   }
 
   return (
-    <div className="container mt-4">
-      {error && <div className="alert alert-danger">{error}</div>}
-
-      {/* Header */}
-      <div className="card mb-4">
-        <div className="card-header role-teacher d-flex justify-content-between align-items-center">
-          <h4 className="mb-0">Panel Docente</h4>
-          <div className="d-flex align-items-center gap-2">
-            {teacherInfo?.name && (
-              <span className="text-white" style={{ fontSize: '0.9rem' }}>
-                Hola, {teacherInfo.name}
-              </span>
-            )}
-            <span className="badge badge-role teacher">Docente</span>
-            <button className="btn btn-sm btn-light" onClick={() => signOut()}>
-              <i className="bi bi-box-arrow-right"></i> Cerrar sesión
-            </button>
-          </div>
-        </div>
-      </div>
+    <AppLayout
+      title="Panel Docente"
+      roleLabel="Docente"
+      userName={teacherInfo?.name || teacherId}
+      onSignOut={() => signOut()}
+      nav={[
+        { label: 'Inicio', icon: 'bi-house', active: view === 'dashboard', onClick: () => setView('dashboard') },
+        { label: 'Autoevaluación', icon: 'bi-pencil-square', active: view === 'eval', onClick: () => { if (!hasEvaluated) setView('eval') } },
+        { label: 'Resultados', icon: 'bi-bar-chart', active: view === 'results', onClick: handleViewResults },
+        { label: 'Plan de Mejora', icon: 'bi-journal-text', active: false, onClick: () => setShowPlanModal(true) },
+      ]}>
+        {error && <div className="alert alert-danger">{error}</div>}
 
       {/* Dashboard - tres tarjetas */}
       {view === 'dashboard' && (
@@ -74,6 +67,9 @@ export default function TeacherPage() {
             <div className="card dashboard-card h-100">
               <div className="card-header role-teacher">
                 <h5 className="mb-0">Autoevaluación</h5>
+              </div>
+              <div className="card-media">
+                <img src="/img/autoevaluacion.svg" alt="Autoevaluación" />
               </div>
               <div className="card-body d-flex flex-column">
                 <p className="card-text">
@@ -99,6 +95,9 @@ export default function TeacherPage() {
               <div className="card-header role-teacher">
                 <h5 className="mb-0">Resultados</h5>
               </div>
+              <div className="card-media">
+                <img src="/img/resultados.svg" alt="Resultados" />
+              </div>
               <div className="card-body d-flex flex-column">
                 <p className="card-text">Revise sus resultados de autoevaluación y comparativos con percepciones estudiantiles.</p>
                 <button className="btn btn-primary mt-auto" onClick={handleViewResults}>
@@ -112,6 +111,9 @@ export default function TeacherPage() {
             <div className="card dashboard-card h-100">
               <div className="card-header role-teacher">
                 <h5 className="mb-0">Plan de Mejora</h5>
+              </div>
+              <div className="card-media">
+                <img src="/img/plan-mejora.svg" alt="Plan de Mejora" />
               </div>
               <div className="card-body d-flex flex-column">
                 <p className="card-text">Desarrolle y documente su plan de mejora continua basado en los resultados.</p>
@@ -162,6 +164,6 @@ export default function TeacherPage() {
           onClose={() => setShowPlanModal(false)}
         />
       )}
-    </div>
+    </AppLayout>
   )
 }

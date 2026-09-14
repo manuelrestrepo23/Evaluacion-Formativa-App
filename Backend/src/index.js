@@ -16,13 +16,23 @@ import cookieParser from 'cookie-parser'
 const app = express()
 const PORT = process.env.PORT || 5000
 
-console.log("Frontend url: ", process.env.FRONTEND_URL)
-app.use((req, res, next) => {
-  console.log("request headers: ", req.headers.origin)
-  next()
-})
+// Origenes permitidos por CORS: lista separada por comas en FRONTEND_URL (dev y/o prod)
+const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:3000')
+  .split(',')
+  .map(o => o.trim())
+  .filter(Boolean)
+
 // Middlewares
-app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:3000' }))
+app.use(cors({
+  origin: (origin, callback) => {
+    // Permitir herramientas sin origin (curl, Postman) y los origenes de la lista
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true)
+    } else {
+      callback(new Error(`Origen no permitido por CORS: ${origin}`))
+    }
+  }
+}))
 app.use(express.json())
 app.use(cookieParser())
 

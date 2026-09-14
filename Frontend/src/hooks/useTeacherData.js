@@ -6,8 +6,8 @@ export function useTeacherData(teacherId) {
   const [studentQuestions, setStudentQuestions] = useState([])
   const [results, setResults] = useState(null)
   const [plans, setPlans] = useState([])
-  const [directorFeedback, setDirectorFeedback] = useState([])
   const [teacherInfo, setTeacherInfo] = useState(null)
+  const [directorFeedback, setDirectorFeedback] = useState([])
   const [hasEvaluated, setHasEvaluated] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -21,17 +21,19 @@ export function useTeacherData(teacherId) {
     setLoading(true)
     setError('')
     try {
-        const [questionsRes, studentQuestionsRes, selfCheckRes, teacherInfoRes] = await Promise.all([
+        const [questionsRes, studentQuestionsRes, selfCheckRes, teacherInfoRes, directorFeedbackRes] = await Promise.all([
         api.get('/api/questions?type=teacher'),
         api.get('/api/questions?type=student'),
         api.get('/api/evaluations/teacher-self-check'),
-        api.get('/api/teachers/me')
+        api.get('/api/teachers/me'),
+        api.get('/api/improvement-plans/from-director')
       ])
 
       setQuestions(questionsRes.data)
       setStudentQuestions(studentQuestionsRes.data)
       setHasEvaluated(selfCheckRes.data.hasEvaluated)
       setTeacherInfo(teacherInfoRes.data)
+      setDirectorFeedback(directorFeedbackRes.data.plans || [])
     } catch (err) {
       setError('Error al cargar los datos. Por favor recarga la página.')
       console.log('Error cargando datos del docente:', err)

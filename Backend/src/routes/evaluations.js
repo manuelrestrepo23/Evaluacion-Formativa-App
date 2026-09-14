@@ -5,15 +5,6 @@ import { requireAuth, requireRole } from '../middleware/auth.js'
 import { hashEmail } from '../utils/anon.js'
 const router = express.Router()
 
-// GET /api/evaluations/all - Obtener todas las evaluaciones (directivo)
-router.get('/all', requireAuth, requireRole('directivo'), async (req, res) => {
-  try {
-    const evaluations = await Evaluation.find({ status: { $ne: 'draft' } }).select('-evaluatorKey')
-    res.status(200).json({ evaluations })
-  } catch (error) {
-    res.status(500).json({ message: 'Error al obtener las evaluaciones', error: error.message })
-  }
-})
 
 // GET /api/evaluations/student - Progreso del estudiante autenticado por profesor (incluye borradores en curso)
 router.get('/student', requireAuth, requireRole('estudiante'), async (req, res) => {

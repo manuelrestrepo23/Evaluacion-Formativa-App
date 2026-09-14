@@ -9,6 +9,14 @@ import TeacherDetailModal from '../components/TeacherDetailModal.jsx'
 
 const COLORS = ['#466B3F', '#94B43B', '#A61C31', '#B1B2B0']
 const SCORE_COLORS = ['#A61C31', '#c76b4e', '#B1B2B0', '#94B43B', '#466B3F']
+const COBERTURA_MINIMA = 5
+
+function estadoDocente(t) {
+  if (!t.studentEvaluationCount || t.studentAverage === 0) return { label: 'Sin datos', cls: 'bg-secondary' }
+  if (t.studentAverage >= 4) return { label: 'Bueno', cls: 'bg-success' }
+  if (t.studentAverage >= 3) return { label: 'Atención', cls: 'bg-warning text-dark' }
+  return { label: 'Crítico', cls: 'bg-danger' }
+}
 
 function exportCSV(stats) {
   if (!stats?.teachers) return
@@ -198,6 +206,10 @@ export default function DirectorPage() {
   const sortedTeachers = stats?.teachers
     ? [...stats.teachers].sort((a, b) => b.overallAverage - a.overallAverage)
     : []
+  
+  const criticos = sortedTeachers.filter(t => t.studentEvaluationCount > 0 && t.studentAverage > 0 && t.studentAverage < 3)
+  const bajaCobertura = sortedTeachers.filter(t => t.studentEvaluationCount > 0 && t.studentEvaluationCount < COBERTURA_MINIMA)
+  const sinEvaluar = sortedTeachers.filter(t => t.studentEvaluationCount === 0)
 
   const barData = sortedTeachers
     .filter(t => t.overallAverage > 0)
@@ -261,6 +273,15 @@ export default function DirectorPage() {
             </button>
           </div>
             {error && <div className="alert alert-danger">{error}</div>}
+
+          {stats && (criticos.length > 0 || bajaCobertura.length > 0 || sinEvaluar.length > 0) && (
+            <div className="alert alert-warning py-2" style={{ fontSize: '0.9rem' }}>
+              <i className="bi bi-exclamation-triangle me-2"></i>
+              {criticos.length > 0 && <span className="me-3"><strong>{criticos.length}</strong> con promedio crítico (&lt;3).</span>}
+              {bajaCobertura.length > 0 && <span className="me-3"><strong>{bajaCobertura.length}</strong> con baja cobertura (&lt;{COBERTURA_MINIMA} evaluaciones).</span>}
+              {sinEvaluar.length > 0 && <span><strong>{sinEvaluar.length}</strong> sin evaluaciones estudiantiles.</span>}
+            </div>
+          )}
 
           {/* Tarjetas de estadísticas */}
           <div className="row mb-4">
@@ -443,6 +464,7 @@ export default function DirectorPage() {
                     <th>Docente</th>
                     <th>Autoevaluación</th>
                     <th>Promedio Estudiantes</th>
+                    <th className="text-center">Estado</th>
                     <th>Evaluaciones Recibidas</th>
                     <th>Acciones</th>
                   </tr>
@@ -461,7 +483,24 @@ export default function DirectorPage() {
                           ? <span className="badge bg-warning text-dark">{teacher.studentAverage}</span>
                           : <span className="text-muted">Sin datos</span>}
                       </td>
-                      <td className="text-center">{teacher.studentEvaluationCount}</td>
+                      <td className="text-center">
+                        {(() => {
+                          const e = estadoDocente(teacher)
+                          return <span className={`badge ${e.cls}`}>{e.label}</span>
+                        })()}
+                      </td>
+                      
+                      <td className="text-center">
+                        {teacher.studentEvaluationCount === 0 ? (
+                          <span className="text-muted">0</span>
+                        ) : teacher.studentEvaluationCount < COBERTURA_MINIMA ? (
+                          <span className="badge bg-warning text-dark" title="Muestra baja: interpretar con cautela">
+                            {teacher.studentEvaluationCount} · baja
+                          </span>
+                        ) : (
+                          <span className="badge bg-light text-dark border">{teacher.studentEvaluationCount}</span>
+                        )}
+                      </td>
                       
                       <td>
                         <div className="d-flex gap-2">

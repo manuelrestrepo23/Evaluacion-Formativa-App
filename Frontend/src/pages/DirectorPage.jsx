@@ -7,15 +7,33 @@ import TeacherFeedbackModal from '../components/TeacherFeedbackModal.jsx'
 import FrequentTerms from '../components/FrequentTerms.jsx'
 import TeacherDetailModal from '../components/TeacherDetailModal.jsx'
 
-const COLORS = ['#466B3F', '#94B43B', '#A61C31', '#B1B2B0']
-const SCORE_COLORS = ['#A61C31', '#c76b4e', '#B1B2B0', '#94B43B', '#466B3F']
-const COBERTURA_MINIMA = 5
+import { COLORES, COLORES_PUNTAJE } from '../theme.js'
+import { RESPUESTAS_VISIBLES } from '../config/umbrales.js'
+import { estadoDocente, evaluarCobertura, esCritico, claseTarjetaPromedio } from '../utils/indicadores.js'
 
-function estadoDocente(t) {
-  if (!t.studentEvaluationCount || t.studentAverage === 0) return { label: 'Sin datos', cls: 'bg-secondary' }
-  if (t.studentAverage >= 4) return { label: 'Bueno', cls: 'bg-success' }
-  if (t.studentAverage >= 3) return { label: 'Atención', cls: 'bg-warning text-dark' }
-  return { label: 'Crítico', cls: 'bg-danger' }
+const RADIAN = Math.PI / 180
+
+// Etiqueta por fuera de la porcion, en tinta gris (nunca del color de la serie).
+// Las porciones menores al 5% no se etiquetan: las cuenta la leyenda.
+function etiquetaPie({ cx, cy, midAngle, outerRadius, percent, value }) {
+  if (percent < 0.05) return null
+
+  const radio = outerRadius + 18
+  const x = cx + radio * Math.cos(-midAngle * RADIAN)
+  const y = cy + radio * Math.sin(-midAngle * RADIAN)
+
+  return (
+    <text
+      x={x}
+      y={y}
+      fill={COLORES.grisOscuro}
+      textAnchor={x > cx ? 'start' : 'end'}
+      dominantBaseline="central"
+      style={{ fontSize: '0.78rem', fontWeight: 600 }}
+    >
+      {value} · {Math.round(percent * 100)}%
+    </text>
+  )
 }
 
 function exportCSV(stats) {
@@ -123,7 +141,7 @@ function OpenAnswersModal({ teacher, onClose }) {
                       <p className="fw-semibold mb-1 text-dark" style={{ fontSize: '0.9rem' }}>
                         {item.question}
                       </p>
-                      <div className="p-3 rounded" style={{ backgroundColor: '#f8f9fa', borderLeft: '3px solid #94B43B' }}>
+                      <div className="p-3 rounded" style={{ backgroundColor: COLORES.fondoSuave, borderLeft: `3px solid ${COLORES.verde}` }}>
                         <p className="mb-0" style={{ fontSize: '0.9rem' }}>{item.answer}</p>
                       </div>
                     </div>
@@ -147,15 +165,15 @@ function OpenAnswersModal({ teacher, onClose }) {
                     .filter(q => q.answers.length > 0)
                     .map((item, i) => {
                       const total = item.answers.length
-                      const shown = item.answers.slice(0, 10)
+                      const shown = item.answers.slice(0, RESPUESTAS_VISIBLES)
                       return (
                         <div key={i} className="mb-4">
                           <p className="fw-semibold mb-1 text-dark" style={{ fontSize: '0.9rem' }}>
                             {item.question}
                           </p>
-                          {total > 10 && (
+                          {total > RESPUESTAS_VISIBLES && (
                             <p className="text-muted mb-2" style={{ fontSize: '0.78rem' }}>
-                              Mostrando 10 de {total} respuestas
+                              Mostrando {RESPUESTAS_VISIBLES} de {total} respuestas
                             </p>
                           )}
                           <FrequentTerms answers={item.answers} />
@@ -164,7 +182,7 @@ function OpenAnswersModal({ teacher, onClose }) {
                               <li key={j} className="mb-2 d-flex align-items-start gap-2">
                                 <span
                                   className="badge rounded-pill mt-1 flex-shrink-0"
-                                  style={{ backgroundColor: '#466B3F', fontSize: '0.7rem' }}
+                                  style={{ backgroundColor: COLORES.verdeOscuro, fontSize: '0.7rem' }}
                                 >
                                   {j + 1}
                                 </span>
@@ -207,8 +225,8 @@ export default function DirectorPage() {
     ? [...stats.teachers].sort((a, b) => b.overallAverage - a.overallAverage)
     : []
   
-  const criticos = sortedTeachers.filter(t => t.studentEvaluationCount > 0 && t.studentAverage > 0 && t.studentAverage < 3)
-  const bajaCobertura = sortedTeachers.filter(t => t.studentEvaluationCount > 0 && t.studentEvaluationCount < COBERTURA_MINIMA)
+  const criticos = sortedTeachers.filter(esCritico)
+  const bajaCobertura = sortedTeachers.filter(t => t.studentEvaluationCount > 0 && !evaluarCobertura(t).suficiente)
   const sinEvaluar = sortedTeachers.filter(t => t.studentEvaluationCount === 0)
 
   const barData = sortedTeachers
@@ -217,11 +235,11 @@ export default function DirectorPage() {
     .map(t => ({ name: t.name, Promedio: t.overallAverage }))
 
   const pieData = stats ? [
-    { name: 'Con ambas evaluaciones', value: stats.teachers.filter(t => t.hasSelfEvaluation && t.studentEvaluationCount > 0).length },
-    { name: 'Solo autoevaluación', value: stats.teachers.filter(t => t.hasSelfEvaluation && t.studentEvaluationCount === 0).length },
-    { name: 'Solo evaluación estudiantil', value: stats.teachers.filter(t => !t.hasSelfEvaluation && t.studentEvaluationCount > 0).length },
-    { name: 'Sin evaluaciones', value: stats.teachers.filter(t => !t.hasSelfEvaluation && t.studentEvaluationCount === 0).length }
-  ] : []
+    { name: 'Con ambas evaluaciones', value: stats.teachers.filter(t => t.hasSelfEvaluation && t.studentEvaluationCount > 0).length, color: COLORES.verdeOscuro },
+    { name: 'Solo autoevaluación', value: stats.teachers.filter(t => t.hasSelfEvaluation && t.studentEvaluationCount === 0).length, color: COLORES.verde },
+    { name: 'Solo evaluación estudiantil', value: stats.teachers.filter(t => !t.hasSelfEvaluation && t.studentEvaluationCount > 0).length, color: COLORES.rojo },
+    { name: 'Sin evaluaciones', value: stats.teachers.filter(t => !t.hasSelfEvaluation && t.studentEvaluationCount === 0).length, color: COLORES.grisClaro }
+  ].filter(d => d.value > 0) : []
 
   const radarData = stats?.categoryAverages
     ? Object.entries(stats.categoryAverages).map(([category, average]) => ({ category, Promedio: average }))
@@ -277,8 +295,8 @@ export default function DirectorPage() {
           {stats && (criticos.length > 0 || bajaCobertura.length > 0 || sinEvaluar.length > 0) && (
             <div className="alert alert-warning py-2" style={{ fontSize: '0.9rem' }}>
               <i className="bi bi-exclamation-triangle me-2"></i>
-              {criticos.length > 0 && <span className="me-3"><strong>{criticos.length}</strong> con promedio crítico (&lt;3).</span>}
-              {bajaCobertura.length > 0 && <span className="me-3"><strong>{bajaCobertura.length}</strong> con baja cobertura (&lt;{COBERTURA_MINIMA} evaluaciones).</span>}
+              {criticos.length > 0 && <span className="me-3"><strong>{criticos.length}</strong> con promedio crítico.</span>}
+              {bajaCobertura.length > 0 && <span className="me-3"><strong>{bajaCobertura.length}</strong> con cobertura insuficiente.</span>}
               {sinEvaluar.length > 0 && <span><strong>{sinEvaluar.length}</strong> sin evaluaciones estudiantiles.</span>}
             </div>
           )}
@@ -310,7 +328,7 @@ export default function DirectorPage() {
               </div>
             </div>
             <div className="col-md-3">
-              <div className="card bg-warning text-dark">
+              <div className={`card text-white ${claseTarjetaPromedio(stats?.overallAverage)}`}>
                 <div className="card-body">
                   <h6 className="card-title">Promedio General</h6>
                   <h2 className="mb-0">{stats?.overallAverage || '-'}</h2>
@@ -331,7 +349,7 @@ export default function DirectorPage() {
                         <XAxis type="number" domain={[0, 5]} />
                         <YAxis type="category" dataKey="name" width={120} />
                         <Tooltip />
-                        <Bar dataKey="Promedio" fill="#94B43B" />
+                        <Bar dataKey="Promedio" fill={COLORES.verde} />
                       </BarChart>
                     </ResponsiveContainer>
                   ) : (
@@ -347,14 +365,32 @@ export default function DirectorPage() {
                 <div className="card-body">
                   {pieData.some(d => d.value > 0) ? (
                     <ResponsiveContainer width="100%" height={320}>
-                      <PieChart margin={{ top: 24, right: 24, bottom: 24, left: 24 }}>
-                        <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
-                          {pieData.map((_, index) => (
-                            <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                      <PieChart margin={{ top: 16, right: 32, bottom: 8, left: 32 }}>
+                        <Pie
+                          data={pieData}
+                          dataKey="value"
+                          nameKey="name"
+                          cx="50%"
+                          cy="45%"
+                          outerRadius={75}
+                          paddingAngle={2}
+                          labelLine={false}
+                          label={etiquetaPie}
+                        >
+                          {pieData.map(d => (
+                            <Cell key={d.name} fill={d.color} />
                           ))}
                         </Pie>
-                        <Tooltip />
-                        <Legend />
+                        <Tooltip formatter={(value, name) => [`${value} docente${value === 1 ? '' : 's'}`, name]} />
+                        <Legend
+                          verticalAlign="bottom"
+                          iconType="circle"
+                          formatter={(value, entry) => (
+                            <span style={{ color: COLORES.grisOscuro, fontSize: '0.82rem' }}>
+                              {value} ({entry.payload.value})
+                            </span>
+                          )}
+                        />
                       </PieChart>
                     </ResponsiveContainer>
                   ) : (
@@ -374,7 +410,7 @@ export default function DirectorPage() {
                   <RadarChart data={radarData}>
                     <PolarGrid />
                     <PolarAngleAxis dataKey="category" />
-                    <Radar name="Promedio" dataKey="Promedio" stroke="#94B43B" fill="#94B43B" fillOpacity={0.2} />
+                    <Radar name="Promedio" dataKey="Promedio" stroke={COLORES.verde} fill={COLORES.verde} fillOpacity={0.2} />
                     <Tooltip />
                   </RadarChart>
                 </ResponsiveContainer>
@@ -394,7 +430,7 @@ export default function DirectorPage() {
                         {categoryRanking.map((c, i) => {
                           const isTop = i === 0
                           const isBottom = i === categoryRanking.length - 1
-                          const color = isTop ? '#466B3F' : isBottom ? '#A61C31' : '#94B43B'
+                          const color = isTop ? COLORES.verdeOscuro : isBottom ? COLORES.rojo : COLORES.verde
                           return (
                             <div key={c.category} className="mb-3">
                               <div className="d-flex justify-content-between mb-1" style={{ fontSize: '0.9rem' }}>
@@ -441,7 +477,7 @@ export default function DirectorPage() {
                           <Tooltip />
                           <Bar dataKey="Respuestas">
                             {instDistData.map((_, i) => (
-                              <Cell key={i} fill={SCORE_COLORS[i]} />
+                              <Cell key={i} fill={COLORES_PUNTAJE[i]} />
                             ))}
                           </Bar>
                         </BarChart>
@@ -475,12 +511,12 @@ export default function DirectorPage() {
                       <td>{teacher.name}</td>
                       <td>
                         {teacher.hasSelfEvaluation
-                          ? <span className="badge bg-primary">{teacher.selfAverage}</span>
+                          ? <span className="badge bg-info">{teacher.selfAverage}</span>
                           : <span className="text-muted">Sin datos</span>}
                       </td>
                       <td>
                         {teacher.studentEvaluationCount > 0
-                          ? <span className="badge bg-warning text-dark">{teacher.studentAverage}</span>
+                          ? <span className="badge bg-primary">{teacher.studentAverage}</span>
                           : <span className="text-muted">Sin datos</span>}
                       </td>
                       <td className="text-center">
@@ -491,15 +527,16 @@ export default function DirectorPage() {
                       </td>
                       
                       <td className="text-center">
-                        {teacher.studentEvaluationCount === 0 ? (
-                          <span className="text-muted">0</span>
-                        ) : teacher.studentEvaluationCount < COBERTURA_MINIMA ? (
-                          <span className="badge bg-warning text-dark" title="Muestra baja: interpretar con cautela">
-                            {teacher.studentEvaluationCount} · baja
-                          </span>
-                        ) : (
-                          <span className="badge bg-light text-dark border">{teacher.studentEvaluationCount}</span>
-                        )}
+                        {(() => {
+                          const c = evaluarCobertura(teacher)
+                          if (c.recibidas === 0) return <span className="text-muted">0</span>
+                          if (!c.suficiente) return (
+                            <span className="badge bg-warning" title="Muestra insuficiente: interpretar con cautela">
+                              {c.etiqueta} · baja
+                            </span>
+                          )
+                          return <span className="badge bg-light text-dark border">{c.etiqueta}</span>
+                        })()}
                       </td>
                       
                       <td>

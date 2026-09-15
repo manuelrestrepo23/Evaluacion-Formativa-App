@@ -128,6 +128,7 @@ router.get('/', requireAuth, requireRole('directivo'), async (req, res) => {
       stats.teachers.push({
         id: teacher.id,
         name: teacher.name,
+        enrolledStudents: teacher.enrolledStudents || 0,
         selfAverage,
         studentAverage,
         overallAverage,

@@ -1,5 +1,6 @@
 import { BarChart, Bar, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts'
-
+import { BRECHA_RELEVANTE } from '../config/umbrales.js'
+import { COLORES_PUNTAJE, COLORES } from '../theme.js'
 // Acorta nombres largos de categoria para que quepan en el radar
 function shortLabel(cat) {
     const map = {
@@ -12,8 +13,8 @@ function shortLabel(cat) {
     return map[cat] || cat
 }
 
-// Colores por puntaje 1..5 (rojo -> verde)
-const SCORE_COLORS = ['#A61C31', '#c76b4e', '#B1B2B0', '#94B43B', '#466B3F']
+
+
 
 export default function TeacherDetailModal({ teacher, onClose }) {
     if (!teacher) return null
@@ -58,9 +59,9 @@ export default function TeacherDetailModal({ teacher, onClose }) {
                             <PolarGrid />
                             <PolarAngleAxis dataKey="category" tick={{ fontSize: 11 }} />
                             <PolarRadiusAxis domain={[0, 5]} tick={{ fontSize: 10 }} />
-                            <Radar name="Estudiantes" dataKey="Estudiantes" stroke="#466B3F" fill="#466B3F" fillOpacity={0.35} />
+                            <Radar name="Estudiantes" dataKey="Estudiantes" stroke={COLORES.verdeOscuro} fill={COLORES.verdeOscuro} fillOpacity={0.35} />
                             {teacher.hasSelfEvaluation && (
-                            <Radar name="Autoevaluación" dataKey="Autoevaluación" stroke="#A61C31" fill="#A61C31" fillOpacity={0.15} />
+                            <Radar name="Autoevaluación" dataKey="Autoevaluación" stroke={COLORES.rojo} fill={COLORES.rojo} fillOpacity={0.15} />
                             )}
                             <Legend />
                             <Tooltip />
@@ -79,7 +80,7 @@ export default function TeacherDetailModal({ teacher, onClose }) {
                             <Tooltip />
                             <Bar dataKey="Respuestas">
                             {distData.map((_, i) => (
-                                <Cell key={i} fill={SCORE_COLORS[i]} />
+                                <Cell key={i} fill={COLORES_PUNTAJE[i]} />
                             ))}
                             </Bar>
                         </BarChart>
@@ -113,7 +114,7 @@ export default function TeacherDetailModal({ teacher, onClose }) {
                                 {noSelf || noStudent ? (
                                     <span className="text-muted">-</span>
                                 ) : (
-                                    <span className={`badge ${c.gap < -0.5 ? 'bg-danger' : c.gap > 0.5 ? 'bg-success' : 'bg-secondary'}`}>
+                                    <span className={`badge ${c.gap <= -BRECHA_RELEVANTE ? 'bg-danger' : c.gap >= BRECHA_RELEVANTE ? 'bg-success' : 'bg-secondary'}`}>
                                     {c.gap > 0 ? '+' : ''}{c.gap}
                                     </span>
                                 )}

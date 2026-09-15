@@ -36,3 +36,35 @@ export function frequentTerms(answers, topN = 8, minLength = 4) {
     .sort((a, b) => b.count - a.count)
     .slice(0, topN)
 }
+// Bigramas: pares de palabras consecutivas. Capturan lo que las palabras
+// sueltas pierden ("no explica", "muy claro", "poco tiempo").
+export function frequentBigrams(answers, topN = 5, minCount = 2) {
+    const counts = {}
+
+    ;(answers || []).forEach(text => {
+    if (!text) return
+
+    // Cortar en limites de oracion: la ultima palabra de una frase y la
+    // primera de la siguiente no son realmente adyacentes.
+    text.split(/[.;:!?\n]+/).forEach(frase => {
+        const words = frase.split(/\s+/).map(normalize).filter(Boolean)
+
+        for (let i = 0; i < words.length - 1; i++) {
+            const a = words[i]
+            const b = words[i + 1]
+            if (a.length < 2 || b.length < 2) continue
+            // Se descarta solo si AMBAS son vacias ("de la", "que se").
+            // Asi sobrevive "no explica", que es justo lo que interesa.
+            if (STOPWORDS.has(a) && STOPWORDS.has(b)) continue
+            const par = `${a} ${b}`
+            counts[par] = (counts[par] || 0) + 1
+        }
+    })
+    })
+
+    return Object.entries(counts)
+        .map(([term, count]) => ({ term, count }))
+        .filter(t => t.count >= minCount)
+        .sort((a, b) => b.count - a.count)
+        .slice(0, topN)
+}

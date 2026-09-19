@@ -8,11 +8,11 @@ const router = express.Router()
 
 // Orden pedagogico fijo de las categorias (para graficas y tablas estables)
 const CATEGORY_ORDER = [
-  'Caracter docente',
-  'Competencias pedagogicas',
+  'Carácter docente',
+  'Competencias pedagógicas',
   'Dominio disciplinar',
   'Contexto',
-  'Produccion de conocimiento pedagogico'
+  'Producción de conocimiento pedagógico'
 ]
 
 const avg = (arr) => (arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0)

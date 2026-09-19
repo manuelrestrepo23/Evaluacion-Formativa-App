@@ -4,11 +4,11 @@ import { COLORES_PUNTAJE, COLORES } from '../theme.js'
 // Acorta nombres largos de categoria para que quepan en el radar
 function shortLabel(cat) {
     const map = {
-    'Caracter docente': 'Carácter',
-    'Competencias pedagogicas': 'Pedagógicas',
+    'Carácter docente': 'Carácter',
+    'Competencias pedagógicas': 'Pedagógicas',
     'Dominio disciplinar': 'Disciplinar',
     'Contexto': 'Contexto',
-    'Produccion de conocimiento pedagogico': 'Prod. conocimiento'
+    'Producción de conocimiento pedagógico': 'Prod. conocimiento'
     }
     return map[cat] || cat
 }

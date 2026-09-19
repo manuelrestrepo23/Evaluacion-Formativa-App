@@ -110,7 +110,7 @@ export default function TeacherPage() {
           <div className="col-md-4 mb-3">
             <div className="card dashboard-card h-100">
               <div className="card-header role-teacher">
-                <h5 className="mb-0">Plan de Mejora</h5>
+                <h5 className="mb-0">Plan de Mejoramiento</h5>
               </div>
               <div className="card-media">
                 <img src="/img/plan-mejora.svg" alt="Plan de Mejora" />

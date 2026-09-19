@@ -12,7 +12,7 @@
     --unal-orange: #c76b4e;         /* Escala intermedia: atencion */
     --unal-orange-dark: #a8552f;    /* Naranja legible sobre fondo claro */
 /* Cuidado: hay tonos derivados (degradados) y versiones rgba() de estos
-       colores repartidos por el archivo. Si se llega a cambiar la paleta, buscar
+        colores repartidos por el archivo. Si se llega a cambiar la paleta, buscar
        tambien "rgba(148, 180, 59", "rgba(70, 107, 63", "rgba(166, 28, 49". */
     
     /* Role Colors */

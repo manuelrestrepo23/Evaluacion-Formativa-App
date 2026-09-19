@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "seed": "node scripts/seed.js",
+    "seed:demo": "node scripts/seed-demo.js",
+    "matriculados": "node scripts/set-matriculados.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

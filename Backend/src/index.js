@@ -41,7 +41,7 @@ app.use(cookieParser())
 
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 300,                 // máx. peticiones por IP en esa ventana
+  max: 3000,                 // máx. peticiones por IP en esa ventana
   standardHeaders: true,
   legacyHeaders: false,
   message: { message: 'Demasiadas peticiones, intenta de nuevo más tarde.' }

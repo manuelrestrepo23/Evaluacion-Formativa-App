@@ -30,7 +30,8 @@ router.get('/', requireAuth, requireRole('estudiante', 'docente', 'directivo'), 
 // POST /api/teachers - Agregar un nuevo docente
 router.post('/', requireAuth, requireRole('directivo', 'docente'), async (req, res) => {
   try {
-    const { id, name, subject, enrolledStudents } = req.body
+    const { name, subject, enrolledStudents } = req.body
+    const id = req.body.id?.trim().toLowerCase()
 
     if (!id || !name) {
       return res.status(400).json({ message: 'ID y nombre son requeridos' })

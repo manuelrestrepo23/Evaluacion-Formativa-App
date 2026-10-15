@@ -11,6 +11,7 @@ function AuthenticatedApp() {
   const { getToken } = useAuth()
   const { user, isLoaded } = useUser()
   const [asignandoRol, setAsignandoRol] = useState(false)
+  const [errorRol, setErrorRol] = useState('')
 
   const { signOut } = useClerk()
 
@@ -41,6 +42,8 @@ function AuthenticatedApp() {
         }
       } catch (err) {
         console.log('Error sincronizando rol:', err)
+        // 403 = el backend rechazó el correo; cualquier otra cosa = problema de conexión
+        setErrorRol(err?.response?.status === 403 ? 'correo' : 'conexion')
       } finally {
         setAsignandoRol(false)
       }
@@ -57,9 +60,16 @@ function AuthenticatedApp() {
   if (!role) return (
     <div className="container mt-5" style={{ maxWidth: 520 }}>
       <div className="alert alert-warning">
-        No pudimos darte acceso. Debes entrar con tu correo institucional <strong>@unal.edu.co</strong>.
+        {errorRol === 'conexion'
+          ? <>No pudimos conectar con el servidor. Revisa tu conexión a internet e intenta de nuevo.</>
+          : <>No pudimos darte acceso. Debes entrar con tu correo institucional <strong>@unal.edu.co</strong>.</>}
       </div>
-      <button className="btn btn-primary" onClick={() => signOut()}>
+      {errorRol === 'conexion' && (
+        <button className="btn btn-primary me-2" onClick={() => window.location.reload()}>
+          Reintentar
+        </button>
+      )}
+      <button className="btn btn-outline-secondary" onClick={() => signOut()}>
         Cerrar sesión e intentar con otra cuenta
       </button>
     </div>
@@ -99,4 +109,4 @@ export default function App() {
       </Routes>
     </BrowserRouter>
   )
-}
+}

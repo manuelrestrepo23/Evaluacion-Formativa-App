@@ -282,7 +282,7 @@ export default function StudentPage() {
             )
           ) : (
             <>
-              <div className="d-flex justify-content-between align-items-center mb-1">
+              <div className="eval-head d-flex justify-content-between align-items-center mb-1">
                 <h5 className="mb-0">Evaluando a: {currentTeacher.name}{currentTeacher.subject ? ` - ${currentTeacher.subject}` : ''}</h5>
                 <span className="text-muted">Profesor {safeIndex + 1} de {pendingTeachers.length}</span>
               </div>
@@ -301,13 +301,13 @@ export default function StudentPage() {
 
               {sortedQuestions.map((q, i) => (
                 <div key={q.number} className="evaluation-item mb-3">
-                  <div className="d-flex justify-content-between align-items-start mb-2 gap-2">
+                  <div className="question-head d-flex justify-content-between align-items-start mb-2 gap-2">
                     <span className="fw-semibold">{i + 1}. {q.question}</span>
                     <span className="badge bg-secondary flex-shrink-0">{q.category}</span>
                   </div>
 
                   {q.questionType === 'likert' ? (
-                    <div className="d-flex align-items-center flex-wrap">
+                    <div className="likert-options">
                       {[1, 2, 3, 4, 5].map(value => (
                         <div key={value}>
                           <input
@@ -319,7 +319,7 @@ export default function StudentPage() {
                             checked={answers[currentTeacher.id]?.scores?.[q.number] === value}
                             onChange={() => handleLikertChange(currentTeacher.id, q, value)}
                           />
-                          <label className="btn btn-outline-primary rounded-circle me-2" htmlFor={`q-${q.number}-${currentTeacher.id}-${value}`}>
+                          <label className="btn btn-outline-primary rounded-circle" htmlFor={`q-${q.number}-${currentTeacher.id}-${value}`}>
                             {value}
                           </label>
                         </div>
@@ -337,7 +337,7 @@ export default function StudentPage() {
                 </div>
               ))}
 
-              <div className="mt-3 d-flex gap-2 flex-wrap">
+              <div className="eval-actions mt-3 d-flex gap-2 flex-wrap">
                 <button type="button" className="btn btn-secondary" onClick={goPrevTeacher} disabled={safeIndex === 0 || finalizing}>
                   Profesor anterior
                 </button>
@@ -354,4 +354,4 @@ export default function StudentPage() {
       </div>
     </AppLayout>
   )
-}
+}

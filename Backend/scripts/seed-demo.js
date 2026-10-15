@@ -65,6 +65,10 @@ const correo = e => e.trim().toLowerCase()
 
 // ---------------------------------------------------------------------------
 async function run() {
+    // Candado: este script BORRA todo. Nunca contra la base del piloto.
+    if ((process.env.MONGODB_URI || '').toLowerCase().includes('piloto')) {
+        throw new Error('seed:demo NO se puede correr contra la base del piloto (la URI contiene "piloto").')
+    }
     await mongoose.connect(process.env.MONGODB_URI)
     console.log('Conectado a MongoDB\n')
 
@@ -202,4 +206,4 @@ run().catch(async err => {
     console.error('\nError:', err.message)
     await mongoose.connection.close().catch(() => {})
     process.exit(1)
-})
+})

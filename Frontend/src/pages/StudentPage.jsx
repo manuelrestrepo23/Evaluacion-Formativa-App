@@ -334,7 +334,7 @@ export default function StudentPage() {
                     <textarea
                       className="form-control"
                       rows="3"
-                      placeholder="Escribe tu respuesta aquí (opcional; si la dejas en blanco se registra como N/A)"
+                      placeholder="Escribe tu respuesta aquí..."
                       value={answers[currentTeacher.id]?.openAnswers?.[q.number] || ''}
                       onChange={e => handleOpenAnswerChange(currentTeacher.id, q, e.target.value)}
                     />

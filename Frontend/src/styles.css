@@ -838,3 +838,6 @@ a, button, .card, .btn, .form-control, .form-select, .tab-button {
     .eval-actions > .btn { flex: 1 1 0; }
     .eval-actions > .btn.ms-auto { flex-basis: 100%; order: -1; margin-left: 0 !important; }
 }
+
+/* Login: aviso de correo institucional */
+.login-aviso { width: 100%; max-width: 25rem; }

@@ -327,6 +327,15 @@ export default function TeacherResults({ results, plans, questions, studentQuest
       </div>
 
       <div className="card-body">
+        {results?.resultadosOcultos && (
+          <div className="alert alert-secondary">
+            <i className="bi bi-shield-lock me-2"></i>
+            Has recibido <strong>{results.studentCount}</strong> {results.studentCount === 1 ? 'evaluación' : 'evaluaciones'} de estudiantes.{' '}
+            {results.motivoOculto === 'periodo'
+              ? 'Para proteger el anonimato, los resultados de tus estudiantes se mostrarán cuando cierre el periodo de evaluación.'
+              : `Para proteger el anonimato, los resultados se muestran cuando haya al menos ${results.minimoAnonimato}.`}
+          </div>
+        )}
         {!processedData?.hasData ? (
           <div className="alert alert-info">
             <h5 className="alert-heading"><i className="bi bi-info-circle me-2"></i>No hay datos disponibles</h5>

@@ -28,16 +28,47 @@ router.get('/student', requireAuth, requireRole('estudiante'), async (req, res) 
   }
 })
 
+// Anonimato de los resultados que ve el docente:
+// - no se entregan evaluaciones de estudiantes hasta que haya al menos MINIMO_ANONIMATO;
+// - se quitan _id y fechas (createdAt/updatedAt), que permitirian asociar cada
+//   evaluacion con el momento en que un estudiante la envio;
+// - se entregan en orden aleatorio, no en el orden de envio;
+// - RESULTADOS_DOCENTES_VISIBLES=false (variable de entorno) oculta los resultados
+//   de estudiantes mientras el periodo de evaluacion siga abierto.
+const MINIMO_ANONIMATO = 5
+
+function barajar(lista) {
+  const copia = [...lista]
+  for (let i = copia.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[copia[i], copia[j]] = [copia[j], copia[i]]
+  }
+  return copia
+}
+
 // GET /api/evaluations/teacher-results - Resultados del docente autenticado
 router.get('/teacher-results', requireAuth, requireRole('docente', 'directivo'), async (req, res) => {
   try {
-    const teacherId = req.userEmail
+    const teacherId = req.userEmail?.toLowerCase()
+    const campos = 'evaluationData status -_id'
 
-    const selfEvaluation = await Evaluation.findOne({ teacherId, userRole: 'docente', status: { $ne: 'draft' } }).select('-evaluatorKey')
-    const studentEvaluations = await Evaluation.find({ teacherId, userRole: 'estudiante', status: { $ne: 'draft' } }).select('-evaluatorKey')
+    const selfEvaluation = await Evaluation.findOne({ teacherId, userRole: 'docente', status: { $ne: 'draft' } }).select(campos).lean()
+    const recibidas = await Evaluation.find({ teacherId, userRole: 'estudiante', status: { $ne: 'draft' } }).select(campos).lean()
+
+    const periodoAbierto = process.env.RESULTADOS_DOCENTES_VISIBLES === 'false'
+    const visibles = !periodoAbierto && recibidas.length >= MINIMO_ANONIMATO
+    const studentEvaluations = visibles ? barajar(recibidas) : []
     const hasData = !!selfEvaluation || studentEvaluations.length > 0
 
-    res.status(200).json({ hasData, selfEvaluation, studentEvaluations })
+    res.status(200).json({
+      hasData,
+      selfEvaluation,
+      studentEvaluations,
+      studentCount: recibidas.length,
+      resultadosOcultos: recibidas.length > 0 && !visibles,
+      motivoOculto: periodoAbierto ? 'periodo' : 'minimo',
+      minimoAnonimato: MINIMO_ANONIMATO
+    })
   } catch (error) {
     res.status(500).json({ message: 'Error al obtener los resultados', error: error.message })
   }

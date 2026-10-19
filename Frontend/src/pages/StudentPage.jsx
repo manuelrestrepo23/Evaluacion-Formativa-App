@@ -335,6 +335,7 @@ export default function StudentPage() {
                       className="form-control"
                       rows="3"
                       placeholder="Escribe tu respuesta aquí..."
+                      maxLength={2000}
                       value={answers[currentTeacher.id]?.openAnswers?.[q.number] || ''}
                       onChange={e => handleOpenAnswerChange(currentTeacher.id, q, e.target.value)}
                     />

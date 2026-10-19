@@ -45,8 +45,8 @@ router.get('/', requireAuth, requireRole('docente', 'directivo'), async (req, re
   }
 })
 
-// POST /api/teachers - Agregar un nuevo docente
-router.post('/', requireAuth, requireRole('directivo', 'docente'), async (req, res) => {
+// POST /api/teachers - Agregar un nuevo docente (solo directivo; en el piloto los carga el script)
+router.post('/', requireAuth, requireRole('directivo'), async (req, res) => {
   try {
     const { name, subject, enrolledStudents } = req.body
     const id = req.body.id?.trim().toLowerCase()

@@ -101,6 +101,9 @@ router.patch('/answer', requireAuth, requireRole('estudiante'), async (req, res)
     if (questionType === 'likert' && (!Number.isInteger(value) || value < 1 || value > 5)) {
       return res.status(400).json({ message: 'El valor de una pregunta likert debe ser un entero entre 1 y 5' })
     }
+    if (questionType === 'abierta' && (typeof value !== 'string' || value.length > 2000)) {
+      return res.status(400).json({ message: 'La respuesta abierta debe ser un texto de máximo 2000 caracteres' })
+    }
     const existing = await Evaluation.findOne({ evaluatorKey: clave, teacherId, userRole })
     if (existing && existing.status === 'submitted') {
       return res.status(409).json({ message: 'Esta evaluación ya fue enviada y no se puede editar' })

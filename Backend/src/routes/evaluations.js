@@ -129,7 +129,9 @@ router.patch('/answer', requireAuth, requireRole('estudiante'), async (req, res)
     if (!['likert', 'abierta'].includes(questionType)) {
       return res.status(400).json({ message: 'Tipo de pregunta inválido' })
     }
-    if (questionType === 'likert' && (!Number.isInteger(value) || value < 1 || value > 5)) {
+    // value null en una pregunta likert = el estudiante quito su seleccion
+    const quitar = questionType === 'likert' && value === null
+    if (questionType === 'likert' && !quitar && (!Number.isInteger(value) || value < 1 || value > 5)) {
       return res.status(400).json({ message: 'El valor de una pregunta likert debe ser un entero entre 1 y 5' })
     }
     if (questionType === 'abierta' && (typeof value !== 'string' || value.length > 2000)) {
@@ -138,6 +140,12 @@ router.patch('/answer', requireAuth, requireRole('estudiante'), async (req, res)
     const existing = await Evaluation.findOne({ evaluatorKey: clave, teacherId, userRole })
     if (existing && existing.status === 'submitted') {
       return res.status(409).json({ message: 'Esta evaluación ya fue enviada y no se puede editar' })
+    }
+    if (quitar) {
+      if (existing) {
+        await Evaluation.updateOne({ _id: existing._id }, { $unset: { [`evaluationData.scores.${questionNumber}`]: '' } })
+      }
+      return res.status(200).json({ message: 'Respuesta eliminada', status: existing?.status || 'draft' })
     }
     // Solo se verifica la inscripcion al crear la evaluacion: si ya existe un
     // borrador, es porque paso esta verificacion antes (ahorra una consulta).

@@ -53,19 +53,23 @@ export function useStudentData(userEmail) {
     }
   }
 
+  // value null en una pregunta likert = quitar la respuesta
   const saveAnswer = async (teacherId, questionNumber, questionType, value) => {
-    setProgress(prev => ({
-      ...prev,
-      [teacherId]: {
-        status: 'draft',
-        scores: prev[teacherId]?.scores || {},
-        openAnswers: prev[teacherId]?.openAnswers || {},
-        [questionType === 'likert' ? 'scores' : 'openAnswers']: {
-          ...(prev[teacherId]?.[questionType === 'likert' ? 'scores' : 'openAnswers'] || {}),
-          [questionNumber]: value
+    const campo = questionType === 'likert' ? 'scores' : 'openAnswers'
+    setProgress(prev => {
+      const respuestas = { ...(prev[teacherId]?.[campo] || {}) }
+      if (value === null) delete respuestas[questionNumber]
+      else respuestas[questionNumber] = value
+      return {
+        ...prev,
+        [teacherId]: {
+          status: 'draft',
+          scores: prev[teacherId]?.scores || {},
+          openAnswers: prev[teacherId]?.openAnswers || {},
+          [campo]: respuestas
         }
       }
-    }))
+    })
 
     await conReintentos(() =>
       api.patch('/api/evaluations/answer', { teacherId, questionNumber, questionType, value })

@@ -48,7 +48,7 @@ export default function TeacherPage() {
 
   return (
     <AppLayout
-      title="Panel Docente"
+      title="Panel docente"
       roleLabel="Docente"
       userName={teacherInfo?.name || teacherId}
       onSignOut={() => signOut()}
@@ -75,7 +75,7 @@ export default function TeacherPage() {
                 <p className="card-text">
                   {hasEvaluated
                     ? 'Ya has completado tu autoevaluación. Puedes revisar tus resultados.'
-                    : 'Complete su autoevaluación formativa para reflexionar sobre su práctica docente.'}
+                    : 'Completa tu autoevaluación formativa para reflexionar sobre tu práctica docente.'}
                 </p>
                 <button
                   className={`btn mt-auto ${hasEvaluated ? 'btn-secondary' : 'btn-primary'}`}
@@ -83,8 +83,8 @@ export default function TeacherPage() {
                   disabled={hasEvaluated}
                 >
                   {hasEvaluated
-                    ? <><i className="bi bi-check-circle me-2"></i>Autoevaluación Completada</>
-                    : 'Comenzar Autoevaluación'}
+                    ? <><i className="bi bi-check-circle me-2"></i>Autoevaluación completada</>
+                    : 'Comenzar autoevaluación'}
                 </button>
               </div>
             </div>
@@ -99,9 +99,9 @@ export default function TeacherPage() {
                 <img src="/img/resultados.svg" alt="Resultados" />
               </div>
               <div className="card-body d-flex flex-column">
-                <p className="card-text">Revise sus resultados de autoevaluación y comparativos con percepciones estudiantiles.</p>
+                <p className="card-text">Revisa los resultados de tu autoevaluación y compáralos con la percepción de tus estudiantes.</p>
                 <button className="btn btn-primary mt-auto" onClick={handleViewResults}>
-                  Ver Resultados
+                  Ver resultados
                 </button>
               </div>
             </div>
@@ -116,7 +116,7 @@ export default function TeacherPage() {
                 <img src="/img/plan-mejora.svg" alt="Acciones de mejoramiento" />
               </div>
               <div className="card-body d-flex flex-column">
-                <p className="card-text">Registre las acciones que emprenderá para mejorar su práctica a partir de sus resultados.</p>
+                <p className="card-text">Registra las acciones que emprenderás para mejorar tu práctica a partir de tus resultados.</p>
                 <button className="btn btn-primary mt-auto" onClick={() => setShowPlanModal(true)}>
                   Registrar acciones
                 </button>

@@ -100,7 +100,7 @@ export default function ImprovementPlanModal({ teacherId, userEmail, onSaved, on
                 Cancelar
               </button>
               <button type="submit" className="btn btn-success" disabled={submitting}>
-                {submitting ? 'Guardando...' : 'Guardar Plan'}
+                {submitting ? 'Guardando...' : 'Guardar plan'}
               </button>
             </div>
           </form>

@@ -34,7 +34,7 @@ export default function DirectorFeedbackCard({ feedback }) {
                 <h6 className="text-uppercase text-muted fw-semibold mb-1" style={rotulo}>
                     <i className="bi bi-person me-2"></i>Retroalimentación individual
             </h6>
-            <p className="text-muted small mb-3">Dirigida únicamente a usted.</p>
+            <p className="text-muted small mb-3">Dirigida únicamente a ti.</p>
             {individuales.map(f => <FeedbackItem key={f._id} f={f} />)}
             </section>
         )}

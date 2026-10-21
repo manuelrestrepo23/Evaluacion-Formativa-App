@@ -37,7 +37,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    background: #f8f9fa;
     color: #333;
     margin: 0;
     -webkit-font-smoothing: antialiased;
@@ -49,7 +49,7 @@ body {
     NAVBAR STYLES
     ========================= */
 .navbar {
-    background: linear-gradient(90deg, var(--unal-gray-dark), #3d4143);
+    background: var(--unal-gray-dark);
     padding: 0.75rem 1rem;
     border-bottom: 3px solid var(--unal-green);
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -91,7 +91,7 @@ body {
     padding: 1.2rem 1.5rem;
     font-weight: 700;
     color: #ffffff;
-    background: linear-gradient(135deg, var(--unal-green), #a8c447);
+    background: var(--unal-green);
     border-bottom: none;
     display: flex;
     align-items: center;
@@ -100,30 +100,30 @@ body {
 
 /* Header color by role */
 .card-header.role-teacher { 
-    background: linear-gradient(135deg, var(--teacher-color), #5a8751);
+    background: var(--teacher-color);
     color: #ffffff;
 }
 .card-header.role-student { 
-    background: linear-gradient(135deg, var(--student-color), #a8c447);
+    background: var(--student-color);
     color: #ffffff;
 }
 .card-header.role-director { 
-    background: linear-gradient(135deg, var(--director-color), #c42643);
+    background: var(--director-color);
     color: #ffffff;
 }
 
 /* When using bg-primary/text-white in header */
 .card-header.bg-primary, .card-header.bg-primary * { 
-    background: linear-gradient(135deg, var(--unal-green), #a8c447);
+    background: var(--unal-green);
     color: #ffffff !important; 
 }
 .card-header.bg-success, .card-header.bg-success * {
-    background: linear-gradient(135deg, var(--unal-green-dark), #5a8751);
+    background: var(--unal-green-dark);
     color: #ffffff !important;
 }
 
 .card-header.bg-danger, .card-header.bg-danger * {
-    background: linear-gradient(135deg, var(--unal-red), #c42643);
+    background: var(--unal-red);
     color: #ffffff !important;
 }
 
@@ -171,36 +171,36 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--unal-green), #a8c447);
+    background: var(--unal-green);
     border: none;
     color: #fff;
     box-shadow: 0 2px 6px rgba(148, 180, 59, 0.3);
 }
 .btn-primary:hover { 
-    background: linear-gradient(135deg, #7f9a32, var(--unal-green));
+    background: #7f9a32;
     box-shadow: 0 4px 12px rgba(148, 180, 59, 0.4);
     transform: translateY(-1px);
 }
 
 .btn-success {
-    background: linear-gradient(135deg, var(--teacher-color), #5a8751);
+    background: var(--teacher-color);
     border: none;
     color: #fff;
     box-shadow: 0 2px 6px rgba(70, 107, 63, 0.3);
 }
 .btn-success:hover {
-    background: linear-gradient(135deg, #3a5833, var(--teacher-color));
+    background: #3a5833;
     box-shadow: 0 4px 12px rgba(70, 107, 63, 0.4);
 }
 
 .btn-danger {
-    background: linear-gradient(135deg, var(--unal-red), #c42643);
+    background: var(--unal-red);
     border: none;
     color: #fff;
     box-shadow: 0 2px 6px rgba(166, 28, 49, 0.3);
 }
 .btn-danger:hover {
-    background: linear-gradient(135deg, #8a1626, var(--unal-red));
+    background: #8a1626;
     box-shadow: 0 4px 12px rgba(166, 28, 49, 0.4);
 }
 
@@ -268,7 +268,7 @@ body {
 /* Style for btn-check inputs (radio with button label) */
 .btn-check:checked + .btn,
 .btn-check:focus + .btn {
-    background: linear-gradient(135deg, var(--unal-green), #a8c447);
+    background: var(--unal-green);
     color: #ffffff;
     border-color: var(--unal-green);
     box-shadow: 0 0 0 3px rgba(148, 180, 59, 0.2);
@@ -331,7 +331,7 @@ body {
     color: var(--unal-green);
 }
 .tab-button.active {
-    background: linear-gradient(135deg, var(--unal-green), #a8c447);
+    background: var(--unal-green);
     color: white;
     border-color: var(--unal-green);
     box-shadow: 0 3px 10px rgba(148, 180, 59, 0.3);
@@ -344,7 +344,7 @@ body {
 .evaluation-item {
     margin-bottom: 20px;
     padding: 18px;
-    background: linear-gradient(135deg, #ffffff, #f9fafb);
+    background: #ffffff;
     border-radius: 10px;
     box-shadow: 0 2px 6px rgba(148, 180, 59, 0.08);
     border-left: 4px solid var(--unal-green);
@@ -392,7 +392,7 @@ body {
 
 /* Chart container */
 .chart-container { 
-    background: linear-gradient(135deg, #ffffff, #f9fafb);
+    background: #ffffff;
     padding: 16px;
     border-radius: 10px;
     position: relative;
@@ -450,7 +450,7 @@ body {
 .login-card .card-footer { background: transparent; border-top: none; color: #6b7280; font-size: 0.85rem; }
 
 .login-card .card-header {
-    background: linear-gradient(135deg, var(--unal-green), #a8c447);
+    background: var(--unal-green);
     color: #fff;
     border-bottom: 3px solid var(--unal-green-dark);
 }
@@ -552,7 +552,7 @@ a, button, .card, .btn, .form-control, .form-select, .tab-button {
 
 /* Bootstrap Badge Overrides - UNAL Colors */
 .badge.bg-primary {
-    background: linear-gradient(135deg, var(--unal-green), #a8c447) !important;
+    background: var(--unal-green) !important;
     color: #ffffff !important;
 }
 
@@ -578,36 +578,43 @@ a, button, .card, .btn, .form-control, .form-select, .tab-button {
 
 /* Card Stat Colors for Director Dashboard */
 .card.bg-primary {
-    background: linear-gradient(135deg, var(--unal-green), #a8c447) !important;
+    background: var(--unal-green) !important;
 }
 
 .card.bg-success {
-    background: linear-gradient(135deg, var(--teacher-color), #5a8751) !important;
+    background: var(--teacher-color) !important;
 }
 
 .card.bg-info {
-    background: linear-gradient(135deg, var(--unal-green-dark), #5a8751) !important;
+    background: var(--unal-green-dark) !important;
 }
 
 .card.bg-warning {
-    background: linear-gradient(135deg, var(--unal-orange), #d98a6f) !important;
+    background: var(--unal-orange) !important;
 }
 
 .card.bg-danger {
-    background: linear-gradient(135deg, var(--unal-red), #c42643) !important;
+    background: var(--unal-red) !important;
 }
 
 .card.bg-secondary {
-    background: linear-gradient(135deg, var(--unal-gray-dark), #6e7375) !important;
+    background: var(--unal-gray-dark) !important;
 }
 
 /* Table Header Colors */
 .table-primary {
+    /* Bootstrap 5.3 pinta las celdas con estas variables; sin ellas queda su azul por defecto */
+    --bs-table-bg: #eff4e2 !important;
+    --bs-table-border-color: var(--unal-green) !important;
+    --bs-table-color: var(--unal-gray-dark) !important;
     background-color: rgba(148, 180, 59, 0.15) !important;
     border-color: var(--unal-green) !important;
 }
 
 .table-warning {
+    --bs-table-bg: #ebdee0 !important;
+    --bs-table-border-color: var(--unal-red-dark) !important;
+    --bs-table-color: var(--unal-gray-dark) !important;
     background-color: rgba(118, 35, 47, 0.15) !important;
     border-color: var(--unal-red-dark) !important;
 }
@@ -651,7 +658,7 @@ a, button, .card, .btn, .form-control, .form-select, .tab-button {
 /*DASHBOARD CARD MEDIA */
 .card-media {
     height: 150px;
-    background: linear-gradient(135deg, #f4f7ec, #e6eed3);
+    background: #f4f7ec;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -680,7 +687,7 @@ a, button, .card, .btn, .form-control, .form-select, .tab-button {
     align-self: flex-start;
     height: 100vh;
     overflow-y: auto;
-    background: linear-gradient(180deg, var(--unal-green-dark), #37522f);
+    background: var(--unal-green-dark);
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -841,3 +848,6 @@ a, button, .card, .btn, .form-control, .form-select, .tab-button {
 
 /* Login: aviso de correo institucional */
 .login-aviso { width: 100%; max-width: 25rem; }
+
+/* Elemento activo de las listas con el verde institucional (no el azul de Bootstrap) */
+.list-group-item.active { background-color: var(--unal-green-dark); border-color: var(--unal-green-dark); }

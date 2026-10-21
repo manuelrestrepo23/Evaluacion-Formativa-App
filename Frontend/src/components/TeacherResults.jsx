@@ -123,7 +123,7 @@ function OpenAnswersSection({ processedData }) {
 
   return (
     <div className="mb-4">
-      <h5 className="mb-3"><i className="bi bi-chat-left-text me-2"></i>Respuestas Abiertas</h5>
+      <h5 className="mb-3"><i className="bi bi-chat-left-text me-2"></i>Respuestas abiertas</h5>
 
       {hasSelf && (
         <div className="mb-4">
@@ -240,7 +240,7 @@ function PlanCard({ plan, index, total, onComplete, onDelete }) {
   return (
     <div className="card mb-3">
       <div className={`card-header d-flex justify-content-between align-items-center ${headerClass}`}>
-        <h6 className="mb-0"><i className="bi bi-calendar-event me-2"></i>Plan de Mejora #{total - index}</h6>
+        <h6 className="mb-0"><i className="bi bi-calendar-event me-2"></i>Plan de mejora #{total - index}</h6>
         <span className={`badge ${badgeClass}`}>{badgeLabel}</span>
       </div>
       <div className="card-body">
@@ -296,7 +296,7 @@ export default function TeacherResults({ results, plans, questions, studentQuest
     : 0
 
   const barData = [
-    { name: 'Promedio General', Autoevaluación: parseFloat(selfAverage.toFixed(2)), Estudiantes: parseFloat(studentAverage.toFixed(2)) }
+    { name: 'Promedio general', Autoevaluación: parseFloat(selfAverage.toFixed(2)), Estudiantes: parseFloat(studentAverage.toFixed(2)) }
   ]
 
   const radarData = ['1-2', '2-3', '3-4', '4-5'].map((range, i) => {
@@ -312,7 +312,7 @@ export default function TeacherResults({ results, plans, questions, studentQuest
   return (
     <div className="card mt-4">
       <div className="card-header role-teacher d-flex justify-content-between align-items-center">
-        <h4 className="mb-0">Resultados de Evaluación</h4>
+        <h4 className="mb-0">Resultados de la evaluación</h4>
         <div className="d-flex gap-2">
           <button
             className="btn btn-sm btn-light"
@@ -351,7 +351,7 @@ export default function TeacherResults({ results, plans, questions, studentQuest
             {/* Gráficas */}
             <div className="row mb-4">
               <div className="col-lg-6 mb-4">
-                <h5 className="mb-3">Promedio General</h5>
+                <h5 className="mb-3">Promedio general</h5>
                 <ResponsiveContainer width="100%" height={250}>
                   <BarChart data={barData}>
                     <XAxis dataKey="name" />
@@ -365,7 +365,7 @@ export default function TeacherResults({ results, plans, questions, studentQuest
               </div>
 
               <div className="col-lg-6 mb-4">
-                <h5 className="mb-3">Distribución de Puntuaciones</h5>
+                <h5 className="mb-3">Distribución de puntuaciones</h5>
                 <ResponsiveContainer width="100%" height={250}>
                   <RadarChart data={radarData}>
                     <PolarGrid />
@@ -382,10 +382,10 @@ export default function TeacherResults({ results, plans, questions, studentQuest
             {/* Resumen */}
             <div className="alert alert-info mb-4">
               {processedData.hasSelfEvaluation && (
-                <p className="mb-1"><strong>Promedio Autoevaluación:</strong> <span className="badge bg-info">{selfAverage.toFixed(2)}</span></p>
+                <p className="mb-1"><strong>Promedio de autoevaluación:</strong> <span className="badge bg-info">{selfAverage.toFixed(2)}</span></p>
               )}
               {processedData.hasStudentEvaluations && (
-                <p className="mb-1"><strong>Promedio Estudiantes ({processedData.studentCount}):</strong> <span className="badge bg-primary">{studentAverage.toFixed(2)}</span></p>
+                <p className="mb-1"><strong>Promedio de estudiantes ({processedData.studentCount}):</strong> <span className="badge bg-primary">{studentAverage.toFixed(2)}</span></p>
               )}
               {processedData.hasSelfEvaluation && processedData.hasStudentEvaluations && (() => {
                 // Convencion unica en toda la app: brecha = estudiantes - autoevaluacion
@@ -404,7 +404,7 @@ export default function TeacherResults({ results, plans, questions, studentQuest
             {/* Tablas detalladas */}
             {processedData.hasSelfEvaluation && (
               <div className="mb-4">
-                <h6 className="text-primary"><i className="bi bi-person-check me-2"></i>Autoevaluación Docente</h6>
+                <h6 className="text-primary"><i className="bi bi-person-check me-2"></i>Autoevaluación docente</h6>
                 <div className="table-responsive">
                   <table className="table table-bordered table-sm">
                     <thead className="table-primary">
@@ -428,7 +428,7 @@ export default function TeacherResults({ results, plans, questions, studentQuest
 
             {processedData.hasStudentEvaluations && (
               <div className="mb-4">
-                <h6 className="text-warning"><i className="bi bi-people-fill me-2"></i>Evaluación Estudiantil (Promedio)</h6>
+                <h6 className="text-warning"><i className="bi bi-people-fill me-2"></i>Evaluación estudiantil (promedio)</h6>
                 <div className="table-responsive">
                   <table className="table table-bordered table-sm">
                     <thead className="table-warning">
@@ -459,7 +459,7 @@ export default function TeacherResults({ results, plans, questions, studentQuest
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h5><i className="bi bi-journal-text me-2"></i>Acciones de mejoramiento</h5>
             <button className="btn btn-sm btn-primary" onClick={onCreatePlan}>
-              <i className="bi bi-plus me-1"></i>Nuevo Plan
+              <i className="bi bi-plus me-1"></i>Nuevo plan
             </button>
           </div>
 

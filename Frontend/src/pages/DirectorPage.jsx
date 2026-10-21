@@ -281,7 +281,7 @@ export default function DirectorPage() {
 
   return (
     <AppLayout
-      title="Panel de Directivos"
+      title="Panel de directivos"
       roleLabel="Directivo"
       userName={user?.firstName || user?.primaryEmailAddress?.emailAddress || 'Directivo'}
       onSignOut={() => signOut()}
@@ -317,7 +317,7 @@ export default function DirectorPage() {
             <div className="col-md-3">
               <div className="card bg-primary text-white">
                 <div className="card-body">
-                  <h6 className="card-title">Total Docentes</h6>
+                  <h6 className="card-title">Total de docentes</h6>
                   <h2 className="mb-0">{stats?.totalTeachers ?? '-'}</h2>
                 </div>
               </div>
@@ -325,7 +325,7 @@ export default function DirectorPage() {
             <div className="col-md-3">
               <div className="card bg-success text-white">
                 <div className="card-body">
-                  <h6 className="card-title">Evaluaciones Totales</h6>
+                  <h6 className="card-title">Evaluaciones totales</h6>
                   <h2 className="mb-0">{stats?.totalEvaluations ?? '-'}</h2>
                 </div>
               </div>
@@ -341,7 +341,7 @@ export default function DirectorPage() {
             <div className="col-md-3">
               <div className={`card text-white ${claseTarjetaPromedio(stats?.overallAverage)}`}>
                 <div className="card-body">
-                  <h6 className="card-title">Promedio General</h6>
+                  <h6 className="card-title">Promedio general</h6>
                   <h2 className="mb-0">{stats?.overallAverage || '-'}</h2>
                 </div>
               </div>
@@ -352,7 +352,7 @@ export default function DirectorPage() {
           <div className="row g-4 mb-4">
             <div className="col-lg-6">
               <div className="card">
-                <div className="card-header"><h5 className="mb-0">Ranking de Docentes por Promedio</h5></div>
+                <div className="card-header"><h5 className="mb-0">Ranking de docentes por promedio</h5></div>
                 <div className="card-body">
                   {barData.length > 0 ? (
                     <ResponsiveContainer width="100%" height={300}>
@@ -372,7 +372,7 @@ export default function DirectorPage() {
 
             <div className="col-lg-6">
               <div className="card">
-                <div className="card-header"><h5 className="mb-0">Distribución de Evaluaciones</h5></div>
+                <div className="card-header"><h5 className="mb-0">Distribución de evaluaciones</h5></div>
                 <div className="card-body">
                   {pieData.some(d => d.value > 0) ? (
                     <ResponsiveContainer width="100%" height={320}>
@@ -415,7 +415,7 @@ export default function DirectorPage() {
           {/* Radar por categoría */}
           {radarData.length > 0 && (
             <div className="card mb-4">
-              <div className="card-header"><h5 className="mb-0">Promedio por Categoría</h5></div>
+              <div className="card-header"><h5 className="mb-0">Promedio por categoría</h5></div>
               <div className="card-body">
                 <ResponsiveContainer width="100%" height={300}>
                   <RadarChart data={radarData}>
@@ -503,16 +503,16 @@ export default function DirectorPage() {
           )}
           {/* Tabla de docentes */}
           <div className="mt-4">
-            <h5>Detalle de Docentes</h5>
+            <h5>Detalle de docentes</h5>
             <div className="table-responsive">
               <table className="table table-striped table-hover">
                 <thead>
                   <tr>
                     <th>Docente</th>
                     <th>Autoevaluación</th>
-                    <th>Promedio Estudiantes</th>
+                    <th>Promedio estudiantes</th>
                     <th className="text-center">Estado</th>
-                    <th>Evaluaciones Recibidas</th>
+                    <th>Evaluaciones recibidas</th>
                     <th>Acciones</th>
                   </tr>
                 </thead>
@@ -586,7 +586,7 @@ export default function DirectorPage() {
           {/* Exportar */}
           <div className="mt-4">
             <button className="btn btn-primary" onClick={() => exportCSV(stats)}>
-              Exportar Reporte CSV
+              Exportar reporte CSV
             </button>
           </div>
         </div>

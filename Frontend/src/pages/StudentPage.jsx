@@ -90,13 +90,17 @@ export default function StudentPage() {
     return !!a.openAnswers?.[question.number]?.trim()
   }
 
+  // Tocar la opcion que ya esta marcada la quita (deseleccionar)
   const handleLikertChange = (teacherId, question, value) => {
-    setAnswers(prev => ({
-      ...prev,
-      [teacherId]: { ...prev[teacherId], scores: { ...prev[teacherId]?.scores, [question.number]: value } }
-    }))
+    const nuevo = answers[teacherId]?.scores?.[question.number] === value ? null : value
+    setAnswers(prev => {
+      const scores = { ...prev[teacherId]?.scores }
+      if (nuevo === null) delete scores[question.number]
+      else scores[question.number] = nuevo
+      return { ...prev, [teacherId]: { ...prev[teacherId], scores } }
+    })
     setSaveError('')
-    saveAnswer(teacherId, question.number, 'likert', value).catch(err => {
+    saveAnswer(teacherId, question.number, 'likert', nuevo).catch(err => {
       setSaveError(getErrorMessage(err, 'No se pudo guardar una respuesta.'))
     })
   }
@@ -208,7 +212,7 @@ export default function StudentPage() {
 
   return (
     <AppLayout
-      title="Evaluación de Percepción Estudiantil"
+      title="Evaluación de percepción estudiantil"
       roleLabel="Estudiante"
       userName={user?.firstName || userEmail}
       onSignOut={() => signOut()}
@@ -233,7 +237,7 @@ export default function StudentPage() {
                   <label className="form-label">Agrega los profesores que te corresponde evaluar este semestre:</label>
                   <div className="d-flex gap-2">
                     <select className="form-select" value={teacherToAdd} onChange={e => setTeacherToAdd(e.target.value)}>
-                      <option value="">-- Seleccione un docente --</option>
+                      <option value="">-- Selecciona un docente --</option>
                       {availableTeachers.map(teacher => (
                         <option key={teacher.id} value={teacher.id}>
                           {teacher.name}{teacher.subject ? ` - ${teacher.subject}` : ''}
@@ -322,7 +326,8 @@ export default function StudentPage() {
                             id={`q-${q.number}-${currentTeacher.id}-${value}`}
                             value={value}
                             checked={answers[currentTeacher.id]?.scores?.[q.number] === value}
-                            onChange={() => handleLikertChange(currentTeacher.id, q, value)}
+                            onClick={() => handleLikertChange(currentTeacher.id, q, value)}
+                            onChange={() => {}}
                           />
                           <label className="btn btn-outline-primary rounded-circle" htmlFor={`q-${q.number}-${currentTeacher.id}-${value}`}>
                             {value}

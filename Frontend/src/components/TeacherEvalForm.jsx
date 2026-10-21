@@ -10,8 +10,14 @@ export default function TeacherEvalForm({ questions, teacherId, userEmail, onSub
   const likertQuestions = questions.filter(q => q.questionType === 'likert')
   const openQuestions = questions.filter(q => q.questionType === 'abierta')
 
+  // Tocar la opcion que ya esta marcada la quita (deseleccionar)
   const handleScoreChange = (questionNumber, value) => {
-    setScores(prev => ({ ...prev, [questionNumber]: parseInt(value) }))
+    setScores(prev => {
+      const nuevos = { ...prev }
+      if (nuevos[questionNumber] === value) delete nuevos[questionNumber]
+      else nuevos[questionNumber] = value
+      return nuevos
+    })
   }
 
   const handleOpenAnswerChange = (questionNumber, value) => {
@@ -47,12 +53,12 @@ export default function TeacherEvalForm({ questions, teacherId, userEmail, onSub
   return (
     <div className="card mt-4">
       <div className="card-header role-teacher d-flex justify-content-between align-items-center">
-        <h4 className="mb-0">Formulario de Autoevaluación Docente</h4>
+        <h4 className="mb-0">Formulario de autoevaluación docente</h4>
         <span className="badge badge-role teacher">Docente</span>
       </div>
 
       <div className="card-body">
-        <p>Evalúe su desempeño según la siguiente escala:</p>
+        <p>Evalúa tu desempeño según la siguiente escala:</p>
         <div className="evaluation-scale mb-4">
           <div className="scale-item">1: Totalmente en desacuerdo</div>
           <div className="scale-item">2: En desacuerdo</div>
@@ -76,7 +82,8 @@ export default function TeacherEvalForm({ questions, teacherId, userEmail, onSub
                       id={`teacher-q-${question.number}-${value}`}
                       value={value}
                       checked={scores[question.number] === value}
-                      onChange={() => handleScoreChange(question.number, value)}
+                      onClick={() => handleScoreChange(question.number, value)}
+                      onChange={() => {}}
                     />
                     <label
                       className="btn btn-outline-primary rounded-circle"
@@ -118,7 +125,7 @@ export default function TeacherEvalForm({ questions, teacherId, userEmail, onSub
               className="btn btn-success"
               disabled={submitting || !allAnswered}
             >
-              {submitting ? 'Enviando...' : 'Enviar Evaluación'}
+              {submitting ? 'Enviando...' : 'Enviar evaluación'}
             </button>
             <button
               type="button"

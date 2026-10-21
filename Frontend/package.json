@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.61.6",
+    "@clerk/localizations": "^3.37.10",
     "axios": "^1.16.0",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",

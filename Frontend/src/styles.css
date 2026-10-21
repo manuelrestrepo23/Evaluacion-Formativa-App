@@ -856,3 +856,26 @@ a, button, .card, .btn, .form-control, .form-select, .tab-button {
 
 /* Elemento activo de las listas con el verde institucional (no el azul de Bootstrap) */
 .list-group-item.active { background-color: var(--unal-green-dark); border-color: var(--unal-green-dark); }
+
+/* Botones principales.
+   1) Bootstrap 5.3 pinta los estados (deshabilitado, presionado, foco) con sus propias
+      variables. Sin definirlas, "Finalizar" se veia azul al estar deshabilitado o al
+      presionarlo, y "Enviar evaluacion" en el verde de Bootstrap.
+   2) Verde oscuro en vez del verde claro: el texto blanco tenia contraste 2.4:1 sobre el
+      verde claro y tiene 6.1:1 sobre el oscuro (lo recomendado es al menos 4.5:1). */
+.btn-primary, .btn-success {
+    background: var(--unal-green-dark);
+    --bs-btn-bg: var(--unal-green-dark);
+    --bs-btn-border-color: var(--unal-green-dark);
+    --bs-btn-hover-bg: #3a5833;
+    --bs-btn-hover-border-color: #3a5833;
+    --bs-btn-active-bg: #2f4829;
+    --bs-btn-active-border-color: #2f4829;
+    --bs-btn-focus-shadow-rgb: 70, 107, 63;
+    --bs-btn-disabled-bg: #e3e4e2;
+    --bs-btn-disabled-border-color: #c9cac8;
+    --bs-btn-disabled-color: #6b6f71;
+    --bs-btn-disabled-opacity: 1;
+}
+.btn-primary:hover, .btn-success:hover { background: #3a5833; }
+.btn-primary:disabled, .btn-success:disabled { box-shadow: none; }

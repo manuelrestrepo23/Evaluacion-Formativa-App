@@ -262,16 +262,21 @@ body {
 .btn.rounded-circle:hover {
     border-color: var(--unal-green);
     background: rgba(148, 180, 59, 0.1);
+    color: var(--unal-green-dark);
     transform: scale(1.1);
 }
 
 /* Style for btn-check inputs (radio with button label) */
-.btn-check:checked + .btn,
-.btn-check:focus + .btn {
+.btn-check:checked + .btn {
     background: var(--unal-green);
     color: #ffffff;
     border-color: var(--unal-green);
     box-shadow: 0 0 0 3px rgba(148, 180, 59, 0.2);
+}
+/* Foco con teclado: solo un anillo. Antes el foco tambien rellenaba el boton,
+   asi que una opcion recien desmarcada se seguia viendo marcada. */
+.btn-check:focus-visible + .btn {
+    box-shadow: 0 0 0 3px rgba(148, 180, 59, 0.45);
 }
 
 .btn-outline-primary {

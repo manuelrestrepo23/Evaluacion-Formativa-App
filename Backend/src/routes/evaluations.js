@@ -160,7 +160,7 @@ router.patch('/answer', requireAuth, requireRole('estudiante'), async (req, res)
         $set: { [`evaluationData.${field}.${questionNumber}`]: value, status: 'draft' },
         $setOnInsert: { teacherId, evaluatorKey: clave, userRole }
       },
-      { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true }
+      { upsert: true, returnDocument: 'after', runValidators: true, setDefaultsOnInsert: true }
     )
 
     res.status(200).json({ message: 'Respuesta guardada', status: evaluation.status })

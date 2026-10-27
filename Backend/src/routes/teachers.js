@@ -79,7 +79,7 @@ router.patch('/:id', requireAuth, requireRole('directivo'), async (req, res) => 
     const teacher = await Teacher.findOneAndUpdate(
       { id: req.params.id },
       { enrolledStudents },
-      { new: true }
+      { returnDocument: 'after' }
     )
     if (!teacher) {
       return res.status(404).json({ message: 'Docente no encontrado' })

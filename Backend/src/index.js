@@ -15,6 +15,10 @@ import { huellaSecreto } from './utils/anon.js'
 
 
 
+// TEMPORAL (CVE-2026-111497): confirmar en los logs de Vercel que Node es >= 22.23.4 o >= 24.22.1.
+// Borrar esta linea cuando quede confirmado.
+console.log('Node', process.version)
+
 const app = express()
 app.set('trust proxy', 1)
 const PORT = process.env.PORT || 5000
@@ -38,7 +42,9 @@ app.use(cors({
   },
   maxAge: 7200   // el navegador recuerda el permiso 2 h: menos peticiones OPTIONS
 }))
-app.use(express.json())
+// inflate: false = rechazar cuerpos comprimidos (gzip/deflate/br) con 415. El frontend nunca los
+// envia, y descomprimirlos expone el servidor a CVE-2026-111497 (Brotli de Node.js) y a un DoS de body-parser.
+app.use(express.json({ inflate: false }))
 app.use(cookieParser())
 
 // Limite de peticiones POR USUARIO, no por IP: en la universidad cientos de
